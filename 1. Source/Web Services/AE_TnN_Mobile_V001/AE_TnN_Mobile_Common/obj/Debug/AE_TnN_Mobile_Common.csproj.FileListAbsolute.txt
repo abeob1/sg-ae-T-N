@@ -1,0 +1,10 @@
+E:\Abeo-Projects\TnN\SourceCode\AE_TnN_Mobile_V001\AE_TnN_Mobile_Common\bin\Debug\AE_TnN_Mobile_Common.dll
+E:\Abeo-Projects\TnN\SourceCode\AE_TnN_Mobile_V001\AE_TnN_Mobile_Common\bin\Debug\AE_TnN_Mobile_Common.pdb
+E:\Abeo-Projects\TnN\SourceCode\AE_TnN_Mobile_V001\AE_TnN_Mobile_Common\obj\Debug\AE_TnN_Mobile_Common.dll
+E:\Abeo-Projects\TnN\SourceCode\AE_TnN_Mobile_V001\AE_TnN_Mobile_Common\obj\Debug\AE_TnN_Mobile_Common.pdb
+E:\Abeo-Projects\TnN\SourceCode\AE_TnN_Mobile_V001\AE_TnN_Mobile_Common\obj\Debug\AE_TnN_Mobile_Common.csprojResolveAssemblyReference.cache
+E:\Abeo-Projects\TnN\SourceCode\Web Service\AE_TnN_Mobile_V001\AE_TnN_Mobile_Common\bin\Debug\AE_TnN_Mobile_Common.dll
+E:\Abeo-Projects\TnN\SourceCode\Web Service\AE_TnN_Mobile_V001\AE_TnN_Mobile_Common\bin\Debug\AE_TnN_Mobile_Common.pdb
+E:\Abeo-Projects\TnN\SourceCode\Web Service\AE_TnN_Mobile_V001\AE_TnN_Mobile_Common\obj\Debug\AE_TnN_Mobile_Common.dll
+E:\Abeo-Projects\TnN\SourceCode\Web Service\AE_TnN_Mobile_V001\AE_TnN_Mobile_Common\obj\Debug\AE_TnN_Mobile_Common.pdb
+E:\Abeo-Projects\TnN\SourceCode\Web Service\AE_TnN_Mobile_V001\AE_TnN_Mobile_Common\obj\Debug\AE_TnN_Mobile_Common.csprojResolveAssemblyReference.cache

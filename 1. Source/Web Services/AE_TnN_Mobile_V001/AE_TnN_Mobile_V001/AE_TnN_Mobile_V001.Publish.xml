@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<publishData>
+  <publishProfile publishUrl="E:\Abeo-Projects\TnN\Publish" deleteExistingFiles="True" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="False" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
+    <file relUrl="SPAMobile.asmx" publishTime="08/11/2015 10:32:55" />
+    <file relUrl="bin/AE_TnN_Mobile_BLL.dll" publishTime="10/01/2015 00:49:12" />
+    <file relUrl="Web.config" publishTime="09/30/2015 19:45:48" />
+    <file relUrl="bin/AE_TnN_Mobile_Common.dll" publishTime="10/01/2015 00:49:11" />
+    <file relUrl="bin/AE_TnN_Mobile_V001.pdb" publishTime="10/01/2015 00:49:25" />
+    <file relUrl="bin/AE_TnN_Mobile_V001.dll" publishTime="10/01/2015 00:49:25" />
+    <file relUrl="bin/AE_TnN_Mobile_BLL.pdb" publishTime="10/01/2015 00:49:12" />
+    <file relUrl="bin/AE_TnN_Mobile_Common.pdb" publishTime="10/01/2015 00:49:11" />
+  </publishProfile>
+</publishData>
