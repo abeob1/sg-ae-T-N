@@ -44,6 +44,7 @@ namespace AE_TnN_Mobile_V001
         JavaScriptSerializer js = new JavaScriptSerializer();
         List<result> lstResult = new List<result>();
         SAPbobsCOM.Company oDICompany;
+        public static string FileUploadPath = ConfigurationManager.AppSettings["FileUploadPath"].ToString();
         #endregion
 
         #region WebMethods
@@ -1665,7 +1666,8 @@ namespace AE_TnN_Mobile_V001
                     JSON_AddCase_DocumentToRead objLstInfo = lstDeserialize[0];
 
                     //The following code is for Converting the Binary file to Original file and Read the data from the File
-                    DataSet ds = oCase.SPA_AddCase_SaveAttachment(objLstInfo.sDoc, objLstInfo.FileName, objLstInfo.ItemCode, objLstInfo.ItemName, objLstInfo.CardCode);
+                    DataSet ds = oCase.SPA_AddCase_SaveAttachment(objLstInfo.FileName, objLstInfo.ItemCode, objLstInfo.ItemName, objLstInfo.CardCode);
+                    //DataSet ds = new DataSet();
 
                     if (ds != null && ds.Tables.Count > 0)
                     {
@@ -2332,6 +2334,171 @@ namespace AE_TnN_Mobile_V001
             }
         }
 
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_AddCase_GetCorporate()
+        {
+            string sFuncName = string.Empty;
+            string sCardCode = string.Empty;
+            string sCategory = string.Empty;
+            string sUserName = string.Empty;
+            try
+            {
+                sFuncName = "SPA_AddCase_GetCorporate()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_AddCase_GetCorporate() ", sFuncName);
+                DataTable dt = oCase.SPA_AddCase_GetCorporate();
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_AddCase_GetCorporate() ", sFuncName);
+                List<ScanIC> lstdoc = new List<ScanIC>();
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    foreach (DataRow r in dt.Rows)
+                    {
+                        ScanIC _SearchInfo = new ScanIC();
+
+                        _SearchInfo.Code = r["Code"].ToString();
+                        _SearchInfo.DocEntry = r["DocEntry"].ToString();
+                        _SearchInfo.EmployeeName = r["EmployeeName"].ToString();
+                        _SearchInfo.Title = string.Empty;
+                        _SearchInfo.Gender = string.Empty;
+                        _SearchInfo.IDNo1 = r["IDNo1"].ToString();
+                        _SearchInfo.IDNo3 = r["IDNo3"].ToString();
+                        _SearchInfo.TaxNo = r["TaxNo"].ToString();
+                        _SearchInfo.MobileNo = r["MobileNo"].ToString();
+                        _SearchInfo.Telephone = r["Telephone"].ToString();
+                        _SearchInfo.OfficeNo = string.Empty;
+                        _SearchInfo.IDAddress1 = r["IDAddress1"].ToString();
+                        _SearchInfo.IDAddress2 = r["IDAddress2"].ToString();
+                        _SearchInfo.IDAddress3 = r["IDAddress3"].ToString();
+                        _SearchInfo.IDAddress4 = r["IDAddress4"].ToString();
+                        _SearchInfo.IDAddress5 = r["IDAddress5"].ToString();
+                        _SearchInfo.CorresAddr1 = r["CorresAddr1"].ToString();
+                        _SearchInfo.CorresAddr2 = r["CorresAddr2"].ToString();
+                        _SearchInfo.CorresAddr3 = r["CorresAddr3"].ToString();
+                        _SearchInfo.CorresAddr4 = r["CorresAddr4"].ToString();
+                        _SearchInfo.CorresAddr5 = r["CorresAddr5"].ToString();
+                        _SearchInfo.AddressToUse = string.Empty;
+                        _SearchInfo.LastUpdatedOn = string.Empty;
+
+                        lstdoc.Add(_SearchInfo);
+                    }
+                }
+                else
+                {
+                    ScanIC _SearchInfo = new ScanIC();
+
+                    _SearchInfo.Message = string.Empty;
+                    _SearchInfo.Code = string.Empty;
+                    _SearchInfo.DocEntry = string.Empty;
+                    _SearchInfo.EmployeeName = string.Empty;
+                    _SearchInfo.Title = string.Empty;
+                    _SearchInfo.Gender = string.Empty;
+                    _SearchInfo.IDNo1 = string.Empty;
+                    _SearchInfo.IDNo3 = string.Empty;
+                    _SearchInfo.TaxNo = string.Empty;
+                    _SearchInfo.MobileNo = string.Empty;
+                    _SearchInfo.Telephone = string.Empty;
+                    _SearchInfo.OfficeNo = string.Empty;
+                    _SearchInfo.IDAddress1 = string.Empty;
+                    _SearchInfo.IDAddress2 = string.Empty;
+                    _SearchInfo.IDAddress3 = string.Empty;
+                    _SearchInfo.IDAddress4 = string.Empty;
+                    _SearchInfo.IDAddress5 = string.Empty;
+                    _SearchInfo.CorresAddr1 = string.Empty;
+                    _SearchInfo.CorresAddr2 = string.Empty;
+                    _SearchInfo.CorresAddr3 = string.Empty;
+                    _SearchInfo.CorresAddr4 = string.Empty;
+                    _SearchInfo.CorresAddr5 = string.Empty;
+                    _SearchInfo.AddressToUse = string.Empty;
+                    _SearchInfo.LastUpdatedOn = string.Empty;
+                    lstdoc.Add(_SearchInfo);
+                }
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Corporate Information ", sFuncName);
+                Context.Response.Output.Write(js.Serialize(lstdoc));
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Corporate Information , the Serialized data is ' " + js.Serialize(lstdoc) + " '", sFuncName);
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void Attachments()
+        {
+            string sFuncName = string.Empty;
+            result objResult = new result();
+            List<result> lstAttachment = new List<result>();
+            try
+            {
+                sFuncName = "Attachments";
+                int i;
+                HttpContext postedContext = HttpContext.Current;
+
+                for (i = 0; i < postedContext.Request.Files.Count; i++)
+                {
+                    HttpPostedFile hpf = postedContext.Request.Files[i];
+
+                    //DataSet dsCompanyList = oLogin.Get_CompanyList();
+                    string PathToShowInSap = string.Empty;
+                    //string PathToShowInWeb = string.Empty;
+                    string sTimeStampValue = string.Empty;
+                    //string sCompanyName = (string)postedContext.Request.Form["companyname"];
+                    //if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Company name in request form : " + sCompanyName, sFuncName);
+                    //DataSet ds = oShowAround.Get_AttachPath(dsCompanyList, sCompanyName);
+                    //if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    //{
+                    //PathToShowInSap = ds.Tables[0].Rows[0][0].ToString();
+                    //PathToShowInWeb = Server.MapPath("~/Attachments/");
+                    PathToShowInSap = FileUploadPath;
+                    sTimeStampValue = MyExtensions.AppendTimeStamp(hpf.FileName);
+                    hpf.SaveAs(PathToShowInSap + sTimeStampValue);
+                    //hpf.SaveAs(PathToShowInWeb + sTimeStampValue);
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With Success  ", sFuncName);
+
+                    objResult.Result = sTimeStampValue;
+                    objResult.DisplayMessage = "Attachment Successfully Added";
+                    lstAttachment.Add(objResult);
+                    //objResult.Attachments = lstAttachment;
+                    //lstAttResult.Add(objResult);
+                    //if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Attachment Path from Mobile for SAP : " + objResult.Attachments[i].SAPURL, sFuncName);
+                    //}
+                    //else
+                    //{
+                    //    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                    //    // AttachmentResult objResult = new AttachmentResult();
+                    //    objResult.Result = "Error";
+                    //    objResult.DisplayMessage = "Attachment Path is Empty in  SAP. Check with SAP";
+                    //    objResult.Attachments = lstAttachment;
+                    //    lstAttResult.Add(objResult);
+                    //}
+                }
+                Context.Response.Output.Write(js.Serialize(lstAttachment));
+
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                //objResult.Attachments = lstAttachment;
+                lstAttachment.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstAttachment));
+            }
+        }
+
         #endregion
 
         #endregion
@@ -2747,7 +2914,7 @@ namespace AE_TnN_Mobile_V001
             public string ItemCode { get; set; }
             public string ItemName { get; set; }
             public string FileName { get; set; }
-            public string sDoc { get; set; }
+            //public string sDoc { get; set; }
             public string CardCode { get; set; }
         }
 
@@ -2793,8 +2960,9 @@ namespace AE_TnN_Mobile_V001
             public string BPM { get; set; }
             public string STATE { get; set; }
             public string AREA { get; set; }
-            public string LOTAREA_SQM { get; set; }
-            public string LOTAREA_SQFT { get; set; }
+            //public string LOTAREA_SQM { get; set; }
+            //public string LOTAREA_SQFT { get; set; }
+            public string LOTAREA { get; set; }
             public string LASTUPDATEDON { get; set; }
             public string DEVELOPER { get; set; }
             public string DVLPR_CODE { get; set; }
@@ -2817,6 +2985,7 @@ namespace AE_TnN_Mobile_V001
             public string Code { get; set; }
             public string DocEntry { get; set; }
             public string EmployeeName { get; set; }
+            public string IDType { get; set; }
             public string Title { get; set; }
             public string Gender { get; set; }
             public string IDNo1 { get; set; }

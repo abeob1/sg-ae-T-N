@@ -16,3 +16,12 @@ E:\Abeo-Projects\TnN\SourceCode\Web Service\AE_TnN_Mobile_V001\AE_TnN_Mobile_BLL
 E:\Abeo-Projects\TnN\SourceCode\Web Service\AE_TnN_Mobile_V001\AE_TnN_Mobile_BLL\obj\Debug\AE_TnN_Mobile_BLL.csproj.ResolveComReference.cache
 E:\Abeo-Projects\TnN\SourceCode\Web Service\AE_TnN_Mobile_V001\AE_TnN_Mobile_BLL\obj\Debug\AE_TnN_Mobile_BLL.dll
 E:\Abeo-Projects\TnN\SourceCode\Web Service\AE_TnN_Mobile_V001\AE_TnN_Mobile_BLL\obj\Debug\AE_TnN_Mobile_BLL.pdb
+E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_BLL\bin\Debug\AE_TnN_Mobile_BLL.dll
+E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_BLL\bin\Debug\AE_TnN_Mobile_BLL.pdb
+E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_BLL\bin\Debug\AE_TnN_Mobile_Common.dll
+E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_BLL\bin\Debug\AE_TnN_Mobile_Common.pdb
+E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_BLL\obj\Debug\AE_TnN_Mobile_BLL.csprojResolveAssemblyReference.cache
+E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_BLL\obj\Debug\Interop.SAPbobsCOM.dll
+E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_BLL\obj\Debug\AE_TnN_Mobile_BLL.csproj.ResolveComReference.cache
+E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_BLL\obj\Debug\AE_TnN_Mobile_BLL.dll
+E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_BLL\obj\Debug\AE_TnN_Mobile_BLL.pdb

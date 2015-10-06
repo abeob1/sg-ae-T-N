@@ -1,0 +1,993 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <!-- The main content view -->
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+           
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/appbg"
+                android:orientation="vertical"
+                >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="#296894"  >
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal" >
+
+                            <TextView
+                                android:id="@+id/textView_evoita"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:text="@string/logo"
+                                android:textColor="@color/white"
+                                android:textSize="40sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView_spa"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/logospa"
+                                android:textColor="@color/aqua"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView_welcome"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:text="@string/welcome"
+                                android:textColor="@color/aqua"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            
+                            android:gravity="right" >
+
+                            <Button
+                                android:id="@+id/button_D_walkin"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Walk-in"
+                                android:textColor="@color/royalBlue" />
+
+                            <Button
+                                android:id="@+id/button_D_find"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="false"
+                                android:text="Find"
+                                android:textColor="@color/gray" />
+
+                            <Button
+                                android:id="@+id/button_D_add"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="false"
+                                android:text="Add"
+                                android:textColor="@color/gray" />
+
+                            <Button
+                                android:id="@+id/button_D_Edit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="false"
+                                android:text="Edit"
+                                android:textColor="@color/gray" />
+
+                            <Button
+                                android:id="@+id/button_D_comfirm"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="false"
+                                android:text="confirm"
+                                android:textColor="@color/gray" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/lineA"
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/blueLight"
+                        android:orientation="vertical" />
+                </LinearLayout>
+<LinearLayout
+                        
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/blueLight"
+                        android:orientation="vertical" />
+                <FrameLayout
+                    android:layout_width="1000dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginTop="@dimen/marginTop_five"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp"
+                    android:paddingTop="10dp" >
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                       
+                        android:orientation="horizontal"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp" >
+
+                        <FrameLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="center" >
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:paddingTop="@dimen/paddingTop_twenty" >
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:orientation="vertical" >
+
+                                    <LinearLayout
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:paddingTop="5dp"
+                                        android:gravity="center" >
+
+                                        <TextView
+                                            android:id="@+id/textView_tb_tm"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_centerVertical="true"
+                                            android:gravity="center"
+                                            android:text="THIS MONTH"
+                                            android:textColor="@color/white"
+                                            android:textSize="15sp"
+                                            android:textStyle="bold" />
+                                    </LinearLayout>
+
+                                    
+
+                                    <LinearLayout
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical" >
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/marginTop_five"
+                                            android:orientation="vertical" >
+
+                                            <LinearLayout
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal"
+                                                android:paddingTop="1dp" >
+
+                                                <TextView
+                                                    android:id="@+id/textView_tb_tm_new_cases"
+                                                    android:layout_width="150dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:gravity="left"
+                                                    android:textStyle="bold"
+                                                    android:paddingLeft="10dp"
+                                                    android:paddingRight="10dp"
+                                                    android:text="@string/new_cases"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="@dimen/activity_small_textsize" />
+
+                                                <ProgressBar
+                                                    android:id="@+id/progressBar_tb_tm_new_case"
+                                                    style="?android:attr/progressBarStyleHorizontal"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="4"
+                                                    android:max="330"
+                                                    android:paddingTop="1dp"
+                                                    android:progressDrawable="@drawable/progressbar"
+                                                    android:secondaryProgress="165" />
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:orientation="horizontal" >
+
+                                                <TextView
+                                                    android:id="@+id/textView10"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                     android:gravity="center"
+                                                    android:text="10"
+                                                    android:textColor="@color/white"
+                                                    android:layout_margin="5dp"
+                                                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="vertical" >
+
+                                                <LinearLayout
+                                                    android:layout_width="fill_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="horizontal" >
+
+                                                    <TextView
+                                                        android:id="@+id/textView_tb_tm_closed_cases"
+                                                        android:layout_width="150dp"
+                                                        android:layout_height="wrap_content"
+                                                        android:textStyle="bold"
+                                                        android:gravity="left"
+                                                        android:paddingLeft="10dp"
+                                                        android:paddingRight="10dp"
+                                                        android:text="@string/closed_cases"
+                                                        android:textColor="@color/white"
+                                                        android:textSize="@dimen/activity_small_textsize" />
+
+                                                    <ProgressBar
+                                                        android:id="@+id/progressBar_tb_tm_closed_case"
+                                                        style="?android:attr/progressBarStyleHorizontal"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="4"
+                                                    android:max="330"
+                                                    android:paddingTop="1dp"
+                                                    android:progressDrawable="@drawable/progressbar"
+                                                    android:secondaryProgress="165"  />
+
+                                                </LinearLayout>
+
+                                                <LinearLayout
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
+                                                    android:orientation="horizontal" >
+
+                                                   <TextView
+                                                    android:id="@+id/textView11"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:text="10"
+                                                    android:textColor="@color/white"
+                                                    android:layout_margin="5dp"
+                                                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                                                </LinearLayout>
+                                            </LinearLayout>
+                                        </LinearLayout>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="center" >
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:paddingTop="@dimen/paddingTop_twenty" >
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:orientation="vertical" >
+
+                                    <LinearLayout
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:paddingTop="1dp" 
+                                        android:gravity="center">
+
+                                        <TextView
+                                            android:id="@+id/textView_LAST_MONTH"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_centerVertical="true"
+                                           
+                                            android:text="LAST MONTH"
+                                            android:textColor="@color/white"
+                                            android:textSize="15sp"
+                                            android:textStyle="bold" />
+                                    </LinearLayout>
+
+                                    
+                                    <LinearLayout
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical" >
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/marginTop_five"
+                                            android:orientation="vertical" >
+
+                                            <LinearLayout
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal"
+                                                android:paddingTop="1dp" >
+
+                                                <TextView
+                                                    android:id="@+id/textView_last_new_case"
+                                                    android:layout_width="150dp"
+                                                    android:layout_height="wrap_content"
+                                                     android:textStyle="bold"
+                                                    android:gravity="left"
+                                                    android:paddingLeft="10dp"
+                                                    android:paddingRight="10dp"
+                                                    android:text="@string/new_cases"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="@dimen/activity_small_textsize" />
+
+                                                <ProgressBar
+                                                    android:id="@+id/progressBar_tb_lm_NewCases"
+                                                    style="?android:attr/progressBarStyleHorizontal"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="4"
+                                                    android:max="330"
+                                                    android:paddingTop="1dp"
+                                                    android:progressDrawable="@drawable/progressbar" />
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:orientation="horizontal" >
+
+                                                <TextView
+                                                    android:id="@+id/textView12"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:text="10"
+                                                    android:textColor="@color/white"
+                                                    android:layout_margin="5dp"
+                                                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="vertical" >
+
+                                                <LinearLayout
+                                                    android:layout_width="fill_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="horizontal" >
+
+                                                    <TextView
+                                                        android:id="@+id/textView_closed_case"
+                                                        android:layout_width="150dp"
+                                                        android:layout_height="wrap_content"
+                                                        android:textStyle="bold"
+                                                        android:gravity="left"
+                                                        android:paddingLeft="10dp"
+                                                        android:paddingRight="10dp"
+                                                        android:text="@string/closed_cases"
+                                                        android:textColor="@color/white"
+                                                        android:textSize="@dimen/activity_small_textsize" />
+
+                                                    <ProgressBar
+                                                        android:id="@+id/progressBar_tb_lm_ClosedCases"
+                                                        style="?android:attr/progressBarStyleHorizontal"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_weight="4"
+                                                        android:max="330"
+                                                        android:paddingTop="1dp"
+                                                        android:progressDrawable="@drawable/progressbar" />
+                                                </LinearLayout>
+
+                                                <LinearLayout
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
+                                                    android:orientation="horizontal" >
+
+                                                    <TextView
+                                                    android:id="@+id/textView13"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:text="10"
+                                                    android:textColor="@color/white"
+                                                    android:layout_margin="5dp"
+                                                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                                                </LinearLayout>
+                                            </LinearLayout>
+                                        </LinearLayout>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </FrameLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dp" >
+
+                        <TextView
+                            android:id="@+id/textView_TARGET_BENCHMARK"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|center_horizontal"                            
+                            android:text="TARGET BENCHMARK"
+                            android:textColor="@color/whiteSmoke"
+                            android:textSize="@dimen/activity_large_textsize"
+                            android:textStyle="bold" />
+                        
+                        
+                    </LinearLayout>
+                    <LinearLayout
+                     android:id="@+id/lineD"
+                     android:layout_width="fill_parent"
+                     android:layout_height="1dp"
+                     android:background="@color/white"
+                     android:orientation="vertical"
+                     android:layout_marginTop="30dp"
+                      />
+                    
+                </FrameLayout>
+               
+                                  
+
+                <FrameLayout
+                    android:layout_width="1000dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginTop="@dimen/marginTop_five"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp"
+                    android:paddingTop="10dp" >
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"                        
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp" >
+
+                        <FrameLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|center_horizontal" >
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:paddingLeft="10dp"
+                                android:paddingTop="10dp" >
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="left"
+                                    android:orientation="vertical"
+                                    android:paddingLeft="10dp"
+                                    android:paddingRight="10dp" >
+
+                                    <LinearLayout
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_weight="1"
+                                        android:paddingTop="1dp" >
+
+                                        <TextView
+                                            android:id="@+id/textView_blank"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_centerVertical="true"
+                                           
+                                            android:text=""
+                                            android:textAppearance="?android:attr/textAppearanceLarge"
+                                            android:textColor="@color/white"
+                                            android:textStyle="bold" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/lineZ"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="1dp"
+                                        android:layout_gravity="center"
+                                        android:layout_weight="4"
+                                       
+                                        android:orientation="vertical" />
+
+                                    <LinearLayout
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical" >
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="vertical" >
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="vertical"
+                                                android:paddingTop="1dp" >
+
+                                                <LinearLayout
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
+                                                    android:layout_weight="1" >
+
+                                                    <TextView
+                                                        android:id="@+id/textView_turnaround"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_centerHorizontal="true"
+                                                        android:layout_centerVertical="true"
+                                                        android:layout_weight="4"
+                                                        android:text="TURNAROUND"
+                                                        android:textColor="@color/white"
+                                                        android:textSize="@dimen/activity_small_textsize"
+                                                        android:textStyle="bold" />
+                                                </LinearLayout>
+
+                                                <LinearLayout
+                                                    android:id="@+id/lineE"
+                                                    android:layout_width="fill_parent"
+                                                    android:layout_height="1dp"
+                                                    android:layout_gravity="center"
+                                                   
+                                                    android:background="@color/blueLight"
+                                                    android:orientation="vertical" />
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="vertical"
+                                                android:paddingTop="10dp" >
+
+                                                <LinearLayout
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
+                                                    android:layout_weight="1" >
+
+                                                    <TextView
+                                                        android:id="@+id/textView_TOTAL_OUTPUT"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_centerHorizontal="true"
+                                                        android:layout_centerVertical="true"
+                                                       
+                                                        android:text="TOTAL OUTPUT"
+                                                        android:textColor="@color/white"
+                                                        android:textSize="@dimen/activity_small_textsize"
+                                                        android:textStyle="bold" />
+                                                </LinearLayout>
+
+                                                <LinearLayout
+                                                    android:id="@+id/lineF"
+                                                    android:layout_width="fill_parent"
+                                                    android:layout_height="1dp"
+                                                    android:layout_gravity="center"
+                                                    android:layout_weight="4"
+                                                    android:background="@color/blueLight"
+                                                    android:orientation="vertical" />
+                                            </LinearLayout>
+                                        </LinearLayout>
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:paddingLeft="20dp"
+                                    android:paddingRight="20dp" >
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="right"
+                                        android:paddingTop="1dp" >
+
+                                        <TextView
+                                            android:id="@+id/textView_T_THIS_MONTH"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_centerVertical="true"
+                                           
+                                            android:text="THIS MONTH"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/activity_small_textsize"
+                                            android:textStyle="bold" />
+                                    </LinearLayout>
+
+                                   
+
+                                    <LinearLayout
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical" >
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="vertical" >
+
+                                            <LinearLayout
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal"
+                                                android:paddingLeft="10dp"
+                                                android:paddingRight="10dp"
+                                                android:paddingTop="1dp" >
+
+                                                <TextView
+                                                    android:id="@+id/textView14"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                     android:gravity="center"
+                                                    android:text="1"
+                                                    android:textColor="@color/white"
+                                                    android:layout_margin="5dp"
+                                                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="vertical" >
+
+                                                <LinearLayout
+                                                    android:layout_width="fill_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="horizontal"
+                                                    android:gravity="center" >
+
+                                                    <TextView
+                                                    android:id="@+id/textView16"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                     android:gravity="center"
+                                                    android:layout_weight="1"
+                                                    android:text="10"
+                                                    android:textColor="@color/white"
+                                                    android:layout_margin="5dp"
+                                                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                                                </LinearLayout>
+                                            </LinearLayout>
+                                        </LinearLayout>
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:paddingLeft="20dp"
+                                    android:paddingRight="20dp" >
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="right"
+                                        android:paddingTop="1dp" >
+
+                                        <TextView
+                                            android:id="@+id/textView_y_LAST_MONTH"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_centerVertical="true"
+                                           
+                                            android:text="LAST MONTH"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/activity_small_textsize"
+                                            android:textStyle="bold" />
+                                    </LinearLayout>
+
+                                   
+
+                                    <LinearLayout
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical" >
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="vertical" >
+
+                                            <LinearLayout
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal"
+                                                android:paddingLeft="10dp"
+                                                android:paddingRight="10dp"
+                                                android:paddingTop="1dp" >
+
+                                                <TextView
+                                                    android:id="@+id/textView15"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:text="10"
+                                                     android:gravity="center"
+                                                    android:textColor="@color/white"
+                                                    android:layout_margin="5dp"
+                                                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="vertical" >
+
+                                                <LinearLayout
+                                                    android:layout_width="fill_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="horizontal" >
+
+                                                    <TextView
+                                                    android:id="@+id/textView17"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:text="1"
+                                                     android:gravity="center"
+                                                    android:textColor="@color/white"
+                                                    android:layout_margin="5dp"
+                                                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                                                </LinearLayout>
+                                            </LinearLayout>
+                                        </LinearLayout>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </FrameLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:paddingLeft="20dp" >
+
+                        <TextView
+                            android:id="@+id/textView_YOUR_SCORES"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                           
+                            android:text="YOUR SCORES"
+                            android:textColor="@color/whiteSmoke"
+                            android:textSize="@dimen/activity_large_textsize"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                    <LinearLayout
+                     android:id="@+id/line1Z"
+                     android:layout_width="fill_parent"
+                     android:layout_height="1dp"
+                     android:background="@color/white"
+                     android:orientation="vertical"
+                     android:layout_marginTop="30dp"
+                     android:layout_marginBottom="30dp"
+                      />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="1100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_weight="1"
+                    
+                    android:gravity="center"
+                    android:paddingBottom="1dp"
+                    android:paddingLeft="-45dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="1dp" >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical" >
+
+                        <Button
+                            android:id="@+id/button_prority"
+                            android:layout_width="wrap_content"
+                            android:layout_height="65dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text=""
+                            android:textSize="30dp"
+                            android:textColor="@color/red"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Priority Cases Outstanding"
+                            android:textColor="@color/red"
+                             android:gravity="center"
+                             android:textSize="@dimen/activity_medium_textsize" />
+
+                        
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:paddingLeft="-105dp"
+                        android:orientation="vertical" >
+
+                        <Button
+                            android:id="@+id/button_action"
+                            android:layout_width="wrap_content"
+                            android:layout_height="65dp"
+                            android:layout_weight="1"
+                            android:textSize="30dp"
+                            android:text=""
+                            android:textColor="@color/orange"
+                            android:textStyle="bold" />
+
+                       <TextView
+                            android:id="@+id/textView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="For Your Action"
+                            android:textColor="@color/yellow"
+                             android:gravity="center"
+                             android:textSize="@dimen/activity_medium_textsize" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:paddingLeft="-175dp"
+                        android:orientation="vertical" >
+
+                        <Button
+                            android:id="@+id/button_open"
+                            android:layout_width="wrap_content"
+                            android:layout_height="65dp"
+                            android:layout_weight="1"
+                            android:textSize="30dp"
+                            android:text=""
+                            android:textColor="@color/green"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textViewopen"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Open Cases"
+                            android:textColor="@color/green"
+                             android:gravity="center"
+                             android:textSize="@dimen/activity_medium_textsize" />
+                    </LinearLayout>
+                </LinearLayout>
+           
+                </LinearLayout>
+               
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- The navigation drawer -->
+
+    <ListView
+        android:id="@+id/left_drawer"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:background="#1a1a1a"
+        android:choiceMode="singleChoice"
+        android:divider="#1a1a1a"
+        android:dividerHeight="10dp"
+        android:paddingBottom="@dimen/paddingBottom_twenty"
+        android:paddingLeft="@dimen/paddingLeft_twenty"
+        android:paddingRight="@dimen/paddingRight_twenty"
+        android:paddingTop="@dimen/paddingTop_twenty" />
+
+</android.support.v4.widget.DrawerLayout>

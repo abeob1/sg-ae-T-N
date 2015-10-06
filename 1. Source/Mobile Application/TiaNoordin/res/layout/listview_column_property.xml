@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/listHeader_height" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+            <TextView
+                android:id="@+id/listProprtyHeader_code"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Title Type"
+                android:textColor="@color/black"
+                android:visibility="gone"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/listProprtyHeader_titleTypeText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Title Type"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listProprtyHeader_titleNoText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Title No"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listProprtyHeader_lotTypeText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Lot Type"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listProprtyHeader_lotPtdPtNoText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Lot/PTD/PT No"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listProprtyHeader_formerlyKnownAsText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Formerly Known As"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listProprtyHeader_bandarPekanMukinText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Bandar/Pekan/Mukin"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listProprtyHeader_daerahText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Daerah"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listProprtyHeader_negeriText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Negeri"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

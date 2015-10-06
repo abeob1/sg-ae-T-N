@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/listHeader_height" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listAddCaseHeader_ItemCodeText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/list_custom"
+                android:gravity="center_vertical|left"
+                android:paddingLeft="@dimen/paddingLeft_five"
+                android:text="Item Code"
+                android:textColor="@color/black"
+                android:textSize="14dp" 
+                >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listAddCaseHeader_ItemNameText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/list_custom"
+                android:gravity="center_vertical|left"
+                android:paddingLeft="@dimen/paddingLeft_five"
+                android:text="Item Name"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                >
+            </TextView>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -14,6 +14,7 @@ namespace AE_TnN_Mobile_BLL
     public class clsCase
     {
         clsLog oLog = new clsLog();
+        clsEncryptDecrypt clsEncypt = new clsEncryptDecrypt();
 
         SAPbobsCOM.Company oDICompany;
 
@@ -33,7 +34,8 @@ namespace AE_TnN_Mobile_BLL
 
         public static string ConnectionString = ConfigurationManager.ConnectionStrings["dbconnection"].ConnectionString;
         public static string ConnString = ConfigurationManager.ConnectionStrings["ConnString"].ConnectionString;
-        public static string AttachmentPath = ConfigurationManager.AppSettings["AttachmentPath"].ToString();
+        public static string FileUploadPath = ConfigurationManager.AppSettings["FileUploadPath"].ToString();
+        public static string FileUploadEncryptedPath = ConfigurationManager.AppSettings["FileUploadEncryptedPath"].ToString();
 
         public DataSet SPA_AddCase_GetCardCode(string sUserName, string sPassword, string sCategory)
         {
@@ -156,7 +158,7 @@ namespace AE_TnN_Mobile_BLL
             }
         }
 
-        public DataSet SPA_AddCase_SaveAttachment(string sDocString, string sDocName, string sItemCode, string sItemName, string sCardCode)
+        public DataSet SPA_AddCase_SaveAttachment(string sDocName, string sItemCode, string sItemName, string sCardCode)
         {
             DataSet oDataset = new DataSet();
             string sFuncName = string.Empty;
@@ -171,15 +173,29 @@ namespace AE_TnN_Mobile_BLL
 
                 // This following part of code is for converting and saving the Binary stream to PDF File.
                 string strdocPath = null;
-                strdocPath = AttachmentPath + sDocName + ".pdf";
-                FileStream objfilestream = new FileStream(strdocPath, FileMode.Create, FileAccess.ReadWrite);
+                string EncryptToPath = null;
+                strdocPath = FileUploadPath + sDocName;
+                EncryptToPath = FileUploadEncryptedPath + sDocName;
 
-                byte[] bytes = new byte[sDocString.Length * sizeof(char)];
-                System.Buffer.BlockCopy(sDocString.ToCharArray(), 0, bytes, 0, bytes.Length);
+                byte[] bytes = SPA_ConvertUploadFiletoBinary(strdocPath);
 
-                //objfilestream.Write(bDocBinaryArray, 0, bDocBinaryArray.Length);
-                objfilestream.Write(bytes, 0, bytes.Length);
-                objfilestream.Close();
+                //Pass the byte array to gopi web service
+
+                // Convert the Uploaded File to Encrypted Format and Save it to Location
+
+                clsEncypt.EncryptFile(strdocPath, EncryptToPath);
+
+                //byte[] Encryptedbytes = SPA_ConvertUploadFiletoBinary(strdocPath);
+
+                //FileStream objfilestream = new FileStream(EncryptToPath, FileMode.Create, FileAccess.ReadWrite);
+                //objfilestream.Write(Encryptedbytes, 0, Encryptedbytes.Length);
+                //objfilestream.Close();
+
+                File.Delete(strdocPath);
+
+                // Update the Encrypted Location in SAP
+
+                
 
                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Attached file is saved Properly ", sFuncName);
 
@@ -743,23 +759,23 @@ namespace AE_TnN_Mobile_BLL
 
                         if (oDICompany.InTransaction) oDICompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
 
-                        DataTable dt = new DataTable();
-                        DataSet ds = SPA_AddCase_GetSalesQuotationItems(dr["CardCode"].ToString());
-                        if (ds != null && ds.Tables.Count > 0)
-                        {
-                            if (ds.Tables[0].Rows.Count > 0)
-                            {
-                                dt = ds.Tables[0];
+                        //DataTable dt = new DataTable();
+                        //DataSet ds = SPA_AddCase_GetSalesQuotationItems(dr["CardCode"].ToString());
+                        //if (ds != null && ds.Tables.Count > 0)
+                        //{
+                        //    if (ds.Tables[0].Rows.Count > 0)
+                        //    {
+                        //        dt = ds.Tables[0];
 
-                                if (dt.Rows.Count > 0)
-                                {
+                        //        if (dt.Rows.Count > 0)
+                        //        {
 
-                                    if (Add_SalesQuotation(dt, oDICompany, dr["CardCode"].ToString(), sErrDesc) != "SUCCESS")
-                                        throw new ArgumentException(sErrDesc);
-                                }
+                        //            if (Add_SalesQuotation(dt, oDICompany, dr["CardCode"].ToString(), sErrDesc) != "SUCCESS")
+                        //                throw new ArgumentException(sErrDesc);
+                        //        }
 
-                            }
-                        }
+                        //    }
+                        //}
 
                         SqlConnection con = new SqlConnection(ConnectionString);
                         SqlCommand command = con.CreateCommand();
@@ -986,8 +1002,8 @@ namespace AE_TnN_Mobile_BLL
                 oGeneralData.SetProperty("U_BPM", dtDatatable.Rows[0]["BPM"].ToString());
                 oGeneralData.SetProperty("U_STATE", dtDatatable.Rows[0]["STATE"].ToString());
                 oGeneralData.SetProperty("U_AREA", dtDatatable.Rows[0]["AREA"].ToString());
-                oGeneralData.SetProperty("U_LOTAREA_SQM", dtDatatable.Rows[0]["LOTAREA_SQM"].ToString());
-                oGeneralData.SetProperty("U_LOTAREA_SQFT", dtDatatable.Rows[0]["LOTAREA_SQFT"].ToString());
+                oGeneralData.SetProperty("U_LOTAREA_SQM", dtDatatable.Rows[0]["LOTAREA"].ToString());
+                oGeneralData.SetProperty("U_LOTAREA_SQFT", dtDatatable.Rows[0]["LOTAREA"].ToString());
                 //oGeneralData.SetProperty("U_LASTUPDATEDON", dtDatatable.Rows[0]["LASTUPDATEDON"].ToString());
                 oGeneralData.SetProperty("U_DEVELOPER", dtDatatable.Rows[0]["DEVELOPER"].ToString());
                 oGeneralData.SetProperty("U_DVLPR_CODE", dtDatatable.Rows[0]["DVLPR_CODE"].ToString());
@@ -1050,8 +1066,8 @@ namespace AE_TnN_Mobile_BLL
                                         + "U_BPM = '" + dtDatatable.Rows[0]["BPM"] + "',"
                                         + "U_STATE = '" + dtDatatable.Rows[0]["STATE"] + "',"
                                         + "U_AREA = '" + dtDatatable.Rows[0]["AREA"] + "',"
-                                        + "U_LOTAREA_SQM = '" + dtDatatable.Rows[0]["LOTAREA_SQM"] + "',"
-                                        + "U_LOTAREA_SQFT = '" + dtDatatable.Rows[0]["LOTAREA_SQFT"] + "',"
+                                        + "U_LOTAREA_SQM = '" + dtDatatable.Rows[0]["LOTAREA"] + "',"
+                                        + "U_LOTAREA_SQFT = '" + dtDatatable.Rows[0]["LOTAREA"] + "',"
                                         + "UpdateDate = '" + DateTime.Now.Date + "',"
                                         + "Updatetime = '" + TimeSplit[0] + TimeSplit[1] + "',"
                                         + "U_DEVELOPER = '" + dtDatatable.Rows[0]["DEVELOPER"] + "',"
@@ -1091,6 +1107,7 @@ namespace AE_TnN_Mobile_BLL
             string sFuncName = string.Empty;
             string sReturnResult = string.Empty;
             string sCode = string.Empty;
+            string sResult = string.Empty;
             int iLoopCount = 0;
             try
             {
@@ -1100,93 +1117,101 @@ namespace AE_TnN_Mobile_BLL
                 {
                     iLoopCount = iLoopCount + 1;
                     DataTable results = new DataTable();
-                    SqlConnection con = new SqlConnection(ConnectionString);
-                    SqlCommand command = con.CreateCommand();
-                    command.CommandText = "SELECT REPLICATE('0', (12-LEN(ISNULL(MAX(SUBSTRING(Code,4,LEN(Code)))+1,1)))) " +
-                                            " + CONVERT(VARCHAR, ISNULL(MAX(SUBSTRING(Code,4,LEN(Code)))+1,1)) [Code] FROM [@AE_RELATEDPARTY]";
-                    con.Open();
-
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-                    dataAdapter.Fill(results);
-
-                    if (results.Rows[0][0].ToString().Length > 0)
+                    if (item["IDType"].ToString() == "INDIVIDUAL")
                     {
-                        sCode = results.Rows[0][0].ToString();
+                        SqlConnection con = new SqlConnection(ConnectionString);
+                        SqlCommand command = con.CreateCommand();
+                        command.CommandText = "SELECT REPLICATE('0', (12-LEN(ISNULL(MAX(SUBSTRING(Code,4,LEN(Code)))+1,1)))) " +
+                                                " + CONVERT(VARCHAR, ISNULL(MAX(SUBSTRING(Code,4,LEN(Code)))+1,1)) [Code] FROM [@AE_RELATEDPARTY]";
+                        con.Open();
+
+                        SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                        dataAdapter.Fill(results);
+
+                        if (results.Rows[0][0].ToString().Length > 0)
+                        {
+                            sCode = results.Rows[0][0].ToString();
+                        }
+
+                        con.Close();
+
+                        if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Connecting to target company ", sFuncName);
+                        oDICompany = oLogin.ConnectToTargetCompany(ConnectionString);
+
+                        SAPbobsCOM.GeneralService oGeneralService = null;
+                        SAPbobsCOM.GeneralData oGeneralData;
+                        SAPbobsCOM.CompanyService oCompanyService = oDICompany.GetCompanyService();
+                        oGeneralService = oCompanyService.GetGeneralService("RELATEDPARTY");
+
+                        oGeneralData = (SAPbobsCOM.GeneralData)oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData);
+
+                        string[] sIDSplitUp = item["IDNo1"].ToString().Split('-');
+                        string sIDNo2 = item["IDNo1"].ToString();
+                        string sAddressId = item["IDAddress1"].ToString() + System.Environment.NewLine + item["IDAddress2"].ToString() + System.Environment.NewLine
+                                            + item["IDAddress3"].ToString() + System.Environment.NewLine +
+                                            item["IDAddress4"].ToString() + System.Environment.NewLine + item["IDAddress5"].ToString();
+                        string sCorrespondAddressId = item["CorresAddr1"].ToString() + System.Environment.NewLine + item["CorresAddr2"].ToString() + System.Environment.NewLine
+                                            + item["CorresAddr3"].ToString() + System.Environment.NewLine +
+                                            item["CorresAddr4"].ToString() + System.Environment.NewLine + item["CorresAddr5"].ToString();
+
+                        //Adding the Informations
+                        oGeneralData.SetProperty("Code", sCode);
+                        //oGeneralData.SetProperty("DocEntry", item["DocEntry"].ToString());
+                        oGeneralData.SetProperty("U_NAME", item["EmployeeName"].ToString());
+                        oGeneralData.SetProperty("U_INDIVIDUAL_TITLE", item["Title"].ToString());
+                        oGeneralData.SetProperty("U_GENDER", item["Gender"].ToString());
+                        oGeneralData.SetProperty("U_IDNO_F1", item["IDNo1"].ToString());
+                        oGeneralData.SetProperty("U_IDNO_F2", sIDNo2.Replace("-", ""));
+                        oGeneralData.SetProperty("U_IDNO_F3", item["IDNo3"].ToString());
+                        if (sIDSplitUp.Length > 0)
+                        {
+                            if (sIDSplitUp.Length >= 1)
+                            {
+                                oGeneralData.SetProperty("U_IDSEC1", sIDSplitUp[0]);
+                            }
+                            if (sIDSplitUp.Length >= 2)
+                            {
+                                oGeneralData.SetProperty("U_IDSEC2", sIDSplitUp[1]);
+                            }
+                            if (sIDSplitUp.Length >= 3)
+                            {
+                                oGeneralData.SetProperty("U_IDSEC3", sIDSplitUp[2]);
+                            }
+                        }
+                        oGeneralData.SetProperty("U_IDTYPE", "INDIVIDUAL");
+                        oGeneralData.SetProperty("U_TAXNOFORMAT1", item["TaxNo"].ToString());
+                        oGeneralData.SetProperty("U_CONTACT_MOBILE", item["MobileNo"].ToString());
+                        oGeneralData.SetProperty("U_CONTACT_TELEPHONE", item["Telephone"].ToString());
+                        oGeneralData.SetProperty("U_SYARIKATNO", item["OfficeNo"].ToString());
+                        oGeneralData.SetProperty("U_ADDSEG1", item["IDAddress1"].ToString());
+                        oGeneralData.SetProperty("U_ADDSEG2", item["IDAddress2"].ToString());
+                        oGeneralData.SetProperty("U_ADDSEG3", item["IDAddress3"].ToString());
+                        oGeneralData.SetProperty("U_ADDSEG4", item["IDAddress4"].ToString());
+                        oGeneralData.SetProperty("U_ADDSEG5", item["IDAddress5"].ToString());
+                        oGeneralData.SetProperty("U_ADDRESS_ID", sAddressId);
+                        oGeneralData.SetProperty("U_CADDSEG1", item["CorresAddr1"].ToString());
+                        oGeneralData.SetProperty("U_CADDSEG2", item["CorresAddr2"].ToString());
+                        oGeneralData.SetProperty("U_CADDSEG3", item["CorresAddr3"].ToString());
+                        oGeneralData.SetProperty("U_CADDSEG4", item["CorresAddr4"].ToString());
+                        oGeneralData.SetProperty("U_CADDSEG5", item["CorresAddr5"].ToString());
+                        oGeneralData.SetProperty("U_ADDRESS_CORRESPOND", sCorrespondAddressId);
+                        oGeneralData.SetProperty("U_ADDRESS_TOUSE", item["AddressToUse"].ToString());
+                        oGeneralData.SetProperty("U_BANK", "N");
+                        oGeneralData.SetProperty("U_DEVELOPER", "N");
+                        oGeneralData.SetProperty("U_SOLICITOR", "N");
+                        //oGeneralData.SetProperty("LastUpdatedOn", item["LastUpdatedOn"].ToString());
+
+                        oGeneralService.Add(oGeneralData);
+
+                        // The following code is update the Related Party data in the Temp table
+                        sResult = SPA_AddCase_Purch_UpdatePropInTemp(sType, iLoopCount.ToString(), item["CardCode"].ToString(), sCode, item["IDNo1"].ToString(), item["EmployeeName"].ToString(), item["TaxNo"].ToString(), item["MobileNo"].ToString(), "INDIVIDUAL");
                     }
-
-                    con.Close();
-
-                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Connecting to target company ", sFuncName);
-                    oDICompany = oLogin.ConnectToTargetCompany(ConnectionString);
-
-                    SAPbobsCOM.GeneralService oGeneralService = null;
-                    SAPbobsCOM.GeneralData oGeneralData;
-                    SAPbobsCOM.CompanyService oCompanyService = oDICompany.GetCompanyService();
-                    oGeneralService = oCompanyService.GetGeneralService("RELATEDPARTY");
-
-                    oGeneralData = (SAPbobsCOM.GeneralData)oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData);
-
-                    string[] sIDSplitUp = item["IDNo1"].ToString().Split('-');
-                    string sIDNo2 = item["IDNo1"].ToString();
-                    string sAddressId = item["IDAddress1"].ToString() + System.Environment.NewLine + item["IDAddress2"].ToString() + System.Environment.NewLine
-                                        + item["IDAddress3"].ToString() + System.Environment.NewLine +
-                                        item["IDAddress4"].ToString() + System.Environment.NewLine + item["IDAddress5"].ToString();
-                    string sCorrespondAddressId = item["CorresAddr1"].ToString() + System.Environment.NewLine + item["CorresAddr2"].ToString() + System.Environment.NewLine
-                                        + item["CorresAddr3"].ToString() + System.Environment.NewLine +
-                                        item["CorresAddr4"].ToString() + System.Environment.NewLine + item["CorresAddr5"].ToString();
-
-                    //Adding the Informations
-                    oGeneralData.SetProperty("Code", sCode);
-                    //oGeneralData.SetProperty("DocEntry", item["DocEntry"].ToString());
-                    oGeneralData.SetProperty("U_NAME", item["EmployeeName"].ToString());
-                    oGeneralData.SetProperty("U_INDIVIDUAL_TITLE", item["Title"].ToString());
-                    oGeneralData.SetProperty("U_GENDER", item["Gender"].ToString());
-                    oGeneralData.SetProperty("U_IDNO_F1", item["IDNo1"].ToString());
-                    oGeneralData.SetProperty("U_IDNO_F2", sIDNo2.Replace("-", ""));
-                    oGeneralData.SetProperty("U_IDNO_F3", item["IDNo3"].ToString());
-                    if (sIDSplitUp.Length > 0)
+                    else
                     {
-                        if (sIDSplitUp.Length >= 1)
-                        {
-                            oGeneralData.SetProperty("U_IDSEC1", sIDSplitUp[0]);
-                        }
-                        if (sIDSplitUp.Length >= 2)
-                        {
-                            oGeneralData.SetProperty("U_IDSEC2", sIDSplitUp[1]);
-                        }
-                        if (sIDSplitUp.Length >= 3)
-                        {
-                            oGeneralData.SetProperty("U_IDSEC3", sIDSplitUp[2]);
-                        }
+                        sCode = item["CardCode"].ToString();
+                        sResult = SPA_AddCase_Purch_UpdatePropInTemp(sType, iLoopCount.ToString(), item["Code"].ToString(), sCode, item["IDNo1"].ToString(), item["EmployeeName"].ToString(), item["TaxNo"].ToString(), item["MobileNo"].ToString(), "INDIVIDUAL");
                     }
-                    oGeneralData.SetProperty("U_IDTYPE", "INDIVIDUAL");
-                    oGeneralData.SetProperty("U_TAXNOFORMAT1", item["TaxNo"].ToString());
-                    oGeneralData.SetProperty("U_CONTACT_MOBILE", item["MobileNo"].ToString());
-                    oGeneralData.SetProperty("U_CONTACT_TELEPHONE", item["Telephone"].ToString());
-                    oGeneralData.SetProperty("U_SYARIKATNO", item["OfficeNo"].ToString());
-                    oGeneralData.SetProperty("U_ADDSEG1", item["IDAddress1"].ToString());
-                    oGeneralData.SetProperty("U_ADDSEG2", item["IDAddress2"].ToString());
-                    oGeneralData.SetProperty("U_ADDSEG3", item["IDAddress3"].ToString());
-                    oGeneralData.SetProperty("U_ADDSEG4", item["IDAddress4"].ToString());
-                    oGeneralData.SetProperty("U_ADDSEG5", item["IDAddress5"].ToString());
-                    oGeneralData.SetProperty("U_ADDRESS_ID", sAddressId);
-                    oGeneralData.SetProperty("U_CADDSEG1", item["CorresAddr1"].ToString());
-                    oGeneralData.SetProperty("U_CADDSEG2", item["CorresAddr2"].ToString());
-                    oGeneralData.SetProperty("U_CADDSEG3", item["CorresAddr3"].ToString());
-                    oGeneralData.SetProperty("U_CADDSEG4", item["CorresAddr4"].ToString());
-                    oGeneralData.SetProperty("U_CADDSEG5", item["CorresAddr5"].ToString());
-                    oGeneralData.SetProperty("U_ADDRESS_CORRESPOND", sCorrespondAddressId);
-                    oGeneralData.SetProperty("U_ADDRESS_TOUSE", item["AddressToUse"].ToString());
-                    oGeneralData.SetProperty("U_BANK", "N");
-                    oGeneralData.SetProperty("U_DEVELOPER", "N");
-                    oGeneralData.SetProperty("U_SOLICITOR", "N");
-                    //oGeneralData.SetProperty("LastUpdatedOn", item["LastUpdatedOn"].ToString());
-
-                    oGeneralService.Add(oGeneralData);
-
-                    // The following code is update the Related Party data in the Temp table
-
-                    string sResult = SPA_AddCase_Purch_UpdatePropInTemp(sType, iLoopCount.ToString(), item["CardCode"].ToString(), sCode, item["IDNo1"].ToString(), item["EmployeeName"].ToString(), item["TaxNo"].ToString(), item["MobileNo"].ToString(), "INDIVIDUAL");
+                    
                     if (sResult != "SUCCESS")
                     {
                         sReturnResult = sResult;
@@ -1303,5 +1328,70 @@ namespace AE_TnN_Mobile_BLL
             }
         }
 
+        public DataTable SPA_AddCase_GetCorporate()
+        {
+            string sFuncName = string.Empty;
+            string sProcName = string.Empty;
+            string sReturnResult = string.Empty;
+            DataTable results = new DataTable();
+            try
+            {
+                sFuncName = "SPA_AddCase_GetCorporate";
+                sProcName = "AE_SPA022_Mobile_AddCase_GetCorporate";
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Calling Run_StoredProcedure() " + sProcName, sFuncName);
+
+
+                oDataset = SqlHelper.ExecuteDataSet(ConnectionString, CommandType.StoredProcedure, sProcName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
+                if (oDataset.Tables.Count > 0 && oDataset != null)
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is a set of data from the SP :" + sProcName, sFuncName);
+                    return oDataset.Tables[0];
+                }
+                else
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is no data from the SP :" + sProcName, sFuncName);
+                    return new DataTable();
+                }
+            }
+            catch (Exception Ex)
+            {
+                sErrDesc = Ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                throw Ex;
+            }
+
+            return results;
+        }
+
+        public byte[] SPA_ConvertUploadFiletoBinary(string sFilePath)
+        {
+            try
+            {
+                //string filename = @"E:\Documents\TiaNoordin\" + FileUpload1.FileName;
+                //string filename = FileUpload1.FileName;
+                byte[] bytes;
+                Random rndm = new Random();
+                using (FileStream file = new FileStream(sFilePath, FileMode.Open, FileAccess.Read))
+                {
+                    bytes = new byte[file.Length];
+                    file.Read(bytes, 0, (int)file.Length);
+                }
+                return bytes;
+                //string sResult = bytes.ToString();
+                //string result = System.Text.Encoding.UTF8.GetString(bytes);
+                //SaveDocument_Boarding(bytes, rndm.Next().ToString() + ".pdf");
+                //TextBox1.Text = "SUCCESS";
+            }
+            catch (Exception Ex)
+            {
+                throw Ex;
+            }
+            
+        }
     }
 }

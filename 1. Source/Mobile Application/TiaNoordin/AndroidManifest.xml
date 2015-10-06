@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="abeo.tia.noordin"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="23" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
+        <activity
+            android:name="com.abeo.tia.noordin.LoginActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.DashBoardActivity"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.WalkInActivity"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.IndividualActivity"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.CorporateActivity"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.FirstActivity"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.SecondActivity"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.PropertyActivity"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.PropertyListActivity"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.PropertyRelatedCaseListActivity"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.AddCaseQuestion1"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.AddCaseQuestion2"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.AddCaseQuestion3"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.AddCaseQuestion4"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.AddCaseStep1of4"
+            android:screenOrientation="landscape" >
+        </activity>
+         <activity
+            android:name="com.abeo.tia.noordin.AddCaseStep2of4"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.AddCaseStep3of4"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.AddCaseStep4of4"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.AddCaseStepChose"
+            android:screenOrientation="landscape" >
+        </activity>
+         <activity
+            android:name="com.abeo.tia.noordin.FilePicker"
+            android:screenOrientation="landscape" >
+        </activity>
+         <activity
+            android:name="com.abeo.tia.noordin.PdfViewer"
+            android:screenOrientation="landscape" >
+        </activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <!-- The main content view -->
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <!-- Add content here -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            
+            android:orientation="vertical"
+            android:background="@drawable/appbg" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" 
+                        android:background="#296894">
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal" >
+
+                            <TextView
+                                android:id="@+id/textView_evoita"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:text="@string/logo"
+                                android:textColor="@color/white"
+                                android:textSize="40sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView_spa"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/logospa"
+                                android:textColor="@color/aqua"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView_welcome"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:text="@string/welcome"
+                                android:textColor="@color/aqua"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/relativeLayout1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                           
+                            android:gravity="right" >
+
+                            <Button
+                                android:id="@+id/button_AddCaseStep1Walkin"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Walk-in"
+                                android:textColor="@color/royalBlue" />
+
+                            <Button
+                                android:id="@+id/button_AddCaseStep1Find"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="false"
+                                android:text="Find"
+                                android:textColor="@color/gray" />
+
+                            <Button
+                                android:id="@+id/button_AddCaseStep1Add"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="false"
+                                android:text="Add"
+                                android:textColor="@color/gray" />
+
+                            <Button
+                                android:id="@+id/button_AddCaseStep1Edit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="false"
+                                android:text="Edit"
+                                android:textColor="@color/gray" />
+
+                            <Button
+                                android:id="@+id/button_AddCaseStep1Confirm"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="false"
+                                android:text="confirm"
+                                android:textColor="@color/gray" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/lineA"
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/blueLight"
+                        android:orientation="vertical" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/textView_question1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:text="Add Case - Step 1 of 4 : Choose Document"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/activity_medium_textsize"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/lineC"
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/blueLight"
+                        android:orientation="vertical" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" 
+                android:layout_gravity="center"
+                android:gravity="center_vertical|center_horizontal">
+                
+                
+                <Button
+                                android:id="@+id/button_readoffer"
+                                android:layout_width="350dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="true"                                
+                                android:text="Read Letter of Offer"
+                                android:background="@drawable/rcbtn"
+                                android:textColor="@color/white" />
+                
+                <Button
+                                android:id="@+id/button_readtitle"
+                                android:layout_width="350dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:text="Read Title"
+                                 android:background="@drawable/rcbtn"
+                                android:textColor="@color/white" />
+                
+            </LinearLayout>
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- The navigation drawer -->
+
+    <ListView
+        android:id="@+id/left_drawer"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:background="#1a1a1a"
+        android:choiceMode="singleChoice"
+        android:divider="#1a1a1a"
+        android:dividerHeight="10dp"
+        android:paddingBottom="@dimen/paddingBottom_twenty"
+        android:paddingLeft="@dimen/paddingLeft_twenty"
+        android:paddingRight="@dimen/paddingRight_twenty"
+        android:paddingTop="@dimen/paddingTop_twenty" />
+
+</android.support.v4.widget.DrawerLayout>

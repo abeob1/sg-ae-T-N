@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/popup_element"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:orientation="vertical"
+android:padding="10sp" >
+
+     <Button
+                                    android:id="@+id/button_AddCaseStep3Individual"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:clickable="true"
+                                    android:text="Individual"
+                                    android:textColor="@color/gray" />
+
+                                <Button
+                                    android:id="@+id/button_AddCaseStep3Corporate"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:clickable="true"
+                                    android:text="Corporate"
+                                    android:textColor="@color/gray" />
+
+</LinearLayout>
+

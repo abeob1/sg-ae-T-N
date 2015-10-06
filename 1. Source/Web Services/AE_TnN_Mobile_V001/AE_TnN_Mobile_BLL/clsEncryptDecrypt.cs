@@ -9,7 +9,7 @@ namespace AE_TnN_Mobile_BLL
 {
     public class clsEncryptDecrypt
     {
-        private void EncryptFile(string inputFile, string outputFile)
+        public void EncryptFile(string inputFile, string outputFile)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace AE_TnN_Mobile_BLL
             }
         }
 
-        private void DecryptFile(string inputFile, string outputFile)
+        public void DecryptFile(string inputFile, string outputFile)
         {
 
             {

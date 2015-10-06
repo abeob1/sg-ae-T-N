@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/listHeader_height" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listCaseHeader_codeText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Title Type"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader"
+                android:visibility="gone" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/listCaseHader_caseFileNoText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Case File No"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listCaseHeader_relatedFileNoText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Related File No"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listCaseHeader_branchCodeText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Branch Code"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listCaseHeader_FileOpendDateText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="File Opend Date"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listCaseHeader_iCText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="IC"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listCaseHeader_caseTypeText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Case Type"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listCaseHeader_clientNameText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="1st Cilent Name"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listCaseHeader_BankText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Bank"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listCaseHeader_lotPTDPTNoText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Lot/PTD/PT No"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listCaseHeader_caseAmountText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Case Amount"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listCaseHeader_userCodeText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="User Code"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listCaseHeader_statusText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Status"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:paddingLeft="@dimen/paddingLeft_listtext_two"
+            android:paddingRight="@dimen/paddingRight_listtext_two" >
+
+            <TextView
+                android:id="@+id/listCaseHeader_fileClosedDateText"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/blueAqua"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="File Closed Date"
+                android:textColor="@color/black"
+                android:textSize="@dimen/activity_textsize_listheader" >
+            </TextView>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
