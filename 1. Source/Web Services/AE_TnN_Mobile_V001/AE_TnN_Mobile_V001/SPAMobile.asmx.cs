@@ -12,6 +12,7 @@ using System.Data;
 using System.Reflection;
 using System.Xml.Serialization;
 using System.IO;
+using System.Data.SqlClient;
 
 
 namespace AE_TnN_Mobile_V001
@@ -41,10 +42,14 @@ namespace AE_TnN_Mobile_V001
         clsDashboard oDashboard = new clsDashboard();
         clsWalkin oWalkin = new clsWalkin();
         clsCase oCase = new clsCase();
+        clsProcessCase oProcessCase = new clsProcessCase();
+        clsEncryptDecrypt clsEncypt = new clsEncryptDecrypt();
         JavaScriptSerializer js = new JavaScriptSerializer();
         List<result> lstResult = new List<result>();
         SAPbobsCOM.Company oDICompany;
+        public static string ConnectionString = ConfigurationManager.ConnectionStrings["dbconnection"].ConnectionString;
         public static string FileUploadPath = ConfigurationManager.AppSettings["FileUploadPath"].ToString();
+        public static string FileUploadEncryptedPath = ConfigurationManager.AppSettings["FileUploadEncryptedPath"].ToString();
         #endregion
 
         #region WebMethods
@@ -369,6 +374,142 @@ namespace AE_TnN_Mobile_V001
 
         #endregion
 
+        #region CaseEnquiry
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_CaseEnquiry(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            try
+            {
+                sFuncName = "SPA_CaseEnquiry()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                string sInput1 = string.Empty;
+                string sInput2 = string.Empty;
+                string sInput3 = string.Empty;
+                string sInput4 = string.Empty;
+                string sInput5 = string.Empty;
+                string sInput6 = string.Empty;
+                string sInput7 = string.Empty;
+                List<RelatedCases> lstCaseInfo = new List<RelatedCases>();
+
+                sJsonInput = "[" + sJsonInput + "]";
+                //Split JSON to Individual String
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_CaseEnquiry> lstDeserialize = js.Deserialize<List<JSON_CaseEnquiry>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    JSON_CaseEnquiry objLstInfo = lstDeserialize[0];
+
+                    sInput1 = objLstInfo.FileOpenDateFrom;
+                    sInput2 = objLstInfo.FileOpenDateTo;
+                    sInput3 = objLstInfo.CaseFileNo;
+                    sInput4 = objLstInfo.CaseType;
+                    sInput5 = objLstInfo.ClientName;
+                    sInput6 = objLstInfo.AmountFrom;
+                    sInput7 = objLstInfo.AmountTo;
+                    sInput1 = objLstInfo.FileOpenDateFrom;
+                }
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_CaseEnquiry() ", sFuncName);
+                DataSet ds = oDashboard.SPA_CaseEnquiry(sInput1, sInput2, sInput3, sInput4, sInput5, sInput6, sInput7);
+                //DataSet ds = new DataSet();
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_CaseEnquiry() ", sFuncName);
+                if (ds != null && ds.Tables.Count > 0)
+                {
+
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow r in ds.Tables[0].Rows)
+                        {
+                            RelatedCases _RelatedInfo = new RelatedCases();
+
+                            _RelatedInfo.CaseFileNo = r["CaseFileNo"].ToString();
+                            _RelatedInfo.RelatedFileNo = r["RelatedCase"].ToString();
+                            _RelatedInfo.BranchCode = r["Branch"].ToString();
+                            _RelatedInfo.FileOpenedDate = r["FileOpenDate"].ToString();
+                            _RelatedInfo.IC = r["InChargeName"].ToString();
+                            _RelatedInfo.CaseType = r["CaseType"].ToString();
+                            _RelatedInfo.ClientName = r["FirstClientName"].ToString();
+                            _RelatedInfo.BankName = "";
+                            _RelatedInfo.Branch = "";
+                            _RelatedInfo.LOTNo = r["LOTNo"].ToString();
+                            _RelatedInfo.CaseAmount = r["CaseAmount"].ToString();
+                            _RelatedInfo.UserCode = r["UserCode"].ToString();
+                            _RelatedInfo.Status = r["CaseStatus"].ToString();
+                            _RelatedInfo.FileClosedDate = r["FileClosedDate"].ToString();
+
+                            lstCaseInfo.Add(_RelatedInfo);
+                        }
+                    }
+                    else
+                    {
+                        RelatedCases _RelatedInfo = new RelatedCases();
+
+                        _RelatedInfo.CaseFileNo = string.Empty;
+                        _RelatedInfo.RelatedFileNo = string.Empty;
+                        _RelatedInfo.BranchCode = string.Empty;
+                        _RelatedInfo.FileOpenedDate = string.Empty;
+                        _RelatedInfo.IC = string.Empty;
+                        _RelatedInfo.CaseType = string.Empty;
+                        _RelatedInfo.ClientName = string.Empty;
+                        _RelatedInfo.BankName = string.Empty;
+                        _RelatedInfo.Branch = string.Empty;
+                        _RelatedInfo.LOTNo = string.Empty;
+                        _RelatedInfo.CaseAmount = string.Empty;
+                        _RelatedInfo.UserCode = string.Empty;
+                        _RelatedInfo.Status = string.Empty;
+                        _RelatedInfo.FileClosedDate = string.Empty;
+
+                        lstCaseInfo.Add(_RelatedInfo);
+                    }
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Related Case Information ", sFuncName);
+                    Context.Response.Output.Write(js.Serialize(lstCaseInfo));
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Related Case Details , the Serialized data is ' " + js.Serialize(lstCaseInfo) + " '", sFuncName);
+                }
+                else
+                {
+                    RelatedCases _RelatedInfo = new RelatedCases();
+
+                    _RelatedInfo.CaseFileNo = string.Empty;
+                    _RelatedInfo.RelatedFileNo = string.Empty;
+                    _RelatedInfo.BranchCode = string.Empty;
+                    _RelatedInfo.FileOpenedDate = string.Empty;
+                    _RelatedInfo.IC = string.Empty;
+                    _RelatedInfo.CaseType = string.Empty;
+                    _RelatedInfo.ClientName = string.Empty;
+                    _RelatedInfo.BankName = string.Empty;
+                    _RelatedInfo.Branch = string.Empty;
+                    _RelatedInfo.LOTNo = string.Empty;
+                    _RelatedInfo.CaseAmount = string.Empty;
+                    _RelatedInfo.UserCode = string.Empty;
+                    _RelatedInfo.Status = string.Empty;
+                    _RelatedInfo.FileClosedDate = string.Empty;
+
+                    lstCaseInfo.Add(_RelatedInfo);
+                    Context.Response.Output.Write(js.Serialize(lstCaseInfo));
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        #endregion
+
         #region Dashboard
         [WebMethod(EnableSession = true)]
         [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
@@ -536,6 +677,372 @@ namespace AE_TnN_Mobile_V001
                 Context.Response.Output.Write(js.Serialize(lstResult));
             }
         }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_OpenCases(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            try
+            {
+                sFuncName = "SPA_OpenCases()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                string sFilterType = "";
+                string sCaseStatus = "Open";
+                string sUserCode = string.Empty;
+
+                List<RelatedCases> lstCaseInfo = new List<RelatedCases>();
+
+                sJsonInput = "[" + sJsonInput + "]";
+                //Split JSON to Individual String
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_OpenCase> lstDeserialize = js.Deserialize<List<JSON_OpenCase>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    JSON_OpenCase objLstInfo = lstDeserialize[0];
+
+                    sUserCode = objLstInfo.sUserName;
+                }
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_DashboardCaseButtonInfo() ", sFuncName);
+                DataSet ds = oDashboard.SPA_DashboardCaseButtonInfo(sFilterType, sCaseStatus, sUserCode);
+                //DataSet ds = new DataSet();
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_DashboardCaseButtonInfo() ", sFuncName);
+                if (ds != null && ds.Tables.Count > 0)
+                {
+
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow r in ds.Tables[0].Rows)
+                        {
+                            RelatedCases _RelatedInfo = new RelatedCases();
+
+                            _RelatedInfo.CaseFileNo = r["CaseFileNo"].ToString();
+                            _RelatedInfo.RelatedFileNo = r["RelatedCase"].ToString();
+                            _RelatedInfo.BranchCode = r["Branch"].ToString();
+                            _RelatedInfo.FileOpenedDate = r["FileOpenDate"].ToString();
+                            _RelatedInfo.IC = r["InChargeName"].ToString();
+                            _RelatedInfo.CaseType = r["CaseType"].ToString();
+                            _RelatedInfo.ClientName = r["FirstClientName"].ToString();
+                            _RelatedInfo.BankName = "";
+                            _RelatedInfo.Branch = "";
+                            _RelatedInfo.LOTNo = r["LOTNo"].ToString();
+                            _RelatedInfo.CaseAmount = r["CaseAmount"].ToString();
+                            _RelatedInfo.UserCode = r["UserCode"].ToString();
+                            _RelatedInfo.Status = r["CaseStatus"].ToString();
+                            _RelatedInfo.FileClosedDate = r["FileClosedDate"].ToString();
+
+                            lstCaseInfo.Add(_RelatedInfo);
+                        }
+                    }
+                    else
+                    {
+                        RelatedCases _RelatedInfo = new RelatedCases();
+
+                        _RelatedInfo.CaseFileNo = string.Empty;
+                        _RelatedInfo.RelatedFileNo = string.Empty;
+                        _RelatedInfo.BranchCode = string.Empty;
+                        _RelatedInfo.FileOpenedDate = string.Empty;
+                        _RelatedInfo.IC = string.Empty;
+                        _RelatedInfo.CaseType = string.Empty;
+                        _RelatedInfo.ClientName = string.Empty;
+                        _RelatedInfo.BankName = string.Empty;
+                        _RelatedInfo.Branch = string.Empty;
+                        _RelatedInfo.LOTNo = string.Empty;
+                        _RelatedInfo.CaseAmount = string.Empty;
+                        _RelatedInfo.UserCode = string.Empty;
+                        _RelatedInfo.Status = string.Empty;
+                        _RelatedInfo.FileClosedDate = string.Empty;
+
+                        lstCaseInfo.Add(_RelatedInfo);
+                    }
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Open Case Information ", sFuncName);
+                    Context.Response.Output.Write(js.Serialize(lstCaseInfo));
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Open Case Details , the Serialized data is ' " + js.Serialize(lstCaseInfo) + " '", sFuncName);
+                }
+                else
+                {
+                    RelatedCases _RelatedInfo = new RelatedCases();
+
+                    _RelatedInfo.CaseFileNo = string.Empty;
+                    _RelatedInfo.RelatedFileNo = string.Empty;
+                    _RelatedInfo.BranchCode = string.Empty;
+                    _RelatedInfo.FileOpenedDate = string.Empty;
+                    _RelatedInfo.IC = string.Empty;
+                    _RelatedInfo.CaseType = string.Empty;
+                    _RelatedInfo.ClientName = string.Empty;
+                    _RelatedInfo.BankName = string.Empty;
+                    _RelatedInfo.Branch = string.Empty;
+                    _RelatedInfo.LOTNo = string.Empty;
+                    _RelatedInfo.CaseAmount = string.Empty;
+                    _RelatedInfo.UserCode = string.Empty;
+                    _RelatedInfo.Status = string.Empty;
+                    _RelatedInfo.FileClosedDate = string.Empty;
+
+                    lstCaseInfo.Add(_RelatedInfo);
+                    Context.Response.Output.Write(js.Serialize(lstCaseInfo));
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ActionCases(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            try
+            {
+                sFuncName = "SPA_ActionCases()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                string sFilterType = "Pend";
+                string sCaseStatus = "Open";
+                string sUserCode = string.Empty;
+
+                List<RelatedCases> lstCaseInfo = new List<RelatedCases>();
+
+                sJsonInput = "[" + sJsonInput + "]";
+                //Split JSON to Individual String
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_OpenCase> lstDeserialize = js.Deserialize<List<JSON_OpenCase>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    JSON_OpenCase objLstInfo = lstDeserialize[0];
+
+                    sUserCode = objLstInfo.sUserName;
+                }
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_DashboardCaseButtonInfo() ", sFuncName);
+                DataSet ds = oDashboard.SPA_DashboardCaseButtonInfo(sFilterType, sCaseStatus, sUserCode);
+                //DataSet ds = new DataSet();
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_DashboardCaseButtonInfo() ", sFuncName);
+                if (ds != null && ds.Tables.Count > 0)
+                {
+
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow r in ds.Tables[0].Rows)
+                        {
+                            RelatedCases _RelatedInfo = new RelatedCases();
+
+                            _RelatedInfo.CaseFileNo = r["CaseFileNo"].ToString();
+                            _RelatedInfo.RelatedFileNo = r["RelatedCase"].ToString();
+                            _RelatedInfo.BranchCode = r["Branch"].ToString();
+                            _RelatedInfo.FileOpenedDate = r["FileOpenDate"].ToString();
+                            _RelatedInfo.IC = r["InChargeName"].ToString();
+                            _RelatedInfo.CaseType = r["CaseType"].ToString();
+                            _RelatedInfo.ClientName = r["FirstClientName"].ToString();
+                            _RelatedInfo.BankName = "";
+                            _RelatedInfo.Branch = "";
+                            _RelatedInfo.LOTNo = r["LOTNo"].ToString();
+                            _RelatedInfo.CaseAmount = r["CaseAmount"].ToString();
+                            _RelatedInfo.UserCode = r["UserCode"].ToString();
+                            _RelatedInfo.Status = r["CaseStatus"].ToString();
+                            _RelatedInfo.FileClosedDate = r["FileClosedDate"].ToString();
+
+                            lstCaseInfo.Add(_RelatedInfo);
+                        }
+                    }
+                    else
+                    {
+                        RelatedCases _RelatedInfo = new RelatedCases();
+
+                        _RelatedInfo.CaseFileNo = string.Empty;
+                        _RelatedInfo.RelatedFileNo = string.Empty;
+                        _RelatedInfo.BranchCode = string.Empty;
+                        _RelatedInfo.FileOpenedDate = string.Empty;
+                        _RelatedInfo.IC = string.Empty;
+                        _RelatedInfo.CaseType = string.Empty;
+                        _RelatedInfo.ClientName = string.Empty;
+                        _RelatedInfo.BankName = string.Empty;
+                        _RelatedInfo.Branch = string.Empty;
+                        _RelatedInfo.LOTNo = string.Empty;
+                        _RelatedInfo.CaseAmount = string.Empty;
+                        _RelatedInfo.UserCode = string.Empty;
+                        _RelatedInfo.Status = string.Empty;
+                        _RelatedInfo.FileClosedDate = string.Empty;
+
+                        lstCaseInfo.Add(_RelatedInfo);
+                    }
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Action Case Information ", sFuncName);
+                    Context.Response.Output.Write(js.Serialize(lstCaseInfo));
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Action Case Details , the Serialized data is ' " + js.Serialize(lstCaseInfo) + " '", sFuncName);
+                }
+                else
+                {
+                    RelatedCases _RelatedInfo = new RelatedCases();
+
+                    _RelatedInfo.CaseFileNo = string.Empty;
+                    _RelatedInfo.RelatedFileNo = string.Empty;
+                    _RelatedInfo.BranchCode = string.Empty;
+                    _RelatedInfo.FileOpenedDate = string.Empty;
+                    _RelatedInfo.IC = string.Empty;
+                    _RelatedInfo.CaseType = string.Empty;
+                    _RelatedInfo.ClientName = string.Empty;
+                    _RelatedInfo.BankName = string.Empty;
+                    _RelatedInfo.Branch = string.Empty;
+                    _RelatedInfo.LOTNo = string.Empty;
+                    _RelatedInfo.CaseAmount = string.Empty;
+                    _RelatedInfo.UserCode = string.Empty;
+                    _RelatedInfo.Status = string.Empty;
+                    _RelatedInfo.FileClosedDate = string.Empty;
+
+                    lstCaseInfo.Add(_RelatedInfo);
+                    Context.Response.Output.Write(js.Serialize(lstCaseInfo));
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_PriorityCases(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            try
+            {
+                sFuncName = "SPA_PriorityCases()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                string sFilterType = "Priority";
+                string sCaseStatus = "Open";
+                string sUserCode = string.Empty;
+
+                List<RelatedCases> lstCaseInfo = new List<RelatedCases>();
+
+                sJsonInput = "[" + sJsonInput + "]";
+                //Split JSON to Individual String
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_OpenCase> lstDeserialize = js.Deserialize<List<JSON_OpenCase>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    JSON_OpenCase objLstInfo = lstDeserialize[0];
+
+                    sUserCode = objLstInfo.sUserName;
+                }
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_DashboardCaseButtonInfo() ", sFuncName);
+                DataSet ds = oDashboard.SPA_DashboardCaseButtonInfo(sFilterType, sCaseStatus, sUserCode);
+                //DataSet ds = new DataSet();
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_DashboardCaseButtonInfo() ", sFuncName);
+                if (ds != null && ds.Tables.Count > 0)
+                {
+
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow r in ds.Tables[0].Rows)
+                        {
+                            RelatedCases _RelatedInfo = new RelatedCases();
+
+                            _RelatedInfo.CaseFileNo = r["CaseFileNo"].ToString();
+                            _RelatedInfo.RelatedFileNo = r["RelatedCase"].ToString();
+                            _RelatedInfo.BranchCode = r["Branch"].ToString();
+                            _RelatedInfo.FileOpenedDate = r["FileOpenDate"].ToString();
+                            _RelatedInfo.IC = r["InChargeName"].ToString();
+                            _RelatedInfo.CaseType = r["CaseType"].ToString();
+                            _RelatedInfo.ClientName = r["FirstClientName"].ToString();
+                            _RelatedInfo.BankName = "";
+                            _RelatedInfo.Branch = "";
+                            _RelatedInfo.LOTNo = r["LOTNo"].ToString();
+                            _RelatedInfo.CaseAmount = r["CaseAmount"].ToString();
+                            _RelatedInfo.UserCode = r["UserCode"].ToString();
+                            _RelatedInfo.Status = r["CaseStatus"].ToString();
+                            _RelatedInfo.FileClosedDate = r["FileClosedDate"].ToString();
+
+                            lstCaseInfo.Add(_RelatedInfo);
+                        }
+                    }
+                    else
+                    {
+                        RelatedCases _RelatedInfo = new RelatedCases();
+
+                        _RelatedInfo.CaseFileNo = string.Empty;
+                        _RelatedInfo.RelatedFileNo = string.Empty;
+                        _RelatedInfo.BranchCode = string.Empty;
+                        _RelatedInfo.FileOpenedDate = string.Empty;
+                        _RelatedInfo.IC = string.Empty;
+                        _RelatedInfo.CaseType = string.Empty;
+                        _RelatedInfo.ClientName = string.Empty;
+                        _RelatedInfo.BankName = string.Empty;
+                        _RelatedInfo.Branch = string.Empty;
+                        _RelatedInfo.LOTNo = string.Empty;
+                        _RelatedInfo.CaseAmount = string.Empty;
+                        _RelatedInfo.UserCode = string.Empty;
+                        _RelatedInfo.Status = string.Empty;
+                        _RelatedInfo.FileClosedDate = string.Empty;
+
+                        lstCaseInfo.Add(_RelatedInfo);
+                    }
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Priority Case Information ", sFuncName);
+                    Context.Response.Output.Write(js.Serialize(lstCaseInfo));
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Priority Case Details , the Serialized data is ' " + js.Serialize(lstCaseInfo) + " '", sFuncName);
+                }
+                else
+                {
+                    RelatedCases _RelatedInfo = new RelatedCases();
+
+                    _RelatedInfo.CaseFileNo = string.Empty;
+                    _RelatedInfo.RelatedFileNo = string.Empty;
+                    _RelatedInfo.BranchCode = string.Empty;
+                    _RelatedInfo.FileOpenedDate = string.Empty;
+                    _RelatedInfo.IC = string.Empty;
+                    _RelatedInfo.CaseType = string.Empty;
+                    _RelatedInfo.ClientName = string.Empty;
+                    _RelatedInfo.BankName = string.Empty;
+                    _RelatedInfo.Branch = string.Empty;
+                    _RelatedInfo.LOTNo = string.Empty;
+                    _RelatedInfo.CaseAmount = string.Empty;
+                    _RelatedInfo.UserCode = string.Empty;
+                    _RelatedInfo.Status = string.Empty;
+                    _RelatedInfo.FileClosedDate = string.Empty;
+
+                    lstCaseInfo.Add(_RelatedInfo);
+                    Context.Response.Output.Write(js.Serialize(lstCaseInfo));
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
         #endregion
 
         #region property
@@ -686,8 +1193,7 @@ namespace AE_TnN_Mobile_V001
                             _DetailInfo.BPM = r["BPM"].ToString();
                             _DetailInfo.STATE = r["STATE"].ToString();
                             _DetailInfo.AREA = r["AREA"].ToString();
-                            _DetailInfo.LOTAREA_SQM = r["LOTAREA_SQM"].ToString();
-                            _DetailInfo.LOTAREA_SQFT = r["LOTAREA_SQFT"].ToString();
+                            _DetailInfo.LOTAREA = r["LOTAREA"].ToString();
                             _DetailInfo.LASTUPDATEDON = r["LASTUPDATEDON"].ToString();
                             _DetailInfo.DEVELOPER = r["DEVELOPER"].ToString();
                             _DetailInfo.DVLPR_CODE = r["DVLPR_CODE"].ToString();
@@ -718,8 +1224,7 @@ namespace AE_TnN_Mobile_V001
                         _DetailInfo.BPM = string.Empty;
                         _DetailInfo.STATE = string.Empty;
                         _DetailInfo.AREA = string.Empty;
-                        _DetailInfo.LOTAREA_SQM = string.Empty;
-                        _DetailInfo.LOTAREA_SQFT = string.Empty;
+                        _DetailInfo.LOTAREA = string.Empty;
                         _DetailInfo.LASTUPDATEDON = string.Empty;
                         _DetailInfo.DEVELOPER = string.Empty;
                         _DetailInfo.DVLPR_CODE = string.Empty;
@@ -1666,106 +2171,86 @@ namespace AE_TnN_Mobile_V001
                     JSON_AddCase_DocumentToRead objLstInfo = lstDeserialize[0];
 
                     //The following code is for Converting the Binary file to Original file and Read the data from the File
-                    DataSet ds = oCase.SPA_AddCase_SaveAttachment(objLstInfo.FileName, objLstInfo.ItemCode, objLstInfo.ItemName, objLstInfo.CardCode);
-                    //DataSet ds = new DataSet();
+                    DataTable dt = SPA_AddCase_SaveAttachment(objLstInfo.FileName, objLstInfo.ItemCode, objLstInfo.ItemName, objLstInfo.CardCode);
 
-                    if (ds != null && ds.Tables.Count > 0)
+                    if (dt != null && dt.Rows.Count > 0)
                     {
-                        if (ds.Tables[0].Rows.Count > 0)
+                        DocumentToRead _DetailInfo = new DocumentToRead();
+
+                        DataTable dtTransposed = GenerateTransposedTable(dt);
+                        DataColumnCollection columns = dtTransposed.Columns;
+
+                        _DetailInfo.Message = "";
+                        _DetailInfo.CODE = string.Empty;
+                        _DetailInfo.TITLETYPE = string.Empty;
+                        if (columns.Contains("U_TITLENO"))
                         {
-                            foreach (DataRow r in ds.Tables[0].Rows)
-                            {
-                                DocumentToRead _DetailInfo = new DocumentToRead();
-
-                                _DetailInfo.Message = ConfigurationManager.AppSettings["Message"].ToString();
-                                _DetailInfo.CODE = ConfigurationManager.AppSettings["CODE"].ToString();
-                                _DetailInfo.TITLETYPE = ConfigurationManager.AppSettings["TITLETYPE"];
-                                _DetailInfo.TITLENO = ConfigurationManager.AppSettings["TITLENO"];
-                                _DetailInfo.LOTTYPE = ConfigurationManager.AppSettings["LOTTYPE"];
-                                _DetailInfo.LOTNO = ConfigurationManager.AppSettings["LOTNO"];
-                                _DetailInfo.FORMERLY_KNOWN_AS = ConfigurationManager.AppSettings["FORMERLY_KNOWN_AS"];
-                                _DetailInfo.BPM = ConfigurationManager.AppSettings["BPM"];
-                                _DetailInfo.STATE = ConfigurationManager.AppSettings["STATE"];
-                                _DetailInfo.AREA = ConfigurationManager.AppSettings["AREA"];
-                                _DetailInfo.LOTAREA_SQM = ConfigurationManager.AppSettings["LOTAREA_SQM"];
-                                _DetailInfo.LOTAREA_SQFT = ConfigurationManager.AppSettings["LOTAREA_SQFT"];
-                                _DetailInfo.LASTUPDATEDON = "";
-                                _DetailInfo.DEVELOPER = "";
-                                _DetailInfo.DVLPR_CODE = "";
-                                _DetailInfo.PROJECT_CODE = "";
-                                _DetailInfo.PROJECTNAME = "";
-                                _DetailInfo.DEVLICNO = ConfigurationManager.AppSettings["DEVLICNO"];
-                                _DetailInfo.DEVSOLICTOR = "";
-                                _DetailInfo.DVLPR_SOL_CODE = "";
-                                _DetailInfo.DVLPR_LOC = ConfigurationManager.AppSettings["DVLPR_LOC"];
-                                _DetailInfo.LSTCHG_BANKCODE = "";
-                                _DetailInfo.LSTCHG_BANKNAME = "";
-                                _DetailInfo.LSTCHG_BRANCH = "";
-                                _DetailInfo.LSTCHG_PANO = ConfigurationManager.AppSettings["LSTCHG_PANO"];
-                                _DetailInfo.LSTCHG_PRSTNO = ConfigurationManager.AppSettings["LSTCHG_PRSTNO"];
-                                lstCaseInfo.Add(_DetailInfo);
-
-                                //_DetailInfo.Message = "";
-                                ////_DetailInfo.CODE = r["CODE"].ToString();
-                                //_DetailInfo.TITLETYPE = r["TITLETYPE"].ToString();
-                                //_DetailInfo.TITLENO = r["TITLENO"].ToString();
-                                //_DetailInfo.LOTTYPE = r["LOTTYPE"].ToString();
-                                //_DetailInfo.LOTNO = r["LOTNO"].ToString();
-                                //_DetailInfo.FORMERLY_KNOWN_AS = r["FORMERLY_KNOWN_AS"].ToString();
-                                //_DetailInfo.BPM = r["BPM"].ToString();
-                                //_DetailInfo.STATE = r["STATE"].ToString();
-                                //_DetailInfo.AREA = r["AREA"].ToString();
-                                //_DetailInfo.LOTAREA_SQM = r["LOTAREA_SQM"].ToString();
-                                //_DetailInfo.LOTAREA_SQFT = r["LOTAREA_SQFT"].ToString();
-                                //_DetailInfo.LASTUPDATEDON = r["LASTUPDATEDON"].ToString();
-                                //_DetailInfo.DEVELOPER = r["DEVELOPER"].ToString();
-                                ////_DetailInfo.DVLPR_CODE = r["DVLPR_CODE"].ToString();
-                                ////_DetailInfo.PROJECT_CODE = r["PROJECT_CODE"].ToString();
-                                //_DetailInfo.PROJECTNAME = r["PROJECTNAME"].ToString();
-                                //_DetailInfo.DEVLICNO = r["DEVLICNO"].ToString();
-                                //_DetailInfo.DEVSOLICTOR = r["DEVSOLICTOR"].ToString();
-                                ////_DetailInfo.DVLPR_SOL_CODE = r["DVLPR_SOL_CODE"].ToString();
-                                //_DetailInfo.DVLPR_LOC = r["DVLPR_LOC"].ToString();
-                                ////_DetailInfo.LSTCHG_BANKCODE = r["LSTCHG_BANKCODE"].ToString();
-                                //_DetailInfo.LSTCHG_BANKNAME = r["LSTCHG_BANKNAME"].ToString();
-                                //_DetailInfo.LSTCHG_BRANCH = r["LSTCHG_BRANCH"].ToString();
-                                //_DetailInfo.LSTCHG_PANO = r["LSTCHG_PANO"].ToString();
-                                //_DetailInfo.LSTCHG_PRSTNO = r["LSTCHG_PRSTNO"].ToString();
-                                //lstCaseInfo.Add(_DetailInfo);
-                            }
+                            _DetailInfo.TITLENO = dtTransposed.Rows[0]["U_TITLENO"].ToString();
                         }
                         else
                         {
-                            DocumentToRead _DetailInfo = new DocumentToRead();
-
-                            _DetailInfo.Message = "Cannot Read the Scanned Files. Kindly key in the data";
-                            _DetailInfo.CODE = "";
-                            _DetailInfo.TITLETYPE = "";
-                            _DetailInfo.TITLENO = "";
-                            _DetailInfo.LOTTYPE = "";
-                            _DetailInfo.LOTNO = "";
-                            _DetailInfo.FORMERLY_KNOWN_AS = "";
-                            _DetailInfo.BPM = "";
-                            _DetailInfo.STATE = "";
-                            _DetailInfo.AREA = "";
-                            _DetailInfo.LOTAREA_SQM = "";
-                            _DetailInfo.LOTAREA_SQFT = "";
-                            _DetailInfo.LASTUPDATEDON = "";
-                            _DetailInfo.DEVELOPER = "";
-                            _DetailInfo.DVLPR_CODE = "";
-                            _DetailInfo.PROJECT_CODE = "";
-                            _DetailInfo.PROJECTNAME = "";
-                            _DetailInfo.DEVLICNO = "";
-                            _DetailInfo.DEVSOLICTOR = "";
-                            _DetailInfo.DVLPR_SOL_CODE = "";
-                            _DetailInfo.DVLPR_LOC = "";
-                            _DetailInfo.LSTCHG_BANKCODE = "";
-                            _DetailInfo.LSTCHG_BANKNAME = "";
-                            _DetailInfo.LSTCHG_BRANCH = "";
-                            _DetailInfo.LSTCHG_PANO = "";
-                            _DetailInfo.LSTCHG_PRSTNO = "";
-                            lstCaseInfo.Add(_DetailInfo);
+                            _DetailInfo.TITLENO = string.Empty;
                         }
+                        _DetailInfo.LOTTYPE = string.Empty;
+                        if (columns.Contains("U_LOTNO"))
+                        {
+                            _DetailInfo.LOTNO = dtTransposed.Rows[0]["U_LOTNO"].ToString();
+                        }
+                        else
+                        {
+                            _DetailInfo.LOTNO = string.Empty;
+                        }
+                        if (columns.Contains("U_FORMERLY_KNOWN_AS"))
+                        {
+                            _DetailInfo.FORMERLY_KNOWN_AS = dtTransposed.Rows[0]["U_FORMERLY_KNOWN_AS"].ToString();
+                        }
+                        else
+                        {
+                            _DetailInfo.FORMERLY_KNOWN_AS = string.Empty;
+                        }
+                        if (columns.Contains("U_BPM"))
+                        {
+                            _DetailInfo.BPM = dtTransposed.Rows[0]["U_BPM"].ToString();
+                        }
+                        else
+                        {
+                            _DetailInfo.BPM = string.Empty;
+                        }
+                        if (columns.Contains("U_STATE"))
+                        {
+                            _DetailInfo.STATE = dtTransposed.Rows[0]["U_STATE"].ToString();
+                        }
+                        else
+                        {
+                            _DetailInfo.STATE = string.Empty;
+                        }
+                        if (columns.Contains("U_AREA"))
+                        {
+                            _DetailInfo.AREA = dtTransposed.Rows[0]["U_AREA"].ToString();
+                        }
+                        else
+                        {
+                            _DetailInfo.AREA = string.Empty;
+                        }
+                        if (columns.Contains("U_LOTAREA"))
+                        {
+                            _DetailInfo.LOTAREA = dtTransposed.Rows[0]["U_LOTAREA"].ToString();
+                        }
+                        else
+                        {
+                            _DetailInfo.LOTAREA = string.Empty;
+                        }
+                        _DetailInfo.LASTUPDATEDON = string.Empty;
+                        _DetailInfo.DEVELOPER = string.Empty;
+                        _DetailInfo.PROJECTNAME = string.Empty;
+                        _DetailInfo.DEVLICNO = string.Empty;
+                        _DetailInfo.DEVSOLICTOR = string.Empty;
+                        _DetailInfo.DVLPR_LOC = string.Empty;
+                        _DetailInfo.LSTCHG_BANKNAME = string.Empty;
+                        _DetailInfo.LSTCHG_BRANCH = string.Empty;
+                        _DetailInfo.LSTCHG_PANO = string.Empty;
+                        _DetailInfo.LSTCHG_PRSTNO = string.Empty;
+                        lstCaseInfo.Add(_DetailInfo);
                     }
                     else
                     {
@@ -1781,8 +2266,7 @@ namespace AE_TnN_Mobile_V001
                         _DetailInfo.BPM = "";
                         _DetailInfo.STATE = "";
                         _DetailInfo.AREA = "";
-                        _DetailInfo.LOTAREA_SQM = "";
-                        _DetailInfo.LOTAREA_SQFT = "";
+                        _DetailInfo.LOTAREA = "";
                         _DetailInfo.LASTUPDATEDON = "";
                         _DetailInfo.DEVELOPER = "";
                         _DetailInfo.DVLPR_CODE = "";
@@ -2150,110 +2634,134 @@ namespace AE_TnN_Mobile_V001
                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
                 if (lstDeserialize.Count > 0)
                 {
-                    Byte[] bBinaryData = lstDeserialize[0].DocBinaryArray;
+                    //Byte[] bBinaryData = lstDeserialize[0].DocBinaryArray;
                     // Call the web method by passing the Binary data to the method and get the result
 
-                    DataSet ds = oCase.SPA_AddCase_ScanIC(bBinaryData);
+                    JSON_AddCase_ScanIC objLstInfo = lstDeserialize[0];
 
-                    ////if (ds != null && ds.Tables.Count > 0)
-                    ////{
+                    DataTable dt = SPA_AddCase_ScanIC(objLstInfo.FileName, objLstInfo.ItemCode, objLstInfo.ItemName, objLstInfo.ICType);
                     List<ScanIC> lstSearchInfo = new List<ScanIC>();
-                    ////if (ds.Tables[0].Rows.Count > 0)
-                    ////{
-                    ////foreach (DataRow r in ds.Tables[0].Rows)
-                    ////{
-                    ScanIC _SearchInfo = new ScanIC();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        DataTable dtTransposed = GenerateTransposedTable(dt);
+                        DataColumnCollection columns = dtTransposed.Columns;
 
-                    ////_SearchInfo.Code =  r["Code"].ToString();
-                    ////_SearchInfo.DocEntry = r["DocEntry"].ToString();
-                    ////_SearchInfo.EmployeeName = r["EmployeeName"].ToString();
-                    ////_SearchInfo.Title = r["Title"].ToString();
-                    ////_SearchInfo.Gender = r["Gender"].ToString();
-                    ////_SearchInfo.IDNo1 = r["IDNo1"].ToString();
-                    ////_SearchInfo.IDNo3 = r["IDNo3"].ToString();
-                    ////_SearchInfo.TaxNo = r["TaxNo"].ToString();
-                    ////_SearchInfo.MobileNo = r["MobileNo"].ToString();
-                    ////_SearchInfo.Telephone = r["Telephone"].ToString();
-                    ////_SearchInfo.OfficeNo = r["OfficeNo"].ToString();
-                    ////_SearchInfo.IDAddress1 = r["IDAddress1"].ToString();
-                    ////_SearchInfo.IDAddress2 = r["IDAddress2"].ToString();
-                    ////_SearchInfo.IDAddress3 = r["IDAddress3"].ToString();
-                    ////_SearchInfo.IDAddress4 = r["IDAddress4"].ToString();
-                    ////_SearchInfo.IDAddress5 = r["IDAddress5"].ToString();
-                    ////_SearchInfo.CorresAddr1 = r["CorresAddr1"].ToString();
-                    ////_SearchInfo.CorresAddr2 = r["CorresAddr2"].ToString();
-                    ////_SearchInfo.CorresAddr3 = r["CorresAddr3"].ToString();
-                    ////_SearchInfo.CorresAddr4 = r["CorresAddr4"].ToString();
-                    ////_SearchInfo.CorresAddr5 = r["CorresAddr5"].ToString();
-                    ////_SearchInfo.AddressToUse = r["AddressToUse"].ToString();
-                    ////_SearchInfo.LastUpdatedOn = r["LastUpdatedOn"].ToString();
+                        ScanIC _SearchInfo = new ScanIC();
+                        _SearchInfo.Message = "";
+                        _SearchInfo.ScanICLocation = FileUploadPath + objLstInfo.FileName;
+                        _SearchInfo.ScanFrontICLocation = string.Empty;
+                        _SearchInfo.ScanFrontICLocation = string.Empty;
+                        if (objLstInfo.ICType == "Front")
+                        {
+                            if (columns.Contains("U_NAME"))
+                            {
+                                _SearchInfo.EmployeeName = dtTransposed.Rows[0]["U_NAME"].ToString();
+                            }
+                            else
+                            {
+                                _SearchInfo.EmployeeName = string.Empty;
+                            }
+                            if (columns.Contains("U_GENDER"))
+                            {
+                                _SearchInfo.Gender = dtTransposed.Rows[0]["U_GENDER"].ToString();
+                            }
+                            else
+                            {
+                                _SearchInfo.Gender = string.Empty;
+                            }
+                            if (columns.Contains("U_IDNO_F1"))
+                            {
+                                _SearchInfo.IDNo1 = dtTransposed.Rows[0]["U_IDNO_F1"].ToString();
+                            }
+                            else
+                            {
+                                _SearchInfo.IDNo1 = string.Empty;
+                            }
+                            if (columns.Contains("U_ADDRESS_ID"))
+                            {
+                                int sLen = dtTransposed.Rows[0]["U_ADDRESS_ID"].ToString().Length;
+                                _SearchInfo.IDAddress1 = dtTransposed.Rows[0]["U_ADDRESS_ID"].ToString().Substring(0, 20);
+                                _SearchInfo.IDAddress2 = dtTransposed.Rows[0]["U_ADDRESS_ID"].ToString().Substring((_SearchInfo.IDAddress1.Length), (sLen - (_SearchInfo.IDAddress1.Length)));
+                            }
+                            else
+                            {
+                                _SearchInfo.IDAddress1 = string.Empty;
+                                _SearchInfo.IDAddress2 = string.Empty;
+                            }
 
-                    _SearchInfo.Message = "OCR Cannot able to Read the data from Scanned File.Kindly Key in.";
-                    _SearchInfo.Code = string.Empty;
-                    _SearchInfo.DocEntry = string.Empty;
-                    _SearchInfo.EmployeeName = string.Empty;
-                    _SearchInfo.Title = string.Empty;
-                    _SearchInfo.Gender = string.Empty;
-                    _SearchInfo.IDNo1 = string.Empty;
-                    _SearchInfo.IDNo3 = string.Empty;
-                    _SearchInfo.TaxNo = string.Empty;
-                    _SearchInfo.MobileNo = string.Empty;
-                    _SearchInfo.Telephone = string.Empty;
-                    _SearchInfo.OfficeNo = string.Empty;
-                    _SearchInfo.IDAddress1 = string.Empty;
-                    _SearchInfo.IDAddress2 = string.Empty;
-                    _SearchInfo.IDAddress3 = string.Empty;
-                    _SearchInfo.IDAddress4 = string.Empty;
-                    _SearchInfo.IDAddress5 = string.Empty;
-                    _SearchInfo.CorresAddr1 = string.Empty;
-                    _SearchInfo.CorresAddr2 = string.Empty;
-                    _SearchInfo.CorresAddr3 = string.Empty;
-                    _SearchInfo.CorresAddr4 = string.Empty;
-                    _SearchInfo.CorresAddr5 = string.Empty;
-                    _SearchInfo.AddressToUse = string.Empty;
-                    _SearchInfo.LastUpdatedOn = string.Empty;
+                        }
+                        else if (objLstInfo.ICType == "Back")
+                        {
+                            if (columns.Contains("U_TITLENO"))
+                            {
+                                _SearchInfo.IDNo3 = dtTransposed.Rows[0]["U_TITLENO"].ToString();
+                            }
+                            else
+                            {
+                                _SearchInfo.IDNo3 = string.Empty;
+                            }
+                        }
+                        _SearchInfo.Code = string.Empty;
+                        _SearchInfo.DocEntry = string.Empty;
+                        _SearchInfo.Title = string.Empty;
+                        _SearchInfo.TaxNo = string.Empty;
+                        _SearchInfo.MobileNo = string.Empty;
+                        _SearchInfo.Telephone = string.Empty;
+                        _SearchInfo.OfficeNo = string.Empty;
+                        _SearchInfo.IDAddress1 = string.Empty;
+                        _SearchInfo.IDAddress2 = string.Empty;
+                        _SearchInfo.IDAddress3 = string.Empty;
+                        _SearchInfo.IDAddress4 = string.Empty;
+                        _SearchInfo.IDAddress5 = string.Empty;
+                        _SearchInfo.CorresAddr1 = string.Empty;
+                        _SearchInfo.CorresAddr2 = string.Empty;
+                        _SearchInfo.CorresAddr3 = string.Empty;
+                        _SearchInfo.CorresAddr4 = string.Empty;
+                        _SearchInfo.CorresAddr5 = string.Empty;
+                        _SearchInfo.AddressToUse = string.Empty;
+                        _SearchInfo.LastUpdatedOn = string.Empty;
+                        lstSearchInfo.Add(_SearchInfo);
+                    }
+                    else
+                    {
+                        ScanIC _SearchInfo = new ScanIC();
 
-                    lstSearchInfo.Add(_SearchInfo);
-                    ////    }
-                    ////}
-                    ////else
-                    ////{
-                    ////    IndividualSearch _SearchInfo = new IndividualSearch();
+                        _SearchInfo.Message = "OCR Cannot able to Read the data from Scanned File.Kindly Key in.";
+                        _SearchInfo.ScanICLocation = FileUploadEncryptedPath + objLstInfo.FileName;
+                        _SearchInfo.ScanFrontICLocation = string.Empty;
+                        _SearchInfo.ScanFrontICLocation = string.Empty;
+                        _SearchInfo.Code = string.Empty;
+                        _SearchInfo.DocEntry = string.Empty;
+                        _SearchInfo.EmployeeName = string.Empty;
+                        _SearchInfo.Title = string.Empty;
+                        _SearchInfo.Gender = string.Empty;
+                        _SearchInfo.IDNo1 = string.Empty;
+                        _SearchInfo.IDNo3 = string.Empty;
+                        _SearchInfo.TaxNo = string.Empty;
+                        _SearchInfo.MobileNo = string.Empty;
+                        _SearchInfo.Telephone = string.Empty;
+                        _SearchInfo.OfficeNo = string.Empty;
+                        _SearchInfo.IDAddress1 = string.Empty;
+                        _SearchInfo.IDAddress2 = string.Empty;
+                        _SearchInfo.IDAddress3 = string.Empty;
+                        _SearchInfo.IDAddress4 = string.Empty;
+                        _SearchInfo.IDAddress5 = string.Empty;
+                        _SearchInfo.CorresAddr1 = string.Empty;
+                        _SearchInfo.CorresAddr2 = string.Empty;
+                        _SearchInfo.CorresAddr3 = string.Empty;
+                        _SearchInfo.CorresAddr4 = string.Empty;
+                        _SearchInfo.CorresAddr5 = string.Empty;
+                        _SearchInfo.AddressToUse = string.Empty;
+                        _SearchInfo.LastUpdatedOn = string.Empty;
 
-                    ////    _SearchInfo.Code = string.Empty;
-                    ////    _SearchInfo.DocEntry = string.Empty;
-                    ////    _SearchInfo.EmployeeName = string.Empty;
-                    ////    _SearchInfo.Title = string.Empty;
-                    ////    _SearchInfo.Gender = string.Empty;
-                    ////    _SearchInfo.IDNo1 = string.Empty;
-                    ////    _SearchInfo.IDNo3 = string.Empty;
-                    ////    _SearchInfo.TaxNo = string.Empty;
-                    ////    _SearchInfo.MobileNo = string.Empty;
-                    ////    _SearchInfo.Telephone = string.Empty;
-                    ////    _SearchInfo.OfficeNo = string.Empty;
-                    ////    _SearchInfo.IDAddress1 = string.Empty;
-                    ////    _SearchInfo.IDAddress2 = string.Empty;
-                    ////    _SearchInfo.IDAddress3 = string.Empty;
-                    ////    _SearchInfo.IDAddress4 = string.Empty;
-                    ////    _SearchInfo.IDAddress5 = string.Empty;
-                    ////    _SearchInfo.CorresAddr1 = string.Empty;
-                    ////    _SearchInfo.CorresAddr2 = string.Empty;
-                    ////    _SearchInfo.CorresAddr3 = string.Empty;
-                    ////    _SearchInfo.CorresAddr4 = string.Empty;
-                    ////    _SearchInfo.CorresAddr5 = string.Empty;
-                    ////    _SearchInfo.AddressToUse = string.Empty;
-                    ////    _SearchInfo.LastUpdatedOn = string.Empty;
-
-                    ////    lstSearchInfo.Add(_SearchInfo);
-                    ////}
-
+                        lstSearchInfo.Add(_SearchInfo);
+                    }
                     if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Scan Information ", sFuncName);
                     Context.Response.Output.Write(js.Serialize(lstSearchInfo));
                     if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Scan Informations , the Serialized data is ' " + js.Serialize(lstSearchInfo) + " '", sFuncName);
-                    ////}
-
                 }
             }
+
             catch (Exception ex)
             {
                 sErrDesc = ex.Message.ToString();
@@ -2501,6 +3009,636 @@ namespace AE_TnN_Mobile_V001
 
         #endregion
 
+        #region ProcessCase
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_GetDataFromOCRD(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            ProcessCase_Details oDetails = new ProcessCase_Details();
+            ProcessCase_Purchaser oPurchase = new ProcessCase_Purchaser();
+            ProcessCase_Vendor oVendor = new ProcessCase_Vendor();
+            ProcessCase_Property oProperty = new ProcessCase_Property();
+            ProcessCase_LoanPrinciple oLoanPrinciple = new ProcessCase_LoanPrinciple();
+            ProcessCase_LoanSubsidary oLoanSubsidary = new ProcessCase_LoanSubsidary();
+            ProcessCase_GetDataFromOCRD oHeader = new ProcessCase_GetDataFromOCRD();
+            List<ProcessCase_GetDataFromOCRD> lstProcessCase = new List<ProcessCase_GetDataFromOCRD>();
+            try
+            {
+                List<ProcessCase_GetDataFromOCRD> lstSearchInfo = new List<ProcessCase_GetDataFromOCRD>();
+                sFuncName = "SPA_ProcessCase_GetDataFromOCRD()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                string sCaseNo = string.Empty;
+                string sUserName = string.Empty;
+                string sUserRole = string.Empty;
+
+                sJsonInput = "[" + sJsonInput + "]";
+                //Split JSON to Individual String
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_ProcessCase_GetDataFromOCRD> lstDeserialize = js.Deserialize<List<JSON_ProcessCase_GetDataFromOCRD>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    JSON_ProcessCase_GetDataFromOCRD objLstInfo = lstDeserialize[0];
+
+                    sCaseNo = objLstInfo.CaseNo;
+                    sUserName = objLstInfo.UserName;
+                    sUserRole = objLstInfo.UserRole;
+                }
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_ProcessCase_GetDataFromOCRD() ", sFuncName);
+                DataSet ds = oProcessCase.SPA_ProcessCase_GetDataFromOCRD(sCaseNo, sUserName, sUserRole);
+
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            // This is for the Details Tab
+                            oDetails.LA = dr["LA"].ToString();
+                            oDetails.MANAGER = dr["MANAGER"].ToString();
+                            oDetails.InCharge = dr["InCharge"].ToString();
+                            oDetails.CustomerService = dr["CustomerService"].ToString();
+                            oDetails.CaseType = dr["CaseType"].ToString();
+                            oDetails.FileLocation = dr["FileLocation"].ToString();
+                            oDetails.FileClosedDate = dr["FileClosedDate"].ToString();
+                            oDetails.VendAcqDt = dr["VendAcqDt"].ToString();
+                            oDetails.CompanyBuisnessSearch = dr["CompanyBuisnessSearch"].ToString();
+                            oDetails.BankWindingSearch = dr["BankWindingSearch"].ToString();
+
+                            // This is for the Purchase Tab
+                            oPurchase.PurRepresentedByFirm = dr["PurRepresentedByFirm"].ToString();
+                            oPurchase.PurlawyerRepresented = dr["PurlawyerRepresented"].ToString();
+                            oPurchase.PurSPADate = dr["PurSPADate"].ToString();
+                            oPurchase.PurEntryOfPrivateCaveat = dr["PurEntryOfPrivateCaveat"].ToString();
+                            oPurchase.PurWithOfPrivateCaveat = dr["PurWithOfPrivateCaveat"].ToString();
+                            oPurchase.PurFirstName = dr["PurFirstName"].ToString();
+                            oPurchase.PurFirstID = dr["PurFirstID"].ToString();
+                            oPurchase.PurFirstTaxNo = dr["PurFirstTaxNo"].ToString();
+                            oPurchase.PurFirstContactNo = dr["PurFirstContactNo"].ToString();
+                            oPurchase.PurFirstType = dr["PurFirstType"].ToString();
+                            oPurchase.PurSecName = dr["PurSecName"].ToString();
+                            oPurchase.PurSecID = dr["PurSecID"].ToString();
+                            oPurchase.PurSecTaxNo = dr["PurSecTaxNo"].ToString();
+                            oPurchase.PurSecContactNo = dr["PurSecContactNo"].ToString();
+                            oPurchase.PurSecType = dr["PurSecType"].ToString();
+                            oPurchase.PurThirdName = dr["PurThirdName"].ToString();
+                            oPurchase.PurThirdID = dr["PurThirdID"].ToString();
+                            oPurchase.PurThirdTaxNo = dr["PurThirdTaxNo"].ToString();
+                            oPurchase.PurThirdContactNo = dr["PurThirdContactNo"].ToString();
+                            oPurchase.PurThirdType = dr["PurThirdType"].ToString();
+                            oPurchase.PurFourthName = dr["PurFourthName"].ToString();
+                            oPurchase.PurFourthID = dr["PurFourthID"].ToString();
+                            oPurchase.PurFourthTaxNo = dr["PurFourthTaxNo"].ToString();
+                            oPurchase.PurFourthContactNo = dr["PurFourthContactNo"].ToString();
+                            oPurchase.PurFourthType = dr["PurFourthType"].ToString();
+
+                            // This is for the Vendor Tab
+                            oVendor.VndrRepresentedByFirm = dr["VndrRepresentedByFirm"].ToString();
+                            oVendor.VndrlawyerRepresented = dr["VndrlawyerRepresented"].ToString();
+                            oVendor.VndrReqDevConsent = dr["VndrReqDevConsent"].ToString();
+                            oVendor.VndrReceiveDevConsent = dr["VndrReceiveDevConsent"].ToString();
+                            oVendor.VndrFirstName = dr["VndrFirstName"].ToString();
+                            oVendor.VndrFirstID = dr["VndrFirstID"].ToString();
+                            oVendor.VndrFirstTaxNo = dr["VndrFirstTaxNo"].ToString();
+                            oVendor.VndrFirstContactNo = dr["VndrFirstContactNo"].ToString();
+                            oVendor.VndrFirstType = dr["VndrFirstType"].ToString();
+                            oVendor.VndrSecName = dr["VndrSecName"].ToString();
+                            oVendor.VndrSecID = dr["VndrSecID"].ToString();
+                            oVendor.VndrSecTaxNo = dr["VndrSecTaxNo"].ToString();
+                            oVendor.VndrSecContactNo = dr["VndrSecContactNo"].ToString();
+                            oVendor.VndrSecType = dr["VndrSecType"].ToString();
+                            oVendor.VndrThirdName = dr["VndrThirdName"].ToString();
+                            oVendor.VndrThirdID = dr["VndrThirdID"].ToString();
+                            oVendor.VndrThirdTaxNo = dr["VndrThirdTaxNo"].ToString();
+                            oVendor.VndrThirdContactNo = dr["VndrThirdContactNo"].ToString();
+                            oVendor.VndrThirdType = dr["VndrThirdType"].ToString();
+                            oVendor.VndrFourthName = dr["VndrFourthName"].ToString();
+                            oVendor.VndrFourthID = dr["VndrFourthID"].ToString();
+                            oVendor.VndrFourthTaxNo = dr["VndrFourthTaxNo"].ToString();
+                            oVendor.VndrFourthContactNo = dr["VndrFourthContactNo"].ToString();
+                            oVendor.VndrFourthType = dr["VndrFourthType"].ToString();
+
+                            // This is for Property Tab
+                            oProperty.TitleType = dr["TitleType"].ToString();
+                            oProperty.CertifiedPlanNo = dr["CertifiedPlanNo"].ToString();
+                            oProperty.LotNo = dr["LotNo"].ToString();
+                            oProperty.PreviouslyKnownAs = dr["PreviouslyKnownAs"].ToString();
+                            oProperty.State = dr["State"].ToString();
+                            oProperty.Area = dr["Area"].ToString();
+                            oProperty.BPM = dr["BPM"].ToString();
+                            oProperty.GovSurvyPlan = dr["GovSurvyPlan"].ToString();
+                            oProperty.LotArea = dr["LotArea"].ToString();
+                            oProperty.Developer = dr["Developer"].ToString();
+                            oProperty.Project = dr["Project"].ToString();
+                            oProperty.DevLicenseNo = dr["DevLicenseNo"].ToString();
+                            oProperty.DevSolicitor = dr["DevSolicitor"].ToString();
+                            oProperty.DevSoliLoc = dr["DevSoliLoc"].ToString();
+                            oProperty.TitleSearchDate = dr["TitleSearchDate"].ToString();
+                            oProperty.DSCTransfer = dr["DSCTransfer"].ToString();
+                            oProperty.DRCTransfer = dr["DRCTransfer"].ToString();
+                            oProperty.FourteenADate = dr["FourteenADate"].ToString();
+                            oProperty.DRTLRegistry = dr["DRTLRegistry"].ToString();
+                            oProperty.PropertyCharged = dr["PropertyCharged"].ToString();
+                            oProperty.BankName = dr["BankName"].ToString();
+                            oProperty.Branch = dr["Branch"].ToString();
+                            oProperty.PAName = dr["PAName"].ToString();
+                            oProperty.PresentationNo = dr["PresentationNo"].ToString();
+                            oProperty.ExistChargeRef = dr["ExistChargeRef"].ToString();
+                            oProperty.ReceiptType = dr["ReceiptType"].ToString();
+                            oProperty.ReceiptNo = dr["ReceiptNo"].ToString();
+                            oProperty.ReceiptDate = dr["ReceiptDate"].ToString();
+                            oProperty.PurchasePrice = dr["PurchasePrice"].ToString();
+                            oProperty.AdjValue = dr["AdjValue"].ToString();
+                            oProperty.VndrPrevSPAValue = dr["VndrPrevSPAValue"].ToString();
+                            oProperty.Deposit = dr["Deposit"].ToString();
+                            oProperty.BalPurPrice = dr["BalPurPrice"].ToString();
+                            oProperty.LoanAmount = dr["LoanAmount"].ToString();
+                            oProperty.LoanCaseNo = dr["LoanCaseNo"].ToString();
+                            oProperty.DiffSum = dr["DiffSum"].ToString();
+                            oProperty.RedAmt = dr["RedAmt"].ToString();
+                            oProperty.RedDate = dr["RedDate"].ToString();
+                            oProperty.DefRdmptSum = dr["DefRdmptSum"].ToString();
+
+                            // This is for Loan Principle Tab
+
+                            oLoanPrinciple.ReqRedStatement = dr["ReqRedStatement"].ToString();
+                            oLoanPrinciple.RedStmtDate = dr["RedStmtDate"].ToString();
+                            oLoanPrinciple.RedPayDate = dr["RedPayDate"].ToString();
+                            oLoanPrinciple.RepByFirm = dr["RepByFirm"].ToString();
+                            oLoanPrinciple.LoanCaseNo = dr["LoanCaseNo"].ToString();
+                            oLoanPrinciple.Project = dr["Project"].ToString();
+                            oLoanPrinciple.MasterBankName = dr["MasterBankName"].ToString();
+                            oLoanPrinciple.BranchName = dr["BranchName"].ToString();
+                            oLoanPrinciple.Address = dr["Address"].ToString();
+                            oLoanPrinciple.PAName = dr["PAName"].ToString();
+                            oLoanPrinciple.BankRef = dr["BankRef"].ToString();
+                            oLoanPrinciple.BankInsDate = dr["BankInsDate"].ToString();
+                            oLoanPrinciple.LOFDate = dr["LOFDate"].ToString();
+                            oLoanPrinciple.BankSolicitor = dr["BankSolicitor"].ToString();
+                            oLoanPrinciple.SoliLoc = dr["SoliLoc"].ToString();
+                            oLoanPrinciple.SoliRef = dr["SoliRef"].ToString();
+                            oLoanPrinciple.TypeofLoan = dr["TypeofLoan"].ToString();
+                            oLoanPrinciple.TypeofFacility = dr["TypeofFacility"].ToString();
+                            oLoanPrinciple.FacilityAmt = dr["FacilityAmt"].ToString();
+                            oLoanPrinciple.Repaymt = dr["Repaymt"].ToString();
+                            oLoanPrinciple.IntrstRate = dr["IntrstRate"].ToString();
+                            oLoanPrinciple.MonthlyInstmt = dr["MonthlyInstmt"].ToString();
+                            oLoanPrinciple.TermLoanAmt = dr["TermLoanAmt"].ToString();
+                            oLoanPrinciple.Interest = dr["Interest"].ToString();
+                            oLoanPrinciple.ODLoan = dr["ODLoan"].ToString();
+                            oLoanPrinciple.MRTA = dr["MRTA"].ToString();
+                            oLoanPrinciple.BankGuarantee = dr["BankGuarantee"].ToString();
+                            oLoanPrinciple.LetterofCredit = dr["LetterofCredit"].ToString();
+                            oLoanPrinciple.TrustReceipt = dr["TrustReceipt"].ToString();
+                            oLoanPrinciple.Others = dr["Others"].ToString();
+                            oLoanPrinciple.LoanDet1 = dr["LoanDet1"].ToString();
+                            oLoanPrinciple.LoanDet2 = dr["LoanDet2"].ToString();
+                            oLoanPrinciple.LoanDet3 = dr["LoanDet3"].ToString();
+                            oLoanPrinciple.LoanDet4 = dr["LoanDet4"].ToString();
+                            oLoanPrinciple.LoanDet5 = dr["LoanDet5"].ToString();
+
+                            // This is for Loan Subsidary Tab
+
+                            oLoanSubsidary.LoanDocForBankExe = dr["LoanDocForBankExe"].ToString();
+                            oLoanSubsidary.FaciAgreeDate = dr["FaciAgreeDate"].ToString();
+                            oLoanSubsidary.LoanDocRetFromBank = dr["LoanDocRetFromBank"].ToString();
+                            oLoanSubsidary.DischargeofCharge = dr["DischargeofCharge"].ToString();
+                            oLoanSubsidary.FirstTypeofFacility = dr["FirstTypeofFacility"].ToString();
+                            oLoanSubsidary.FirstFacilityAmt = dr["FirstFacilityAmt"].ToString();
+                            oLoanSubsidary.FirstRepaymt = dr["FirstRepaymt"].ToString();
+                            oLoanSubsidary.FirstIntrstRate = dr["FirstIntrstRate"].ToString();
+                            oLoanSubsidary.FirstMonthlyInstmt = dr["FirstMonthlyInstmt"].ToString();
+                            oLoanSubsidary.FirstTermLoanAmt = dr["FirstTermLoanAmt"].ToString();
+                            oLoanSubsidary.FirstInterest = dr["FirstInterest"].ToString();
+                            oLoanSubsidary.FirstODLoan = dr["FirstODLoan"].ToString();
+                            oLoanSubsidary.FirstMRTA = dr["FirstMRTA"].ToString();
+                            oLoanSubsidary.FirstBankGuarantee = dr["FirstBankGuarantee"].ToString();
+                            oLoanSubsidary.FirstLetterofCredit = dr["FirstLetterofCredit"].ToString();
+                            oLoanSubsidary.FirstTrustReceipt = dr["FirstTrustReceipt"].ToString();
+                            oLoanSubsidary.FirstOthers = dr["FirstOthers"].ToString();
+                            oLoanSubsidary.SecTypeofFacility = dr["SecTypeofFacility"].ToString();
+                            oLoanSubsidary.SecFacilityAmt = dr["SecFacilityAmt"].ToString();
+                            oLoanSubsidary.SecRepaymt = dr["SecRepaymt"].ToString();
+                            oLoanSubsidary.SecIntrstRate = dr["SecIntrstRate"].ToString();
+                            oLoanSubsidary.SecMonthlyInstmt = dr["SecMonthlyInstmt"].ToString();
+                            oLoanSubsidary.SecTermLoanAmt = dr["SecTermLoanAmt"].ToString();
+                            oLoanSubsidary.SecInterest = dr["SecInterest"].ToString();
+                            oLoanSubsidary.SecODLoan = dr["SecODLoan"].ToString();
+                            oLoanSubsidary.SecMRTA = dr["SecMRTA"].ToString();
+                            oLoanSubsidary.SecBankGuarantee = dr["SecBankGuarantee"].ToString();
+                            oLoanSubsidary.SecLetterofCredit = dr["SecLetterofCredit"].ToString();
+                            oLoanSubsidary.SecTrustReceipt = dr["SecTrustReceipt"].ToString();
+                            oLoanSubsidary.SecOthers = dr["SecOthers"].ToString();
+                            oLoanSubsidary.ThirdTypeofFacility = dr["ThirdTypeofFacility"].ToString();
+                            oLoanSubsidary.ThirdFacilityAmt = dr["ThirdFacilityAmt"].ToString();
+                            oLoanSubsidary.ThirdRepaymt = dr["ThirdRepaymt"].ToString();
+                            oLoanSubsidary.ThirdIntrstRate = dr["ThirdIntrstRate"].ToString();
+                            oLoanSubsidary.ThirdMonthlyInstmt = dr["ThirdMonthlyInstmt"].ToString();
+                            oLoanSubsidary.ThirdTermLoanAmt = dr["ThirdTermLoanAmt"].ToString();
+                            oLoanSubsidary.ThirdInterest = dr["ThirdInterest"].ToString();
+                            oLoanSubsidary.ThirdODLoan = dr["ThirdODLoan"].ToString();
+                            oLoanSubsidary.ThirdMRTA = dr["ThirdMRTA"].ToString();
+                            oLoanSubsidary.ThirdBankGuarantee = dr["ThirdBankGuarantee"].ToString();
+                            oLoanSubsidary.ThirdLetterofCredit = dr["ThirdLetterofCredit"].ToString();
+                            oLoanSubsidary.ThirdTrustReceipt = dr["ThirdTrustReceipt"].ToString();
+                            oLoanSubsidary.ThirdOthers = dr["ThirdOthers"].ToString();
+                            oLoanSubsidary.FourthTypeofFacility = dr["FourthTypeofFacility"].ToString();
+                            oLoanSubsidary.FourthFacilityAmt = dr["FourthFacilityAmt"].ToString();
+                            oLoanSubsidary.FourthRepaymt = dr["FourthRepaymt"].ToString();
+                            oLoanSubsidary.FourthIntrstRate = dr["FourthIntrstRate"].ToString();
+                            oLoanSubsidary.FourthMonthlyInstmt = dr["FourthMonthlyInstmt"].ToString();
+                            oLoanSubsidary.FourthTermLoanAmt = dr["FourthTermLoanAmt"].ToString();
+                            oLoanSubsidary.FourthInterest = dr["FourthInterest"].ToString();
+                            oLoanSubsidary.FourthODLoan = dr["FourthODLoan"].ToString();
+                            oLoanSubsidary.FourthMRTA = dr["FourthMRTA"].ToString();
+                            oLoanSubsidary.FourthBankGuarantee = dr["FourthBankGuarantee"].ToString();
+                            oLoanSubsidary.FourthLetterofCredit = dr["FourthLetterofCredit"].ToString();
+                            oLoanSubsidary.FourthTrustReceipt = dr["FourthTrustReceipt"].ToString();
+                            oLoanSubsidary.FourthOthers = dr["FourthOthers"].ToString();
+                            oLoanSubsidary.FifthTypeofFacility = dr["FifthTypeofFacility"].ToString();
+                            oLoanSubsidary.FifthFacilityAmt = dr["FifthFacilityAmt"].ToString();
+                            oLoanSubsidary.FifthRepaymt = dr["FifthRepaymt"].ToString();
+                            oLoanSubsidary.FifthIntrstRate = dr["FifthIntrstRate"].ToString();
+                            oLoanSubsidary.FifthMonthlyInstmt = dr["FifthMonthlyInstmt"].ToString();
+                            oLoanSubsidary.FifthTermLoanAmt = dr["FifthTermLoanAmt"].ToString();
+                            oLoanSubsidary.FifthInterest = dr["FifthInterest"].ToString();
+                            oLoanSubsidary.FifthODLoan = dr["FifthODLoan"].ToString();
+                            oLoanSubsidary.FifthMRTA = dr["FifthMRTA"].ToString();
+                            oLoanSubsidary.FifthBankGuarantee = dr["FifthBankGuarantee"].ToString();
+                            oLoanSubsidary.FifthLetterofCredit = dr["FifthLetterofCredit"].ToString();
+                            oLoanSubsidary.FifthTrustReceipt = dr["FifthTrustReceipt"].ToString();
+                            oLoanSubsidary.FifthOthers = dr["FifthOthers"].ToString();
+
+
+                            // For holding the header information and the tab list of datas
+                            oHeader.Case = dr["Case"].ToString();
+                            oHeader.CaseType = dr["CaseType"].ToString();
+                            oHeader.CaseStatus = dr["CaseStatus"].ToString();
+                            oHeader.FileOpenDate = dr["FileOpenDate"].ToString();
+                            oHeader.CaseFileNo = dr["CaseFileNo"].ToString();
+                            oHeader.KIV = dr["KIV"].ToString();
+                            oHeader.Details = oDetails;
+                            oHeader.Purchaser = oPurchase;
+                            oHeader.Vendor = oVendor;
+                            oHeader.Property = oProperty;
+                            oHeader.LoanPrinciple = oLoanPrinciple;
+                            oHeader.LoanSubsidary = oLoanSubsidary;
+
+                            lstProcessCase.Add(oHeader);
+                        }
+                    }
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Process case Information ", sFuncName);
+                    Context.Response.Output.Write(js.Serialize(lstProcessCase));
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Process case Informations , the Serialized data is ' " + js.Serialize(lstProcessCase) + " '", sFuncName);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_UpdateCaseTabDetails(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            string sTabId = string.Empty;
+            try
+            {
+                sFuncName = "SPA_ProcessCase_UpdateCaseTabDetails()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                //sJsonInput = "[" + sJsonInput + "]";
+                //Split JSON to Individual String
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<ProcessCase_GetDataFromOCRD> lstDeserialize = js.Deserialize<List<ProcessCase_GetDataFromOCRD>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    //JSON_AddIndividualSearch objLstInfo = lstDeserialize[0];
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Converting Json to Datatable ", sFuncName);
+                    ProcessCase_Header objHeader = new ProcessCase_Header();
+                    objHeader.Case = lstDeserialize[0].Case;
+                    objHeader.CaseType = lstDeserialize[0].CaseType;
+                    objHeader.CaseStatus = lstDeserialize[0].CaseStatus;
+                    objHeader.FileOpenDate = lstDeserialize[0].FileOpenDate;
+                    objHeader.CaseFileNo = lstDeserialize[0].CaseFileNo;
+                    objHeader.KIV = lstDeserialize[0].KIV;
+                    objHeader.TabId = lstDeserialize[0].TabId;
+                    sTabId = lstDeserialize[0].TabId;
+
+                    ProcessCase_Details objLstInfo = lstDeserialize[0].Details;
+                    ProcessCase_Purchaser objLstInfo1 = lstDeserialize[0].Purchaser;
+                    ProcessCase_Vendor objLstInfo2 = lstDeserialize[0].Vendor;
+                    ProcessCase_Property objLstInfo3 = lstDeserialize[0].Property;
+                    ProcessCase_LoanPrinciple objLstInfo4 = lstDeserialize[0].LoanPrinciple;
+                    ProcessCase_LoanSubsidary objLstInfo5 = lstDeserialize[0].LoanSubsidary;
+                    DataTable dtHeader = ObjectToData(objHeader);
+                    DataTable dtDetails = ObjectToData(objLstInfo);
+                    DataTable dtPurchaser = ObjectToData(objLstInfo1);
+                    DataTable dtVendor = ObjectToData(objLstInfo2);
+                    DataTable dtProperty = ObjectToData(objLstInfo3);
+                    DataTable dtLoanPrinciple = ObjectToData(objLstInfo4);
+                    DataTable dtLoanSubsidary = ObjectToData(objLstInfo5);
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Converting Json to Datatable , Calling the method SPA_ProcessCase_UpdateCaseTabDetails()", sFuncName);
+                    string sResult = oProcessCase.SPA_ProcessCase_UpdateCaseTabDetails(sTabId, dtHeader, dtDetails, dtPurchaser, dtVendor, dtProperty, dtLoanPrinciple, dtLoanSubsidary);
+                    if (sResult == "SUCCESS")
+                    {
+                        if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
+                        result objResult = new result();
+                        objResult.Result = "SUCCESS";
+                        objResult.DisplayMessage = "Case Details Updated Successfully";
+                        lstResult.Add(objResult);
+                        Context.Response.Output.Write(js.Serialize(lstResult));
+                    }
+                    else
+                    {
+                        if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                        result objResult = new result();
+                        objResult.Result = "ERROR";
+                        objResult.DisplayMessage = sResult;
+                        lstResult.Add(objResult);
+                        Context.Response.Output.Write(js.Serialize(lstResult));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_GetIDType()
+        {
+            string sFuncName = string.Empty;
+            string sCardCode = string.Empty;
+            string sCategory = string.Empty;
+            string sUserName = string.Empty;
+            try
+            {
+                sFuncName = "SPA_ProcessCase_GetIDType()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_ProcessCase_GetIDType() ", sFuncName);
+                DataTable dt = oProcessCase.SPA_ProcessCase_GetIDType();
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_ProcessCase_GetIDType() ", sFuncName);
+                List<ValidValues> lstValues = new List<ValidValues>();
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    foreach (DataRow r in dt.Rows)
+                    {
+                        ValidValues _Info = new ValidValues();
+
+                        _Info.Id = r["Id"].ToString();
+                        _Info.Name = r["Name"].ToString();
+                        lstValues.Add(_Info);
+                    }
+                }
+                else
+                {
+                    ValidValues _Info = new ValidValues();
+
+                    _Info.Id = "-- Select --";
+                    _Info.Name = "-- Select --";
+                    lstValues.Add(_Info);
+                }
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the ID Type Information ", sFuncName);
+                Context.Response.Output.Write(js.Serialize(lstValues));
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the ID Type Information , the Serialized data is ' " + js.Serialize(lstValues) + " '", sFuncName);
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_CreateBilling(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            string sReturnResult = string.Empty;
+            try
+            {
+                sFuncName = "SPA_ProcessCase_CreateBilling()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_ProcessCase_CreateBilling() ", sFuncName);
+                sReturnResult = oProcessCase.SPA_ProcessCase_CreateBilling(sJsonInput, new DataTable());
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_ProcessCase_CreateBilling() ", sFuncName);
+                if (sReturnResult == "SUCCESS")
+                {
+                    result objResult = new result();
+                    objResult.Result = "Success";
+                    objResult.DisplayMessage = "Create Billing is successfull in SAP";
+                    lstResult.Add(objResult);
+                    Context.Response.Output.Write(js.Serialize(lstResult));
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
+                }
+                else
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                    result objResult = new result();
+                    objResult.Result = "Error";
+                    objResult.DisplayMessage = sReturnResult;
+                    lstResult.Add(objResult);
+                    Context.Response.Output.Write(js.Serialize(lstResult));
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_GetNextSection(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            DataSet ds = new DataSet();
+            string sReturnResult = string.Empty;
+            try
+            {
+                sFuncName = "SPA_ProcessCase_GetNextSection()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+                string sCaseNo = string.Empty;
+
+                sJsonInput = "[" + sJsonInput + "]";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_NextSection> lstDeserialize = js.Deserialize<List<JSON_NextSection>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    JSON_NextSection objLstInfo = lstDeserialize[0];
+                    List<GetNextSection> lstGetNextSection = new List<GetNextSection>();
+                    sCaseNo = objLstInfo.sCaseNo;
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_ProcessCase_GetNextSection() ", sFuncName);
+                    ds = oProcessCase.SPA_ProcessCase_GetNextSection(sCaseNo);
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_ProcessCase_GetNextSection() ", sFuncName);
+
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            foreach (DataRow dr in ds.Tables[0].Rows)
+                            {
+
+                                GetNextSection oGetNextSection = new GetNextSection();
+
+                                oGetNextSection.ItemCode = dr["ItemCode"].ToString();
+                                oGetNextSection.ItemName = dr["ItemName"].ToString();
+                                oGetNextSection.INTNO = dr["INTNO"].ToString();
+                                oGetNextSection.U_SORT_CODE = dr["U_SORT_CODE"].ToString();
+                                oGetNextSection.CREATION_DATE = dr["CREATION_DATE"].ToString();
+                                oGetNextSection.Qty = dr["Qty"].ToString();
+                                oGetNextSection.price = dr["price"].ToString();
+                                oGetNextSection.u_ACTION_BY = dr["u_ACTION_BY"].ToString();
+                                oGetNextSection.LAST_UPDATE = dr["LAST_UPDATE"].ToString();
+                                oGetNextSection.STATUS_DATE = dr["STATUS_DATE"].ToString();
+                                oGetNextSection.TrnspName = dr["TrnspName"].ToString();
+                                oGetNextSection.ForwardParty = dr["ForwardParty"].ToString();
+                                oGetNextSection.ItmsGrpNam = dr["ItmsGrpNam"].ToString();
+                                lstGetNextSection.Add(oGetNextSection);
+                            }
+                        }
+                    }
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Next section Information ", sFuncName);
+                    Context.Response.Output.Write(js.Serialize(lstGetNextSection));
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Next section Informations , the Serialized data is ' " + js.Serialize(lstGetNextSection) + " '", sFuncName);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_GetOptionalItems(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            DataSet ds = new DataSet();
+            string sReturnResult = string.Empty;
+            try
+            {
+                sFuncName = "SPA_ProcessCase_GetOptionalItems()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+                string sCaseNo = string.Empty;
+
+                sJsonInput = "[" + sJsonInput + "]";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_NextSection> lstDeserialize = js.Deserialize<List<JSON_NextSection>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    JSON_NextSection objLstInfo = lstDeserialize[0];
+                    List<GetNextSection> lstGetNextSection = new List<GetNextSection>();
+                    sCaseNo = objLstInfo.sCaseNo;
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_ProcessCase_GetOptionalItems() ", sFuncName);
+                    ds = oProcessCase.SPA_ProcessCase_GetOptionalItems(sCaseNo);
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_ProcessCase_GetOptionalItems() ", sFuncName);
+
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            foreach (DataRow dr in ds.Tables[0].Rows)
+                            {
+
+                                GetNextSection oGetNextSection = new GetNextSection();
+
+                                oGetNextSection.ItemCode = dr["ItemCode"].ToString();
+                                oGetNextSection.ItemName = dr["ItemName"].ToString();
+                                oGetNextSection.INTNO = dr["U_SORT_CODE"].ToString();
+                                oGetNextSection.U_SORT_CODE = dr["U_SORT_CODE"].ToString();
+                                oGetNextSection.CREATION_DATE = dr["CREATION_DATE"].ToString();
+                                oGetNextSection.Qty = dr["Qty"].ToString();
+                                oGetNextSection.price = dr["price"].ToString();
+                                oGetNextSection.u_ACTION_BY = dr["u_ACTION_BY"].ToString();
+                                oGetNextSection.LAST_UPDATE = dr["LAST_UPDATE"].ToString();
+                                oGetNextSection.STATUS_DATE = dr["STATUS_DATE"].ToString();
+                                oGetNextSection.TrnspName = dr["TrnspName"].ToString();
+                                oGetNextSection.ForwardParty = dr["ForwardParty"].ToString();
+                                oGetNextSection.ItmsGrpNam = dr["ItmsGrpNam"].ToString();
+                                lstGetNextSection.Add(oGetNextSection);
+                            }
+                        }
+                    }
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Optional Items Information ", sFuncName);
+                    Context.Response.Output.Write(js.Serialize(lstGetNextSection));
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Optional Items Informations , the Serialized data is ' " + js.Serialize(lstGetNextSection) + " '", sFuncName);
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Classes
@@ -2647,8 +3785,7 @@ namespace AE_TnN_Mobile_V001
             public string BPM { get; set; }
             public string STATE { get; set; }
             public string AREA { get; set; }
-            public string LOTAREA_SQM { get; set; }
-            public string LOTAREA_SQFT { get; set; }
+            public string LOTAREA { get; set; }
             public string LASTUPDATEDON { get; set; }
             public string DEVELOPER { get; set; }
             public string DVLPR_CODE { get; set; }
@@ -2702,8 +3839,7 @@ namespace AE_TnN_Mobile_V001
             public string BPM { get; set; }
             public string STATE { get; set; }
             public string AREA { get; set; }
-            public string LOTAREA_SQM { get; set; }
-            public string LOTAREA_SQFT { get; set; }
+            public string LOTAREA { get; set; }
             public string LASTUPDATEDON { get; set; }
             public string DEVELOPER { get; set; }
             public string DVLPR_CODE { get; set; }
@@ -2901,6 +4037,7 @@ namespace AE_TnN_Mobile_V001
             public string QryGroup10 { get; set; }
             public string QryGroup11 { get; set; }
             public string QryGroup17 { get; set; }
+            public string QryGroup21 { get; set; }
         }
 
         class JSON_AddCase_ListofItems
@@ -2930,8 +4067,7 @@ namespace AE_TnN_Mobile_V001
             public string BPM { get; set; }
             public string STATE { get; set; }
             public string AREA { get; set; }
-            public string LOTAREA_SQM { get; set; }
-            public string LOTAREA_SQFT { get; set; }
+            public string LOTAREA { get; set; }
             public string LASTUPDATEDON { get; set; }
             public string DEVELOPER { get; set; }
             public string DVLPR_CODE { get; set; }
@@ -2960,8 +4096,6 @@ namespace AE_TnN_Mobile_V001
             public string BPM { get; set; }
             public string STATE { get; set; }
             public string AREA { get; set; }
-            //public string LOTAREA_SQM { get; set; }
-            //public string LOTAREA_SQFT { get; set; }
             public string LOTAREA { get; set; }
             public string LASTUPDATEDON { get; set; }
             public string DEVELOPER { get; set; }
@@ -3010,12 +4144,18 @@ namespace AE_TnN_Mobile_V001
 
         class JSON_AddCase_ScanIC
         {
-            public Byte[] DocBinaryArray { get; set; }
+            public string ItemCode { get; set; }
+            public string ItemName { get; set; }
+            public string FileName { get; set; }
+            public string ICType { get; set; }
         }
 
         class ScanIC
         {
             public string Message { get; set; }
+            public string ScanICLocation { get; set; }
+            public string ScanFrontICLocation { get; set; }
+            public string ScanBackICLocation { get; set; }
             public string Code { get; set; }
             public string DocEntry { get; set; }
             public string EmployeeName { get; set; }
@@ -3048,6 +4188,309 @@ namespace AE_TnN_Mobile_V001
             public string UserName { get; set; }
         }
 
+        class JSON_ProcessCase_GetDataFromOCRD
+        {
+            public string CaseNo { get; set; }
+            public string UserName { get; set; }
+            public string UserRole { get; set; }
+        }
+
+        class ProcessCase_GetDataFromOCRD
+        {
+            public string Case { get; set; }
+            public string CaseType { get; set; }
+            public string CaseStatus { get; set; }
+            public string FileOpenDate { get; set; }
+            public string CaseFileNo { get; set; }
+            public string KIV { get; set; }
+            public string TabId { get; set; }
+            public ProcessCase_Details Details { get; set; }
+            public ProcessCase_Purchaser Purchaser { get; set; }
+            public ProcessCase_Vendor Vendor { get; set; }
+            public ProcessCase_Property Property { get; set; }
+            public ProcessCase_LoanPrinciple LoanPrinciple { get; set; }
+            public ProcessCase_LoanSubsidary LoanSubsidary { get; set; }
+        }
+
+        class ProcessCase_Header
+        {
+            public string Case { get; set; }
+            public string CaseType { get; set; }
+            public string CaseStatus { get; set; }
+            public string FileOpenDate { get; set; }
+            public string CaseFileNo { get; set; }
+            public string KIV { get; set; }
+            public string TabId { get; set; }
+        }
+
+        class ProcessCase_Details
+        {
+            public string LA { get; set; }
+            public string MANAGER { get; set; }
+            public string InCharge { get; set; }
+            public string CustomerService { get; set; }
+            public string CaseType { get; set; }
+            public string FileLocation { get; set; }
+            public string FileClosedDate { get; set; }
+            public string VendAcqDt { get; set; }
+            public string CompanyBuisnessSearch { get; set; }
+            public string BankWindingSearch { get; set; }
+        }
+
+        class ProcessCase_Purchaser
+        {
+            public string PurRepresentedByFirm { get; set; }
+            public string PurlawyerRepresented { get; set; }
+            public string PurSPADate { get; set; }
+            public string PurEntryOfPrivateCaveat { get; set; }
+            public string PurWithOfPrivateCaveat { get; set; }
+            public string PurFirstName { get; set; }
+            public string PurFirstID { get; set; }
+            public string PurFirstTaxNo { get; set; }
+            public string PurFirstContactNo { get; set; }
+            public string PurFirstType { get; set; }
+            public string PurSecName { get; set; }
+            public string PurSecID { get; set; }
+            public string PurSecTaxNo { get; set; }
+            public string PurSecContactNo { get; set; }
+            public string PurSecType { get; set; }
+            public string PurThirdName { get; set; }
+            public string PurThirdID { get; set; }
+            public string PurThirdTaxNo { get; set; }
+            public string PurThirdContactNo { get; set; }
+            public string PurThirdType { get; set; }
+            public string PurFourthName { get; set; }
+            public string PurFourthID { get; set; }
+            public string PurFourthTaxNo { get; set; }
+            public string PurFourthContactNo { get; set; }
+            public string PurFourthType { get; set; }
+        }
+
+        class ProcessCase_Vendor
+        {
+            public string VndrRepresentedByFirm { get; set; }
+            public string VndrlawyerRepresented { get; set; }
+            public string VndrReqDevConsent { get; set; }
+            public string VndrReceiveDevConsent { get; set; }
+            public string VndrFirstName { get; set; }
+            public string VndrFirstID { get; set; }
+            public string VndrFirstTaxNo { get; set; }
+            public string VndrFirstContactNo { get; set; }
+            public string VndrFirstType { get; set; }
+            public string VndrSecName { get; set; }
+            public string VndrSecID { get; set; }
+            public string VndrSecTaxNo { get; set; }
+            public string VndrSecContactNo { get; set; }
+            public string VndrSecType { get; set; }
+            public string VndrThirdName { get; set; }
+            public string VndrThirdID { get; set; }
+            public string VndrThirdTaxNo { get; set; }
+            public string VndrThirdContactNo { get; set; }
+            public string VndrThirdType { get; set; }
+            public string VndrFourthName { get; set; }
+            public string VndrFourthID { get; set; }
+            public string VndrFourthTaxNo { get; set; }
+            public string VndrFourthContactNo { get; set; }
+            public string VndrFourthType { get; set; }
+        }
+
+        class ProcessCase_Property
+        {
+            public string TitleType { get; set; }
+            public string CertifiedPlanNo { get; set; }
+            public string LotNo { get; set; }
+            public string PreviouslyKnownAs { get; set; }
+            public string State { get; set; }
+            public string Area { get; set; }
+            public string BPM { get; set; }
+            public string GovSurvyPlan { get; set; }
+            public string LotArea { get; set; }
+            public string Developer { get; set; }
+            public string Project { get; set; }
+            public string DevLicenseNo { get; set; }
+            public string DevSolicitor { get; set; }
+            public string DevSoliLoc { get; set; }
+            public string TitleSearchDate { get; set; }
+            public string DSCTransfer { get; set; }
+            public string DRCTransfer { get; set; }
+            public string FourteenADate { get; set; }
+            public string DRTLRegistry { get; set; }
+            public string PropertyCharged { get; set; }
+            public string BankName { get; set; }
+            public string Branch { get; set; }
+            public string PAName { get; set; }
+            public string PresentationNo { get; set; }
+            public string ExistChargeRef { get; set; }
+            public string ReceiptType { get; set; }
+            public string ReceiptNo { get; set; }
+            public string ReceiptDate { get; set; }
+            public string PurchasePrice { get; set; }
+            public string AdjValue { get; set; }
+            public string VndrPrevSPAValue { get; set; }
+            public string Deposit { get; set; }
+            public string BalPurPrice { get; set; }
+            public string LoanAmount { get; set; }
+            public string LoanCaseNo { get; set; }
+            public string DiffSum { get; set; }
+            public string RedAmt { get; set; }
+            public string RedDate { get; set; }
+            public string DefRdmptSum { get; set; }
+        }
+
+        public class ProcessCase_LoanPrinciple
+        {
+            public string ReqRedStatement { get; set; }
+            public string RedStmtDate { get; set; }
+            public string RedPayDate { get; set; }
+            public string RepByFirm { get; set; }
+            public string LoanCaseNo { get; set; }
+            public string Project { get; set; }
+            public string MasterBankName { get; set; }
+            public string BranchName { get; set; }
+            public string Address { get; set; }
+            public string PAName { get; set; }
+            public string BankRef { get; set; }
+            public string BankInsDate { get; set; }
+            public string LOFDate { get; set; }
+            public string BankSolicitor { get; set; }
+            public string SoliLoc { get; set; }
+            public string SoliRef { get; set; }
+            public string TypeofLoan { get; set; }
+            public string TypeofFacility { get; set; }
+            public string FacilityAmt { get; set; }
+            public string Repaymt { get; set; }
+            public string IntrstRate { get; set; }
+            public string MonthlyInstmt { get; set; }
+            public string TermLoanAmt { get; set; }
+            public string Interest { get; set; }
+            public string ODLoan { get; set; }
+            public string MRTA { get; set; }
+            public string BankGuarantee { get; set; }
+            public string LetterofCredit { get; set; }
+            public string TrustReceipt { get; set; }
+            public string Others { get; set; }
+            public string LoanDet1 { get; set; }
+            public string LoanDet2 { get; set; }
+            public string LoanDet3 { get; set; }
+            public string LoanDet4 { get; set; }
+            public string LoanDet5 { get; set; }
+        }
+
+        public class ProcessCase_LoanSubsidary
+        {
+            public string LoanDocForBankExe { get; set; }
+            public string FaciAgreeDate { get; set; }
+            public string LoanDocRetFromBank { get; set; }
+            public string DischargeofCharge { get; set; }
+            public string FirstTypeofFacility { get; set; }
+            public string FirstFacilityAmt { get; set; }
+            public string FirstRepaymt { get; set; }
+            public string FirstIntrstRate { get; set; }
+            public string FirstMonthlyInstmt { get; set; }
+            public string FirstTermLoanAmt { get; set; }
+            public string FirstInterest { get; set; }
+            public string FirstODLoan { get; set; }
+            public string FirstMRTA { get; set; }
+            public string FirstBankGuarantee { get; set; }
+            public string FirstLetterofCredit { get; set; }
+            public string FirstTrustReceipt { get; set; }
+            public string FirstOthers { get; set; }
+
+            public string SecTypeofFacility { get; set; }
+            public string SecFacilityAmt { get; set; }
+            public string SecRepaymt { get; set; }
+            public string SecIntrstRate { get; set; }
+            public string SecMonthlyInstmt { get; set; }
+            public string SecTermLoanAmt { get; set; }
+            public string SecInterest { get; set; }
+            public string SecODLoan { get; set; }
+            public string SecMRTA { get; set; }
+            public string SecBankGuarantee { get; set; }
+            public string SecLetterofCredit { get; set; }
+            public string SecTrustReceipt { get; set; }
+            public string SecOthers { get; set; }
+
+            public string ThirdTypeofFacility { get; set; }
+            public string ThirdFacilityAmt { get; set; }
+            public string ThirdRepaymt { get; set; }
+            public string ThirdIntrstRate { get; set; }
+            public string ThirdMonthlyInstmt { get; set; }
+            public string ThirdTermLoanAmt { get; set; }
+            public string ThirdInterest { get; set; }
+            public string ThirdODLoan { get; set; }
+            public string ThirdMRTA { get; set; }
+            public string ThirdBankGuarantee { get; set; }
+            public string ThirdLetterofCredit { get; set; }
+            public string ThirdTrustReceipt { get; set; }
+            public string ThirdOthers { get; set; }
+
+            public string FourthTypeofFacility { get; set; }
+            public string FourthFacilityAmt { get; set; }
+            public string FourthRepaymt { get; set; }
+            public string FourthIntrstRate { get; set; }
+            public string FourthMonthlyInstmt { get; set; }
+            public string FourthTermLoanAmt { get; set; }
+            public string FourthInterest { get; set; }
+            public string FourthODLoan { get; set; }
+            public string FourthMRTA { get; set; }
+            public string FourthBankGuarantee { get; set; }
+            public string FourthLetterofCredit { get; set; }
+            public string FourthTrustReceipt { get; set; }
+            public string FourthOthers { get; set; }
+
+            public string FifthTypeofFacility { get; set; }
+            public string FifthFacilityAmt { get; set; }
+            public string FifthRepaymt { get; set; }
+            public string FifthIntrstRate { get; set; }
+            public string FifthMonthlyInstmt { get; set; }
+            public string FifthTermLoanAmt { get; set; }
+            public string FifthInterest { get; set; }
+            public string FifthODLoan { get; set; }
+            public string FifthMRTA { get; set; }
+            public string FifthBankGuarantee { get; set; }
+            public string FifthLetterofCredit { get; set; }
+            public string FifthTrustReceipt { get; set; }
+            public string FifthOthers { get; set; }
+        }
+
+        public class JSON_CaseEnquiry
+        {
+            public string FileOpenDateFrom { get; set; }
+            public string FileOpenDateTo { get; set; }
+            public string CaseFileNo { get; set; }
+            public string CaseType { get; set; }
+            public string ClientName { get; set; }
+            public string AmountFrom { get; set; }
+            public string AmountTo { get; set; }
+        }
+
+        public class JSON_OpenCase
+        {
+            public string sUserName { get; set; }
+        }
+
+        public class JSON_NextSection
+        {
+            public string sCaseNo { get; set; }
+        }
+
+        public class GetNextSection
+        {
+            public string ItemCode { get; set; }
+            public string ItemName { get; set; }
+            public string INTNO { get; set; }
+            public string U_SORT_CODE { get; set; }
+            public string CREATION_DATE { get; set; }
+            public string Qty { get; set; }
+            public string price { get; set; }
+            public string u_ACTION_BY { get; set; }
+            public string LAST_UPDATE { get; set; }
+            public string STATUS_DATE { get; set; }
+            public string TrnspName { get; set; }
+            public string ForwardParty { get; set; }
+            public string ItmsGrpNam { get; set; }
+        }
+
         #endregion
 
         #region tempTables
@@ -3068,8 +4511,7 @@ namespace AE_TnN_Mobile_V001
             rowNew["BPM"] = objEditDetails.BPM;
             rowNew["STATE"] = objEditDetails.STATE;
             rowNew["AREA"] = objEditDetails.AREA;
-            rowNew["LOTAREA_SQM"] = objEditDetails.LOTAREA_SQM;
-            rowNew["LOTAREA_SQFT"] = objEditDetails.LOTAREA_SQFT;
+            rowNew["LOTAREA"] = objEditDetails.LOTAREA;
             rowNew["LASTUPDATEDON"] = objEditDetails.LASTUPDATEDON;
             rowNew["DEVELOPER"] = objEditDetails.DEVELOPER;
             rowNew["DVLPR_CODE"] = objEditDetails.DVLPR_CODE;
@@ -3103,8 +4545,7 @@ namespace AE_TnN_Mobile_V001
             tbProperty.Columns.Add("BPM");
             tbProperty.Columns.Add("STATE");
             tbProperty.Columns.Add("AREA");
-            tbProperty.Columns.Add("LOTAREA_SQM");
-            tbProperty.Columns.Add("LOTAREA_SQFT");
+            tbProperty.Columns.Add("LOTAREA");
             tbProperty.Columns.Add("LASTUPDATEDON");
             tbProperty.Columns.Add("DEVELOPER");
             tbProperty.Columns.Add("DVLPR_CODE");
@@ -3212,6 +4653,250 @@ namespace AE_TnN_Mobile_V001
             }
             //put a breakpoint here and check datatable
             return dataTable;
+        }
+
+        public static DataTable ObjectToData(object o)
+        {
+            DataTable dt = new DataTable("OutputData");
+
+            DataRow dr = dt.NewRow();
+            dt.Rows.Add(dr);
+
+            o.GetType().GetProperties().ToList().ForEach(f =>
+            {
+                try
+                {
+                    f.GetValue(o, null);
+                    dt.Columns.Add(f.Name, f.PropertyType);
+                    dt.Rows[0][f.Name] = f.GetValue(o, null);
+                }
+                catch { }
+            });
+            return dt;
+        }
+
+        public DataTable SPA_AddCase_ScanIC(string sDocName, string sItemCode, string sItemName, string sICType)
+        {
+            DataTable oDatatable = new DataTable();
+            string sFuncName = string.Empty;
+            string sProcName = string.Empty;
+            DataView oDTView = new DataView();
+            string sCode = string.Empty;
+            try
+            {
+                sFuncName = "SPA_AddCase_ScanIC()";
+                //sProcName = "AE_SPA013_Mobile_AddCase_CheckStatus";
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                // This following part of code is for converting and saving the Binary stream to PDF File.
+                string strdocPath = null;
+                string EncryptToPath = null;
+                strdocPath = FileUploadPath + sDocName;
+                EncryptToPath = FileUploadEncryptedPath + sDocName;
+
+                byte[] bytes = SPA_ConvertUploadFiletoBinary(strdocPath);
+
+                //Pass the byte array to gopi web service
+
+                var client = new ReadDocument.Service1SoapClient();
+
+                oDatatable = client.ReadDocument(sItemCode, bytes, sDocName);
+                if (sICType == "Front")
+                {
+                    sCode = "100021";
+                }
+                else if (sICType == "Back")
+                {
+                    sCode = "100022";
+                }
+                DataSet ds = oCase.SPA_AddCase_ScanDocumentMapping_RELPARTY(sCode);
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow item in oDatatable.Rows) // The data from Gopi webservices
+                        {
+                            foreach (DataRow InnerItem in ds.Tables[0].Rows) // This is from the Item Maintenance table
+                            {
+                                if (item[0].ToString().Trim() == InnerItem[1].ToString().Trim()) // if(Gopi webservice first column is equal to the Item Maintenance Second Column
+                                {
+                                    item[0] = InnerItem[0].ToString(); // Assign the Item Maintenance First column to the Gopi webservice first column
+                                }
+                            }
+                        }
+                    }
+                }
+                //oDatatable.Columns["Marks"].ColumnName = "SubjectMarks";
+
+                // Convert the Uploaded File to Encrypted Format and Save it to Location
+                clsEncypt.EncryptFile(strdocPath, EncryptToPath);
+
+                // Delete the file stored in the temp folder from mobile app
+                //File.Delete(strdocPath);
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Attached file is saved Properly ", sFuncName);
+
+            }
+            catch (Exception Ex)
+            {
+                sErrDesc = Ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                throw Ex;
+            }
+            return oDatatable;
+        }
+
+        public DataTable SPA_AddCase_SaveAttachment(string sDocName, string sItemCode, string sItemName, string sCardCode)
+        {
+            DataTable oDatatable = new DataTable();
+            string sFuncName = string.Empty;
+            string sProcName = string.Empty;
+            DataView oDTView = new DataView();
+            try
+            {
+                sFuncName = "SPA_AddCase_SaveDocument()";
+                //sProcName = "AE_SPA013_Mobile_AddCase_CheckStatus";
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                // This following part of code is for converting and saving the Binary stream to PDF File.
+                string strdocPath = null;
+                string EncryptToPath = null;
+                strdocPath = FileUploadPath + sDocName;
+                EncryptToPath = FileUploadEncryptedPath + sDocName;
+
+                byte[] bytes = SPA_ConvertUploadFiletoBinary(strdocPath);
+
+                //Pass the byte array to gopi web service
+
+                var client = new ReadDocument.Service1SoapClient();
+
+                oDatatable = client.ReadDocument(sItemCode, bytes, sDocName);
+
+                DataSet ds = oCase.SPA_AddCase_ScanDocumentMapping_Property(sItemCode);
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow item in oDatatable.Rows) // The data from Gopi webservices
+                        {
+                            foreach (DataRow InnerItem in ds.Tables[0].Rows) // This is from the Item Maintenance table
+                            {
+                                if (item[0].ToString().Trim() == InnerItem[1].ToString().Trim()) // if(Gopi webservice first column is equal to the Item Maintenance Second Column
+                                {
+                                    item[0] = InnerItem[0].ToString(); // Assign the Item Maintenance First column to the Gopi webservice first column
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //Pass the byte array to gopi web service
+
+                // Convert the Uploaded File to Encrypted Format and Save it to Location
+
+                clsEncypt.EncryptFile(strdocPath, EncryptToPath);
+
+                //byte[] Encryptedbytes = SPA_ConvertUploadFiletoBinary(strdocPath);
+
+                //FileStream objfilestream = new FileStream(EncryptToPath, FileMode.Create, FileAccess.ReadWrite);
+                //objfilestream.Write(Encryptedbytes, 0, Encryptedbytes.Length);
+                //objfilestream.Close();
+
+                //File.Delete(strdocPath);
+
+                // Update the Encrypted Location in SAP
+
+
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Attached file is saved Properly ", sFuncName);
+
+                // The following part of code is for Update the Selected ItemCode and ItemName in the Temp table [AE_OCRD]
+                SqlConnection con = new SqlConnection(ConnectionString);
+                SqlCommand command = con.CreateCommand();
+                command.CommandText = "Update [AE_OCRD] set ItemCode ='" + sItemCode + "',ItemName ='" + sItemName + "' where Code ='" + sCardCode + "'";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Executing the Query : " + command.CommandText, sFuncName);
+
+                con.Open();
+                command.ExecuteNonQuery();
+                con.Close();
+
+                // The following part of code is for Calling the Web method by passing the Binary file as Input to read the Fields from the file.
+
+
+                //oDataset = new DataSet();
+
+            }
+            catch (Exception Ex)
+            {
+                sErrDesc = Ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                throw Ex;
+            }
+            return oDatatable;
+        }
+
+        public byte[] SPA_ConvertUploadFiletoBinary(string sFilePath)
+        {
+            try
+            {
+                //string filename = @"E:\Documents\TiaNoordin\" + FileUpload1.FileName;
+                //string filename = FileUpload1.FileName;
+                byte[] bytes;
+                Random rndm = new Random();
+                using (FileStream file = new FileStream(sFilePath, FileMode.Open, FileAccess.Read))
+                {
+                    bytes = new byte[file.Length];
+                    file.Read(bytes, 0, (int)file.Length);
+                }
+                return bytes;
+                //string sResult = bytes.ToString();
+                //string result = System.Text.Encoding.UTF8.GetString(bytes);
+                //SaveDocument_Boarding(bytes, rndm.Next().ToString() + ".pdf");
+                //TextBox1.Text = "SUCCESS";
+            }
+            catch (Exception Ex)
+            {
+                throw Ex;
+            }
+
+        }
+
+        private DataTable GenerateTransposedTable(DataTable inputTable)
+        {
+            DataTable outputTable = new DataTable();
+
+            // Add columns by looping rows
+
+            // Header row's first column is same as in inputTable
+            outputTable.Columns.Add(inputTable.Columns[0].ColumnName.ToString());
+
+            // Header row's second column onwards, 'inputTable's first column taken
+            foreach (DataRow inRow in inputTable.Rows)
+            {
+                string newColName = inRow[0].ToString();
+                outputTable.Columns.Add(newColName);
+            }
+
+            // Add rows by looping columns        
+            for (int rCount = 1; rCount <= inputTable.Columns.Count - 1; rCount++)
+            {
+                DataRow newRow = outputTable.NewRow();
+
+                // First column is inputTable's Header row's second column
+                newRow[0] = inputTable.Columns[rCount].ColumnName.ToString();
+                for (int cCount = 0; cCount <= inputTable.Rows.Count - 1; cCount++)
+                {
+                    string colValue = inputTable.Rows[cCount][rCount].ToString();
+                    newRow[cCount + 1] = colValue;
+                }
+                outputTable.Rows.Add(newRow);
+            }
+
+            return outputTable;
         }
 
         #endregion

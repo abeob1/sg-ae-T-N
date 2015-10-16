@@ -27,6 +27,7 @@ namespace AE_TnN_Mobile_BLL
         //SAPbobsCOM.Company oDICompany;
 
         public static string ConnectionString = ConfigurationManager.ConnectionStrings["dbconnection"].ConnectionString;
+        public static string Category = ConfigurationManager.AppSettings["Category"].ToString();
 
         public DataSet SPA_DashboardInfo(string sAppType, string sUserCode)
         {
@@ -378,8 +379,7 @@ namespace AE_TnN_Mobile_BLL
                 oGeneralData.SetProperty("U_BPM", dtDatatable.Rows[0]["BPM"].ToString());
                 oGeneralData.SetProperty("U_STATE", dtDatatable.Rows[0]["STATE"].ToString());
                 oGeneralData.SetProperty("U_AREA", dtDatatable.Rows[0]["AREA"].ToString());
-                oGeneralData.SetProperty("U_LOTAREA_SQM", dtDatatable.Rows[0]["LOTAREA_SQM"].ToString());
-                oGeneralData.SetProperty("U_LOTAREA_SQFT", dtDatatable.Rows[0]["LOTAREA_SQFT"].ToString());
+                oGeneralData.SetProperty("U_LOTAREA", dtDatatable.Rows[0]["LOTAREA"].ToString());
                 //oGeneralData.SetProperty("U_LASTUPDATEDON", dtDatatable.Rows[0]["LASTUPDATEDON"].ToString());
                 oGeneralData.SetProperty("U_DEVELOPER", dtDatatable.Rows[0]["DEVELOPER"].ToString());
                 oGeneralData.SetProperty("U_DVLPR_CODE", dtDatatable.Rows[0]["DVLPR_CODE"].ToString());
@@ -431,8 +431,7 @@ namespace AE_TnN_Mobile_BLL
                                         + "U_BPM = '" + dtDatatable.Rows[0]["BPM"] + "',"
                                         + "U_STATE = '" + dtDatatable.Rows[0]["STATE"] + "',"
                                         + "U_AREA = '" + dtDatatable.Rows[0]["AREA"] + "',"
-                                        + "U_LOTAREA_SQM = '" + dtDatatable.Rows[0]["LOTAREA_SQM"] + "',"
-                                        + "U_LOTAREA_SQFT = '" + dtDatatable.Rows[0]["LOTAREA_SQFT"] + "',"
+                                        + "U_LOTAREA = '" + dtDatatable.Rows[0]["LOTAREA"] + "',"
                                         + "UpdateDate = '" + DateTime.Now.Date + "',"
                                         + "Updatetime = '" + TimeSplit[0] + TimeSplit[1] + "',"
                                         + "U_DEVELOPER = '" + dtDatatable.Rows[0]["DEVELOPER"] + "',"
@@ -465,6 +464,110 @@ namespace AE_TnN_Mobile_BLL
             }
 
             return sReturnResult;
+        }
+
+        public DataSet SPA_CaseEnquiry(string sInput1, string sInput2, string sInput3, string sInput4, string sInput5, string sInput6, string sInput7)
+        {
+            string sFuncName = string.Empty;
+            string sProcName = string.Empty;
+            string sReturnResult = string.Empty;
+            DataSet oDataset = new DataSet();
+            try
+            {
+                sFuncName = "SPA_CaseEnquiry()";
+                sProcName = "AE_ListofCases";
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Calling Run_StoredProcedure() " + sProcName, sFuncName);
+
+
+                oDataset = SqlHelper.ExecuteDataSet(ConnectionString, CommandType.StoredProcedure, sProcName,
+                            Data.CreateParameter("@Filtertype", string.Empty),
+                            Data.CreateParameter("@Casetype", sInput4),
+                            Data.CreateParameter("@Casestatus", string.Empty),
+                            Data.CreateParameter("@Usercode", string.Empty),
+                            Data.CreateParameter("@DateOpenFr", sInput1),
+                            Data.CreateParameter("@DateOpenTo", sInput2),
+                            Data.CreateParameter("@CaseFileNoFr", sInput3),
+                            Data.CreateParameter("@CaseFileNoTo", string.Empty),
+                            Data.CreateParameter("@ClientName", sInput5),
+                            Data.CreateParameter("@CaseAmtFr", sInput6),
+                            Data.CreateParameter("@CaseAmtTo", sInput7),
+                            Data.CreateParameter("@DateClosedFr", string.Empty),
+                            Data.CreateParameter("@DateClosedTo", string.Empty));
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
+                if (oDataset.Tables.Count > 0 && oDataset != null)
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is a set of data from the SP :" + sProcName, sFuncName);
+                    return oDataset;
+                }
+                else
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is no data from the SP :" + sProcName, sFuncName);
+                    return oDataset;
+                }
+            }
+            catch (Exception Ex)
+            {
+                sErrDesc = Ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                throw Ex;
+            }
+        }
+
+        public DataSet SPA_DashboardCaseButtonInfo(string sFilterType, string sCaseStatus, string sUserCode)
+        {
+            string sFuncName = string.Empty;
+            string sProcName = string.Empty;
+            string sReturnResult = string.Empty;
+            DataSet oDataset = new DataSet();
+            try
+            {
+                sFuncName = "SPA_OpenCase()";
+                sProcName = "AE_ListofCases";
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Calling Run_StoredProcedure() " + sProcName, sFuncName);
+
+
+                oDataset = SqlHelper.ExecuteDataSet(ConnectionString, CommandType.StoredProcedure, sProcName,
+                            Data.CreateParameter("@Filtertype", sFilterType),
+                            Data.CreateParameter("@Casetype", Category),
+                            Data.CreateParameter("@Casestatus", sCaseStatus),
+                            Data.CreateParameter("@Usercode", sUserCode),
+                            Data.CreateParameter("@DateOpenFr", string.Empty),
+                            Data.CreateParameter("@DateOpenTo", string.Empty),
+                            Data.CreateParameter("@CaseFileNoFr", string.Empty),
+                            Data.CreateParameter("@CaseFileNoTo", string.Empty),
+                            Data.CreateParameter("@ClientName", string.Empty),
+                            Data.CreateParameter("@CaseAmtFr", string.Empty),
+                            Data.CreateParameter("@CaseAmtTo", string.Empty),
+                            Data.CreateParameter("@DateClosedFr", string.Empty),
+                            Data.CreateParameter("@DateClosedTo", string.Empty));
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
+                if (oDataset.Tables.Count > 0 && oDataset != null)
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is a set of data from the SP :" + sProcName, sFuncName);
+                    return oDataset;
+                }
+                else
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is no data from the SP :" + sProcName, sFuncName);
+                    return oDataset;
+                }
+            }
+            catch (Exception Ex)
+            {
+                sErrDesc = Ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                throw Ex;
+            }
         }
     }
 }

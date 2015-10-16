@@ -181,6 +181,12 @@ namespace AE_TnN_Mobile_BLL
 
                 //Pass the byte array to gopi web service
 
+                //var client = new ReadDocument.Service1SoapClient();
+
+                //oDatatable = client.ReadDocument(sItemCode, bytes, sDocName);
+
+                //Pass the byte array to gopi web service
+
                 // Convert the Uploaded File to Encrypted Format and Save it to Location
 
                 clsEncypt.EncryptFile(strdocPath, EncryptToPath);
@@ -195,7 +201,7 @@ namespace AE_TnN_Mobile_BLL
 
                 // Update the Encrypted Location in SAP
 
-                
+
 
                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Attached file is saved Properly ", sFuncName);
 
@@ -350,40 +356,51 @@ namespace AE_TnN_Mobile_BLL
             }
         }
 
-        public DataSet SPA_AddCase_ScanIC(Byte[] bDocBinaryArray)
-        {
-            DataSet oDataset = new DataSet();
-            string sFuncName = string.Empty;
-            string sProcName = string.Empty;
-            DataView oDTView = new DataView();
-            try
-            {
-                sFuncName = "SPA_AddCase_ScanIC()";
-                //sProcName = "AE_SPA013_Mobile_AddCase_CheckStatus";
+        //public DataTable SPA_AddCase_ScanIC(string sDocName, string sItemCode, string sItemName)
+        //{
+        //    DataTable oDatatable = new DataTable();
+        //    string sFuncName = string.Empty;
+        //    string sProcName = string.Empty;
+        //    DataView oDTView = new DataView();
+        //    try
+        //    {
+        //        sFuncName = "SPA_AddCase_ScanIC()";
+        //        //sProcName = "AE_SPA013_Mobile_AddCase_CheckStatus";
 
-                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+        //        if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
 
-                // This following part of code is for converting and saving the Binary stream to PDF File.
-                //string strdocPath = null;
-                //strdocPath = AttachmentPath + sDocName + ".pdf";
-                //FileStream objfilestream = new FileStream(strdocPath, FileMode.Create, FileAccess.ReadWrite);
-                //objfilestream.Write(bDocBinaryArray, 0, bDocBinaryArray.Length);
-                //objfilestream.Close();
+        //        // This following part of code is for converting and saving the Binary stream to PDF File.
+        //        string strdocPath = null;
+        //        string EncryptToPath = null;
+        //        strdocPath = FileUploadPath + sDocName;
+        //        EncryptToPath = FileUploadEncryptedPath + sDocName;
 
-                // The following part of code is for Calling the Web method by passing the Binary file as Input to read the Fields from the file.
+        //        byte[] bytes = SPA_ConvertUploadFiletoBinary(strdocPath);
 
-                oDataset = new DataSet();
+        //        //Pass the byte array to gopi web service
 
-            }
-            catch (Exception Ex)
-            {
-                sErrDesc = Ex.Message.ToString();
-                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
-                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
-                throw Ex;
-            }
-            return oDataset;
-        }
+        //        var client = new ReadDocument.Service1SoapClient();
+
+        //        oDatatable = client.ReadDocument(sItemCode, bytes, sDocName);
+
+        //        // Convert the Uploaded File to Encrypted Format and Save it to Location
+        //        clsEncypt.EncryptFile(strdocPath, EncryptToPath);
+
+        //        // Delete the file stored in the temp folder from mobile app
+        //        //File.Delete(strdocPath);
+
+        //        if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Attached file is saved Properly ", sFuncName);
+
+        //    }
+        //    catch (Exception Ex)
+        //    {
+        //        sErrDesc = Ex.Message.ToString();
+        //        oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+        //        if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+        //        throw Ex;
+        //    }
+        //    return oDatatable;
+        //}
 
         public DataTable SPA_AddCase_GetProject()
         {
@@ -538,6 +555,7 @@ namespace AE_TnN_Mobile_BLL
         public string SPA_AddCase(DataTable dtDatatable)
         {
             DataSet oDataset = new DataSet();
+            DataTable dtAssignCase = new DataTable();
             string sFuncName = string.Empty;
             string sProcName = string.Empty;
             DataView oDTView = new DataView();
@@ -614,19 +632,23 @@ namespace AE_TnN_Mobile_BLL
                     } if (dr["QryGroup17"].ToString() == "Y")
                     {
                         oBP.set_Properties(17, SAPbobsCOM.BoYesNoEnum.tYES);
+                    } if (dr["QryGroup21"].ToString() == "Y")
+                    {
+                        oBP.set_Properties(21, SAPbobsCOM.BoYesNoEnum.tYES);
                     }
 
                     oBP.DebitorAccount = dr["DebPayAcct"].ToString(); //if cardCode without 'C', then its DebPayAcct else SalesDebPayAcct
                     oBP.ProjectCode = dr["ProjectCod"].ToString();
+                    oBP.OwnerIDNumber = dr["U_CASE_BRANCH"].ToString();
 
                     oBP.UserFields.Fields.Item("U_CASESTATUS").Value = dr["U_CASESTATUS"].ToString();
                     oBP.UserFields.Fields.Item("U_FILEOPENDATE").Value = dr["U_FILEOPENDATE"].ToString();
 
-                    oBP.UserFields.Fields.Item("U_PARTNER_EMPID").Value = dr["U_PARTNER_EMPID"].ToString();
-                    oBP.UserFields.Fields.Item("U_LA_EMPID").Value = dr["U_LA_EMPID"].ToString();
-                    oBP.UserFields.Fields.Item("U_MANAGER_EMPID").Value = dr["U_MANAGER_EMPID"].ToString();
-                    oBP.UserFields.Fields.Item("U_IC_EMPID").Value = dr["U_IC_EMPID"].ToString();
-                    oBP.UserFields.Fields.Item("U_CS_EMPID").Value = dr["U_CS_EMPID"].ToString();
+                    //oBP.UserFields.Fields.Item("U_PARTNER_EMPID").Value = dr["U_PARTNER_EMPID"].ToString();
+                    //oBP.UserFields.Fields.Item("U_LA_EMPID").Value = dr["U_LA_EMPID"].ToString();
+                    //oBP.UserFields.Fields.Item("U_MANAGER_EMPID").Value = dr["U_MANAGER_EMPID"].ToString();
+                    //oBP.UserFields.Fields.Item("U_IC_EMPID").Value = dr["U_IC_EMPID"].ToString();
+                    //oBP.UserFields.Fields.Item("U_CS_EMPID").Value = dr["U_CS_EMPID"].ToString();
 
                     oBP.UserFields.Fields.Item("U_PURCH_RP_ID1").Value = dr["U_PURCH_RP_ID1"].ToString();
                     oBP.UserFields.Fields.Item("U_PURCH_RP_NAME1").Value = dr["U_PURCH_RP_NAME1"].ToString();
@@ -698,14 +720,13 @@ namespace AE_TnN_Mobile_BLL
                     oBP.UserFields.Fields.Item("U_STATE").Value = dr["U_STATE"].ToString();
                     oBP.UserFields.Fields.Item("U_AREA").Value = dr["U_AREA"].ToString();
                     oBP.UserFields.Fields.Item("U_BPM").Value = dr["U_BPM"].ToString();
-                    oBP.UserFields.Fields.Item("U_LOTAREA_SQM").Value = dr["U_LOTAREA_SQM"].ToString();
-                    oBP.UserFields.Fields.Item("U_LOTAREA_SQFT").Value = dr["U_LOTAREA_SQFT"].ToString();
+                    oBP.UserFields.Fields.Item("U_LOTAREA").Value = dr["U_LOTAREA"].ToString();
 
-                    oBP.UserFields.Fields.Item("U_PARTNER_FST_NAME").Value = dr["U_PARTNER_FST_NAME"].ToString();
-                    oBP.UserFields.Fields.Item("U_LA_FST_NAME").Value = dr["U_LA_FST_NAME"].ToString();
-                    oBP.UserFields.Fields.Item("U_MANAGER_FST_NAME").Value = dr["U_MANAGER_FST_NAME"].ToString();
-                    oBP.UserFields.Fields.Item("U_IC_FST_NAME").Value = dr["U_IC_FST_NAME"].ToString();
-                    oBP.UserFields.Fields.Item("U_CS_FST_NAME").Value = dr["U_CS_FST_NAME"].ToString();
+                    //oBP.UserFields.Fields.Item("U_PARTNER_FST_NAME").Value = dr["U_PARTNER_FST_NAME"].ToString();
+                    //oBP.UserFields.Fields.Item("U_LA_FST_NAME").Value = dr["U_LA_FST_NAME"].ToString();
+                    //oBP.UserFields.Fields.Item("U_MANAGER_FST_NAME").Value = dr["U_MANAGER_FST_NAME"].ToString();
+                    //oBP.UserFields.Fields.Item("U_IC_FST_NAME").Value = dr["U_IC_FST_NAME"].ToString();
+                    //oBP.UserFields.Fields.Item("U_CS_FST_NAME").Value = dr["U_CS_FST_NAME"].ToString();
 
                     oBP.UserFields.Fields.Item("U_PROJECT_NAME").Value = dr["U_PROJECT_NAME"].ToString();
                     oBP.UserFields.Fields.Item("U_CASE_BRANCH").Value = dr["U_CASE_BRANCH"].ToString();
@@ -751,32 +772,94 @@ namespace AE_TnN_Mobile_BLL
                             if (oDICompany.InTransaction) oDICompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
                             sResult = oDICompany.GetLastErrorDescription(); throw new ArgumentException(sResult);
                         }
-                        
-                        // After Customer added in BP Master, Update the BPCode in the TempOCRD Table
+
+                        //Assign the Case
+
+                        if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting to assign the case ", sFuncName);
+                        if (dr["SubRole"].ToString() == "CS")
+                        {
+                            oDataset = SqlHelper.ExecuteDataSet(ConnectionString, CommandType.StoredProcedure, "assignCase",
+                                               Data.CreateParameter("@apptype", dr["Category"].ToString()), Data.CreateParameter("@caseno", dr["CardCode"].ToString()));
+                            if (oDataset != null && oDataset.Tables.Count > 0)
+                            {
+                                if (oDataset.Tables[0].Rows.Count > 0)
+                                {
+                                    oBP.GetByKey(dr["CardCode"].ToString());
+                                    oBP.UserFields.Fields.Item("U_PARTNER_EMPID").Value = oDataset.Tables[0].Rows[0]["PTEmpId"].ToString();
+                                    oBP.UserFields.Fields.Item("U_LA_EMPID").Value = oDataset.Tables[0].Rows[0]["LAEmpId"].ToString();
+                                    oBP.UserFields.Fields.Item("U_MANAGER_EMPID").Value = oDataset.Tables[0].Rows[0]["MGEmpId"].ToString();
+                                    oBP.UserFields.Fields.Item("U_IC_EMPID").Value = oDataset.Tables[0].Rows[0]["ICEmpId"].ToString();
+                                    oBP.UserFields.Fields.Item("U_CS_EMPID").Value = dr["EmpId"].ToString();
+
+                                    oBP.UserFields.Fields.Item("U_PARTNER_FST_NAME").Value = oDataset.Tables[0].Rows[0]["PTEmpName"].ToString();
+                                    oBP.UserFields.Fields.Item("U_LA_FST_NAME").Value = oDataset.Tables[0].Rows[0]["LAEmpName"].ToString();
+                                    oBP.UserFields.Fields.Item("U_MANAGER_FST_NAME").Value = oDataset.Tables[0].Rows[0]["MGEmpName"].ToString();
+                                    oBP.UserFields.Fields.Item("U_IC_FST_NAME").Value = oDataset.Tables[0].Rows[0]["ICEmpName"].ToString();
+                                    oBP.UserFields.Fields.Item("U_CS_FST_NAME").Value = dr["EmpName"].ToString();
+
+                                    lRetCode = oBP.Update();
+                                    if (lRetCode == 0)
+                                    {
+                                        if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Case assigned successfully for CS ", sFuncName);
+                                    }
+                                    else
+                                    {
+                                        if (oDICompany.InTransaction) oDICompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                                        sResult = oDICompany.GetLastErrorDescription(); throw new ArgumentException(sResult);
+                                    }
+                                }
+                            }
+                        }
+                        else if (dr["SubRole"].ToString() == "IC")
+                        {
+                            oBP.GetByKey(dr["CardCode"].ToString());
+                            oBP.UserFields.Fields.Item("U_PARTNER_EMPID").Value = dr["EmpId"].ToString();
+                            oBP.UserFields.Fields.Item("U_LA_EMPID").Value = dr["EmpId"].ToString();
+                            oBP.UserFields.Fields.Item("U_MANAGER_EMPID").Value = dr["EmpId"].ToString();
+                            oBP.UserFields.Fields.Item("U_IC_EMPID").Value = dr["EmpId"].ToString();
+
+                            oBP.UserFields.Fields.Item("U_PARTNER_FST_NAME").Value = dr["EmpName"].ToString();
+                            oBP.UserFields.Fields.Item("U_LA_FST_NAME").Value = dr["EmpName"].ToString();
+                            oBP.UserFields.Fields.Item("U_MANAGER_FST_NAME").Value = dr["EmpName"].ToString();
+                            oBP.UserFields.Fields.Item("U_IC_FST_NAME").Value = dr["EmpName"].ToString();
+
+                            lRetCode = oBP.Update();
+                            if (lRetCode == 0)
+                            {
+                                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Case assigned successfully for IC ", sFuncName);
+                            }
+                            else
+                            {
+                                if (oDICompany.InTransaction) oDICompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                                sResult = oDICompany.GetLastErrorDescription(); throw new ArgumentException(sResult);
+                            }
+                        }
+
 
                         // Create sales Quotation
                         //ItemCode - 
 
                         if (oDICompany.InTransaction) oDICompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
 
-                        //DataTable dt = new DataTable();
-                        //DataSet ds = SPA_AddCase_GetSalesQuotationItems(dr["CardCode"].ToString());
-                        //if (ds != null && ds.Tables.Count > 0)
-                        //{
-                        //    if (ds.Tables[0].Rows.Count > 0)
-                        //    {
-                        //        dt = ds.Tables[0];
+                        DataTable dt = new DataTable();
+                        DataSet ds = SPA_AddCase_GetSalesQuotationItems(dr["CardCode"].ToString());
+                        if (ds != null && ds.Tables.Count > 0)
+                        {
+                            if (ds.Tables[0].Rows.Count > 0)
+                            {
+                                dt = ds.Tables[0];
 
-                        //        if (dt.Rows.Count > 0)
-                        //        {
+                                if (dt.Rows.Count > 0)
+                                {
 
-                        //            if (Add_SalesQuotation(dt, oDICompany, dr["CardCode"].ToString(), sErrDesc) != "SUCCESS")
-                        //                throw new ArgumentException(sErrDesc);
-                        //        }
+                                    if (Add_SalesQuotation(dt, oDICompany, dr["CardCode"].ToString(), sErrDesc) != "SUCCESS")
+                                        throw new ArgumentException(sErrDesc);
+                                }
 
-                        //    }
-                        //}
+                            }
+                        }
 
+                        // After Customer added in BP Master, Update the BPCode in the TempOCRD Table
                         SqlConnection con = new SqlConnection(ConnectionString);
                         SqlCommand command = con.CreateCommand();
                         command.CommandText = "Update [AE_OCRD] set U_BPCode ='" + dr["CardCode"].ToString() + "' where Code ='" + dr["TempCardCode"].ToString() + "'";
@@ -830,14 +913,21 @@ namespace AE_TnN_Mobile_BLL
                 {
                     //if (iCount != 0)
                     //    oSalesQuotation.Lines.Add();
-
-                    //oSalesQuotation.Lines.SetCurrentLine();
-                    oSalesQuotation.Lines.ItemCode = Convert.ToString(iRow["ItemCode"]);
-                    oSalesQuotation.Lines.Quantity = Convert.ToInt32(iRow["Qty"]);
-                    oSalesQuotation.Lines.Price = Convert.ToDouble(iRow["Price"]);
-                    oSalesQuotation.Lines.Add();
-                    //oSalesQuotation.Lines.VatGroup = "SR";
-                    iCount = iCount + 1;
+                    if (Convert.ToDouble(iRow["Qty"]) > 0)
+                    {
+                        //oSalesQuotation.Lines.SetCurrentLine();
+                        oSalesQuotation.Lines.ItemCode = Convert.ToString(iRow["ItemCode"]);
+                        oSalesQuotation.Lines.Quantity = Convert.ToInt32(iRow["Qty"]);
+                        oSalesQuotation.Lines.Price = Convert.ToDouble(iRow["Price"]);
+                        
+                        oSalesQuotation.Lines.UserFields.Fields.Item("U_STEP_CREATION_DT").Value = DateTime.Now.Date;
+                        oSalesQuotation.Lines.UserFields.Fields.Item("U_STATUS").Value = "Pend";
+                        oSalesQuotation.Lines.UserFields.Fields.Item("U_NEXT_ACTION_BY").Value = Convert.ToString(iRow["u_ACTION_BY"]);
+                        oSalesQuotation.Lines.UserFields.Fields.Item("U_NEXT_ACTION_BY").Value = Convert.ToString(iRow["INTNO"]);
+                        oSalesQuotation.Lines.Add();
+                        //oSalesQuotation.Lines.VatGroup = "SR";
+                        iCount = iCount + 1;
+                    }
                 }
 
                 lRetCode = oSalesQuotation.Add();
@@ -876,9 +966,11 @@ namespace AE_TnN_Mobile_BLL
             string sBranchId = string.Empty;
             string sBranchName = string.Empty;
             string sAppType = string.Empty;
+            Int32 iGroupCode = 0;
             try
             {
                 sFuncName = "SPA_AddCase_Questions()";
+                sProcName = "AE_SPA017_Mobile_AddCase_GetGroupCode";
                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
 
                 if (dtDatatable.Rows.Count > 0)
@@ -901,13 +993,31 @@ namespace AE_TnN_Mobile_BLL
                             SqlConnection con = new SqlConnection(ConnectionString);
 
                             string insertQuery = "INSERT INTO [AE_OCRD](Code,Name,U_Branch,U_QryGroup3,U_VNDR_RP_FIRM,U_VNDR_RP_LWYR,U_PURCH_RP_FIRM,U_PURCH_RP_LWYR," +
-                                                 "U_CASESTATUS,GroupCode,U_QryGroup4,U_QryGroup5,U_QryGroup6,U_QryGroup7,U_QryGroup8,U_QryGroup9,U_QryGroup10,U_QryGroup11,U_QryGroup17)" +
+                                                 "U_CASESTATUS,GroupCode,U_QryGroup4,U_QryGroup5,U_QryGroup6,U_QryGroup7,U_QryGroup8,U_QryGroup9,U_QryGroup10,U_QryGroup11,U_QryGroup17, U_QryGroup21)" +
                                                  "VALUES (@Code,@Name,@U_Branch,@U_QryGroup3,@U_VNDR_RP_FIRM,@U_VNDR_RP_LWYR,@U_PURCH_RP_FIRM,@U_PURCH_RP_LWYR," +
-                                                 "@U_CASESTATUS,@GroupCode,@U_QryGroup4,@U_QryGroup5,@U_QryGroup6,@U_QryGroup7,@U_QryGroup8,@U_QryGroup9,@U_QryGroup10,@U_QryGroup11,@U_QryGroup17)";
+                                                 "@U_CASESTATUS,@GroupCode,@U_QryGroup4,@U_QryGroup5,@U_QryGroup6,@U_QryGroup7,@U_QryGroup8,@U_QryGroup9,@U_QryGroup10,@U_QryGroup11,@U_QryGroup17, @U_QryGroup21)";
 
                             foreach (DataRow url in dtDatatable.Rows)
                             {
                                 con.Open();
+
+                                //Calling the sp for getting the Group code
+                                oDataset = SqlHelper.ExecuteDataSet(ConnectionString, CommandType.StoredProcedure, sProcName,
+                                Data.CreateParameter("@Category", sCategory), Data.CreateParameter("@sell", url["QryGroup3"].ToString()),
+                                Data.CreateParameter("@buy", url["QryGroup4"].ToString()), Data.CreateParameter("@subsales", url["QryGroup6"].ToString()),
+                                Data.CreateParameter("@developer", url["QryGroup5"].ToString()), Data.CreateParameter("@uc", url["QryGroup10"].ToString()),
+                                Data.CreateParameter("@completed", url["QryGroup11"].ToString()), Data.CreateParameter("@actofordev", url["QryGroup5"].ToString()),
+                                Data.CreateParameter("@commercial", url["QryGroup7"].ToString()), Data.CreateParameter("@landed", url["QryGroup8"].ToString()),
+                                Data.CreateParameter("@apartment", url["QryGroup9"].ToString()));
+
+                                if (oDataset != null && oDataset.Tables.Count > 0)
+                                {
+                                    if (oDataset.Tables[0].Rows.Count > 0)
+                                    {
+                                        iGroupCode = Convert.ToInt32(oDataset.Tables[0].Rows[0]["GroupCode"]);
+                                    }
+                                }
+
                                 SqlCommand cmd = new SqlCommand();
                                 cmd = con.CreateCommand();
                                 cmd.CommandText = insertQuery;
@@ -915,7 +1025,7 @@ namespace AE_TnN_Mobile_BLL
                                 cmd.Parameters.AddWithValue("@Code", sCardCode);
                                 cmd.Parameters.AddWithValue("@Name", sBranchName + "/" + sCardCode + "/" + sAppType);
                                 cmd.Parameters.AddWithValue("@U_Branch", sBranchId);
-                                cmd.Parameters.AddWithValue("@GroupCode", 107); // Here we need to call the SP to get the Group code
+                                cmd.Parameters.AddWithValue("@GroupCode", iGroupCode); // Here we need to call the SP to get the Group code
                                 cmd.Parameters.AddWithValue("@U_CASESTATUS", "OPEN"); // Default case status is Open
                                 cmd.Parameters.AddWithValue("@U_QryGroup3", url["QryGroup3"]);
                                 cmd.Parameters.AddWithValue("@U_VNDR_RP_FIRM", url["VNDR_RP_FIRM_SELL"]);
@@ -931,6 +1041,7 @@ namespace AE_TnN_Mobile_BLL
                                 cmd.Parameters.AddWithValue("@U_QryGroup10", url["QryGroup10"]);
                                 cmd.Parameters.AddWithValue("@U_QryGroup11", url["QryGroup11"]);
                                 cmd.Parameters.AddWithValue("@U_QryGroup17", url["QryGroup17"]);
+                                cmd.Parameters.AddWithValue("@U_QryGroup21", url["QryGroup21"]);
 
                                 // don't forget to take care of connection - I omit this part for clearness
                                 cmd.ExecuteNonQuery();
@@ -1002,8 +1113,7 @@ namespace AE_TnN_Mobile_BLL
                 oGeneralData.SetProperty("U_BPM", dtDatatable.Rows[0]["BPM"].ToString());
                 oGeneralData.SetProperty("U_STATE", dtDatatable.Rows[0]["STATE"].ToString());
                 oGeneralData.SetProperty("U_AREA", dtDatatable.Rows[0]["AREA"].ToString());
-                oGeneralData.SetProperty("U_LOTAREA_SQM", dtDatatable.Rows[0]["LOTAREA"].ToString());
-                oGeneralData.SetProperty("U_LOTAREA_SQFT", dtDatatable.Rows[0]["LOTAREA"].ToString());
+                oGeneralData.SetProperty("U_LOTAREA", dtDatatable.Rows[0]["LOTAREA"].ToString());
                 //oGeneralData.SetProperty("U_LASTUPDATEDON", dtDatatable.Rows[0]["LASTUPDATEDON"].ToString());
                 oGeneralData.SetProperty("U_DEVELOPER", dtDatatable.Rows[0]["DEVELOPER"].ToString());
                 oGeneralData.SetProperty("U_DVLPR_CODE", dtDatatable.Rows[0]["DVLPR_CODE"].ToString());
@@ -1066,8 +1176,7 @@ namespace AE_TnN_Mobile_BLL
                                         + "U_BPM = '" + dtDatatable.Rows[0]["BPM"] + "',"
                                         + "U_STATE = '" + dtDatatable.Rows[0]["STATE"] + "',"
                                         + "U_AREA = '" + dtDatatable.Rows[0]["AREA"] + "',"
-                                        + "U_LOTAREA_SQM = '" + dtDatatable.Rows[0]["LOTAREA"] + "',"
-                                        + "U_LOTAREA_SQFT = '" + dtDatatable.Rows[0]["LOTAREA"] + "',"
+                                        + "U_LOTAREA = '" + dtDatatable.Rows[0]["LOTAREA"] + "',"
                                         + "UpdateDate = '" + DateTime.Now.Date + "',"
                                         + "Updatetime = '" + TimeSplit[0] + TimeSplit[1] + "',"
                                         + "U_DEVELOPER = '" + dtDatatable.Rows[0]["DEVELOPER"] + "',"
@@ -1211,7 +1320,7 @@ namespace AE_TnN_Mobile_BLL
                         sCode = item["CardCode"].ToString();
                         sResult = SPA_AddCase_Purch_UpdatePropInTemp(sType, iLoopCount.ToString(), item["Code"].ToString(), sCode, item["IDNo1"].ToString(), item["EmployeeName"].ToString(), item["TaxNo"].ToString(), item["MobileNo"].ToString(), "INDIVIDUAL");
                     }
-                    
+
                     if (sResult != "SUCCESS")
                     {
                         sReturnResult = sResult;
@@ -1391,7 +1500,91 @@ namespace AE_TnN_Mobile_BLL
             {
                 throw Ex;
             }
-            
+
+        }
+
+        public DataSet SPA_AddCase_ScanDocumentMapping_RELPARTY(string sCode)
+        {
+            DataSet oDataset = new DataSet();
+            string sFuncName = string.Empty;
+            string sProcName = string.Empty;
+            DataView oDTView = new DataView();
+
+            try
+            {
+                sFuncName = "SPA_AddCase_ScanDocumentMapping_RELPARTY()";
+                sProcName = "AE_SPA025_Mobile_ScanDocumentMapping_RELPARTY";
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Calling Run_StoredProcedure() " + sProcName, sFuncName);
+
+
+                oDataset = SqlHelper.ExecuteDataSet(ConnectionString, CommandType.StoredProcedure, sProcName,
+                    Data.CreateParameter("@Code", sCode));
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
+                if (oDataset.Tables.Count > 0 && oDataset != null)
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is a set of data from the SP :" + sProcName, sFuncName);
+                    return oDataset;
+                }
+                else
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is no data from the SP :" + sProcName, sFuncName);
+                    return oDataset;
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                sErrDesc = Ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                throw Ex;
+            }
+        }
+
+        public DataSet SPA_AddCase_ScanDocumentMapping_Property(string sCode)
+        {
+            DataSet oDataset = new DataSet();
+            string sFuncName = string.Empty;
+            string sProcName = string.Empty;
+            DataView oDTView = new DataView();
+
+            try
+            {
+                sFuncName = "SPA_AddCase_ScanDocumentMapping_Property()";
+                sProcName = "AE_SPA026_Mobile_ScanDocumentMapping_Property";
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Calling Run_StoredProcedure() " + sProcName, sFuncName);
+
+
+                oDataset = SqlHelper.ExecuteDataSet(ConnectionString, CommandType.StoredProcedure, sProcName,
+                    Data.CreateParameter("@Code", sCode));
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
+                if (oDataset.Tables.Count > 0 && oDataset != null)
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is a set of data from the SP :" + sProcName, sFuncName);
+                    return oDataset;
+                }
+                else
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is no data from the SP :" + sProcName, sFuncName);
+                    return oDataset;
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                sErrDesc = Ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                throw Ex;
+            }
         }
     }
 }
