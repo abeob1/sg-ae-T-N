@@ -46,10 +46,19 @@ namespace AE_TnN_Mobile_V001
         clsEncryptDecrypt clsEncypt = new clsEncryptDecrypt();
         JavaScriptSerializer js = new JavaScriptSerializer();
         List<result> lstResult = new List<result>();
+        List<result_Case> lstResult_Case = new List<result_Case>();
         SAPbobsCOM.Company oDICompany;
         public static string ConnectionString = ConfigurationManager.ConnectionStrings["dbconnection"].ConnectionString;
         public static string FileUploadPath = ConfigurationManager.AppSettings["FileUploadPath"].ToString();
+        public static string PropertyFilePath = ConfigurationManager.AppSettings["PropertyFilePath"].ToString();
+        public static string ICFilePath = ConfigurationManager.AppSettings["ICFilePath"].ToString();
+        public static string GDocFilePath = ConfigurationManager.AppSettings["GDocFilePath"].ToString();
+        public static string SDocFilePath = ConfigurationManager.AppSettings["SDocFilePath"].ToString();
         public static string FileUploadEncryptedPath = ConfigurationManager.AppSettings["FileUploadEncryptedPath"].ToString();
+        public static string PropertyFile = ConfigurationManager.AppSettings["PropertyFile"].ToString();
+        public static string ICFile = ConfigurationManager.AppSettings["ICFile"].ToString();
+        public static string GDocFile = ConfigurationManager.AppSettings["GDocFile"].ToString();
+        public static string SDocFile = ConfigurationManager.AppSettings["SDocFile"].ToString();
         #endregion
 
         #region WebMethods
@@ -1895,30 +1904,59 @@ namespace AE_TnN_Mobile_V001
                                                             "IDAddress1", "IDAddress2", "IDAddress3", "IDAddress4", "IDAddress5"
                                                             , "CorresAddr1", "CorresAddr2", "CorresAddr3", "CorresAddr4", "CorresAddr5",
                                                             "AddressToUse", "LastUpdatedOn");
-
-                    foreach (DataRow r in distinctValues.Rows)
+                    if (distinctValues.Rows.Count > 0)
                     {
+                        foreach (DataRow r in distinctValues.Rows)
+                        {
+                            CorporateSearch _SearchInfo = new CorporateSearch();
+
+                            _SearchInfo.Code = r["Code"].ToString();
+                            _SearchInfo.DocEntry = r["DocEntry"].ToString();
+                            _SearchInfo.CompName = r["CompName"].ToString();
+                            _SearchInfo.BRNNo = r["BRNNo"].ToString();
+                            _SearchInfo.TaxNo = r["TaxNo"].ToString();
+                            _SearchInfo.OfficeNo = r["OfficeNo"].ToString();
+                            _SearchInfo.IDAddress1 = r["IDAddress1"].ToString();
+                            _SearchInfo.IDAddress2 = r["IDAddress2"].ToString();
+                            _SearchInfo.IDAddress3 = r["IDAddress3"].ToString();
+                            _SearchInfo.IDAddress4 = r["IDAddress4"].ToString();
+                            _SearchInfo.IDAddress5 = r["IDAddress5"].ToString();
+                            _SearchInfo.CorresAddr1 = r["CorresAddr1"].ToString();
+                            _SearchInfo.CorresAddr2 = r["CorresAddr2"].ToString();
+                            _SearchInfo.CorresAddr3 = r["CorresAddr3"].ToString();
+                            _SearchInfo.CorresAddr4 = r["CorresAddr4"].ToString();
+                            _SearchInfo.CorresAddr5 = r["CorresAddr5"].ToString();
+                            _SearchInfo.AddressToUse = r["AddressToUse"].ToString();
+                            _SearchInfo.LastUpdatedOn = r["LastUpdatedOn"].ToString();
+                            _SearchInfo.Director = lstDirector;
+
+                            lstSearchInfo.Add(_SearchInfo);
+                        }
+                    }
+                    else
+                    {
+                        List<Director> lstDirector1 = new List<Director>();
                         CorporateSearch _SearchInfo = new CorporateSearch();
 
-                        _SearchInfo.Code = r["Code"].ToString();
-                        _SearchInfo.DocEntry = r["DocEntry"].ToString();
-                        _SearchInfo.CompName = r["CompName"].ToString();
-                        _SearchInfo.BRNNo = r["BRNNo"].ToString();
-                        _SearchInfo.TaxNo = r["TaxNo"].ToString();
-                        _SearchInfo.OfficeNo = r["OfficeNo"].ToString();
-                        _SearchInfo.IDAddress1 = r["IDAddress1"].ToString();
-                        _SearchInfo.IDAddress2 = r["IDAddress2"].ToString();
-                        _SearchInfo.IDAddress3 = r["IDAddress3"].ToString();
-                        _SearchInfo.IDAddress4 = r["IDAddress4"].ToString();
-                        _SearchInfo.IDAddress5 = r["IDAddress5"].ToString();
-                        _SearchInfo.CorresAddr1 = r["CorresAddr1"].ToString();
-                        _SearchInfo.CorresAddr2 = r["CorresAddr2"].ToString();
-                        _SearchInfo.CorresAddr3 = r["CorresAddr3"].ToString();
-                        _SearchInfo.CorresAddr4 = r["CorresAddr4"].ToString();
-                        _SearchInfo.CorresAddr5 = r["CorresAddr5"].ToString();
-                        _SearchInfo.AddressToUse = r["AddressToUse"].ToString();
-                        _SearchInfo.LastUpdatedOn = r["LastUpdatedOn"].ToString();
-                        _SearchInfo.Director = lstDirector;
+                        _SearchInfo.Code = string.Empty;
+                        _SearchInfo.DocEntry = string.Empty;
+                        _SearchInfo.CompName = string.Empty;
+                        _SearchInfo.BRNNo = string.Empty;
+                        _SearchInfo.TaxNo = string.Empty;
+                        _SearchInfo.OfficeNo = string.Empty;
+                        _SearchInfo.IDAddress1 = string.Empty;
+                        _SearchInfo.IDAddress2 = string.Empty;
+                        _SearchInfo.IDAddress3 = string.Empty;
+                        _SearchInfo.IDAddress4 = string.Empty;
+                        _SearchInfo.IDAddress5 = string.Empty;
+                        _SearchInfo.CorresAddr1 = string.Empty;
+                        _SearchInfo.CorresAddr2 = string.Empty;
+                        _SearchInfo.CorresAddr3 = string.Empty;
+                        _SearchInfo.CorresAddr4 = string.Empty;
+                        _SearchInfo.CorresAddr5 = string.Empty;
+                        _SearchInfo.AddressToUse = string.Empty;
+                        _SearchInfo.LastUpdatedOn = string.Empty;
+                        _SearchInfo.Director = lstDirector1;
 
                         lstSearchInfo.Add(_SearchInfo);
                     }
@@ -1926,6 +1964,7 @@ namespace AE_TnN_Mobile_V001
                 else
                 {
                     CorporateSearch _SearchInfo = new CorporateSearch();
+                    List<Director> lstDirector2 = new List<Director>();
 
                     _SearchInfo.Code = string.Empty;
                     _SearchInfo.DocEntry = string.Empty;
@@ -1945,6 +1984,7 @@ namespace AE_TnN_Mobile_V001
                     _SearchInfo.CorresAddr5 = string.Empty;
                     _SearchInfo.AddressToUse = string.Empty;
                     _SearchInfo.LastUpdatedOn = string.Empty;
+                    _SearchInfo.Director = lstDirector2;
 
                     lstSearchInfo.Add(_SearchInfo);
                 }
@@ -2040,7 +2080,7 @@ namespace AE_TnN_Mobile_V001
                 if (lstDeserialize.Count > 0)
                 {
                     DataTable dt = ToDataTable(lstDeserialize);
-                    sResult = oCase.SPA_AddCase(dt);
+                    sResult = oCase.SPA_AddCase(dt, sResult);
 
                     if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS", sFuncName);
                     result objResult = new result();
@@ -2175,12 +2215,21 @@ namespace AE_TnN_Mobile_V001
 
                     if (dt != null && dt.Rows.Count > 0)
                     {
+                        if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Data is there", sFuncName);
                         DocumentToRead _DetailInfo = new DocumentToRead();
 
                         DataTable dtTransposed = GenerateTransposedTable(dt);
                         DataColumnCollection columns = dtTransposed.Columns;
 
-                        _DetailInfo.Message = "";
+                        if (columns.Contains("Failed"))
+                        {
+                            _DetailInfo.Message = dtTransposed.Rows[0]["Failed"].ToString();
+                        }
+                        else
+                        {
+                            _DetailInfo.Message = "";
+                        }
+
                         _DetailInfo.CODE = string.Empty;
                         _DetailInfo.TITLETYPE = string.Empty;
                         if (columns.Contains("U_TITLENO"))
@@ -2250,10 +2299,14 @@ namespace AE_TnN_Mobile_V001
                         _DetailInfo.LSTCHG_BRANCH = string.Empty;
                         _DetailInfo.LSTCHG_PANO = string.Empty;
                         _DetailInfo.LSTCHG_PRSTNO = string.Empty;
+                        _DetailInfo.LSTCHG_PRSTLINK = dtTransposed.Rows[0]["LSTCHG_PRSTLINK"].ToString();
+                        _DetailInfo.TITLELINK = dtTransposed.Rows[0]["TITLELINK"].ToString();
+
                         lstCaseInfo.Add(_DetailInfo);
                     }
                     else
                     {
+                        if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Data is not there", sFuncName);
                         DocumentToRead _DetailInfo = new DocumentToRead();
 
                         _DetailInfo.Message = "Cannot Read the Scanned Files. Kindly key in the data";
@@ -2281,12 +2334,15 @@ namespace AE_TnN_Mobile_V001
                         _DetailInfo.LSTCHG_BRANCH = "";
                         _DetailInfo.LSTCHG_PANO = "";
                         _DetailInfo.LSTCHG_PRSTNO = "";
+                        _DetailInfo.LSTCHG_PRSTLINK = "";
+                        _DetailInfo.TITLELINK = "";
                         lstCaseInfo.Add(_DetailInfo);
                     }
                 }
 
                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
                 Context.Response.Output.Write(js.Serialize(lstCaseInfo));
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Document , the Serialized data is ' " + js.Serialize(lstCaseInfo) + " '", sFuncName);
 
                 //JSON_EditPropertyEnquiryDetails entityEditProperty = new JSON_EditPropertyEnquiryDetails();
                 //if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Converting Json to Datatable ", sFuncName);
@@ -2647,12 +2703,24 @@ namespace AE_TnN_Mobile_V001
                         DataColumnCollection columns = dtTransposed.Columns;
 
                         ScanIC _SearchInfo = new ScanIC();
-                        _SearchInfo.Message = "";
-                        _SearchInfo.ScanICLocation = FileUploadPath + objLstInfo.FileName;
-                        _SearchInfo.ScanFrontICLocation = string.Empty;
-                        _SearchInfo.ScanFrontICLocation = string.Empty;
+
+                        if (columns.Contains("Failed"))
+                        {
+                            _SearchInfo.Message = dtTransposed.Rows[0]["Failed"].ToString();
+                        }
+                        else
+                        {
+                            _SearchInfo.Message = "";
+                        }
+                        //_SearchInfo.ScanICLocation = FileUploadPath + objLstInfo.FileName;
+
                         if (objLstInfo.ICType == "Front")
                         {
+                            if (columns.Contains("FRONTIC"))
+                            {
+                                _SearchInfo.ScanFrontICLocation = dtTransposed.Rows[0]["FRONTIC"].ToString();
+                            }
+
                             if (columns.Contains("U_NAME"))
                             {
                                 _SearchInfo.EmployeeName = dtTransposed.Rows[0]["U_NAME"].ToString();
@@ -2688,17 +2756,22 @@ namespace AE_TnN_Mobile_V001
                                 _SearchInfo.IDAddress1 = string.Empty;
                                 _SearchInfo.IDAddress2 = string.Empty;
                             }
-
+                            _SearchInfo.IDNo3 = string.Empty;
                         }
                         else if (objLstInfo.ICType == "Back")
                         {
-                            if (columns.Contains("U_TITLENO"))
+                            if (columns.Contains("BACKIC"))
                             {
-                                _SearchInfo.IDNo3 = dtTransposed.Rows[0]["U_TITLENO"].ToString();
+                                _SearchInfo.ScanBackICLocation = dtTransposed.Rows[0]["BACKIC"].ToString();
+                            }
+                            if (columns.Contains("U_IDNO_F3"))
+                            {
+                                _SearchInfo.IDNo3 = dtTransposed.Rows[0]["U_IDNO_F3"].ToString();
                             }
                             else
                             {
                                 _SearchInfo.IDNo3 = string.Empty;
+                                _SearchInfo.Message = dtTransposed.Rows[0][1].ToString(); //for showing the error message.
                             }
                         }
                         _SearchInfo.Code = string.Empty;
@@ -2708,8 +2781,8 @@ namespace AE_TnN_Mobile_V001
                         _SearchInfo.MobileNo = string.Empty;
                         _SearchInfo.Telephone = string.Empty;
                         _SearchInfo.OfficeNo = string.Empty;
-                        _SearchInfo.IDAddress1 = string.Empty;
-                        _SearchInfo.IDAddress2 = string.Empty;
+                        //_SearchInfo.IDAddress1 = string.Empty;
+                        //_SearchInfo.IDAddress2 = string.Empty;
                         _SearchInfo.IDAddress3 = string.Empty;
                         _SearchInfo.IDAddress4 = string.Empty;
                         _SearchInfo.IDAddress5 = string.Empty;
@@ -2727,7 +2800,6 @@ namespace AE_TnN_Mobile_V001
                         ScanIC _SearchInfo = new ScanIC();
 
                         _SearchInfo.Message = "OCR Cannot able to Read the data from Scanned File.Kindly Key in.";
-                        _SearchInfo.ScanICLocation = FileUploadEncryptedPath + objLstInfo.FileName;
                         _SearchInfo.ScanFrontICLocation = string.Empty;
                         _SearchInfo.ScanFrontICLocation = string.Empty;
                         _SearchInfo.Code = string.Empty;
@@ -2806,24 +2878,27 @@ namespace AE_TnN_Mobile_V001
                     {
                         if (ds.Tables[0].Rows.Count > 0)
                         {
-                            string sResult = oCase.SPA_AddCase(ds.Tables[0]);
-                            if (sResult == "SUCCESS")
+                            string sResult = oCase.SPA_AddCase(ds.Tables[0], sUserName);
+                            if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Result Valaue :" + sResult.Substring(0, 7).ToString(), sFuncName);
+                            if (sResult.Substring(0, 7).ToString() == "SUCCESS")
                             {
                                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
-                                result objResult = new result();
+                                result_Case objResult = new result_Case();
+                                objResult.CaseNo = sResult.Substring(7, sResult.Length - 7);
                                 objResult.Result = "SUCCESS";
                                 objResult.DisplayMessage = "Case Created Successfully";
-                                lstResult.Add(objResult);
-                                Context.Response.Output.Write(js.Serialize(lstResult));
+                                lstResult_Case.Add(objResult);
+                                Context.Response.Output.Write(js.Serialize(lstResult_Case));
                             }
                             else
                             {
                                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
-                                result objResult = new result();
+                                result_Case objResult = new result_Case();
+                                objResult.CaseNo = "";
                                 objResult.Result = "ERROR";
                                 objResult.DisplayMessage = sResult;
-                                lstResult.Add(objResult);
-                                Context.Response.Output.Write(js.Serialize(lstResult));
+                                lstResult_Case.Add(objResult);
+                                Context.Response.Output.Write(js.Serialize(lstResult_Case));
                             }
                         }
                     }
@@ -3448,36 +3523,44 @@ namespace AE_TnN_Mobile_V001
 
         [WebMethod(EnableSession = true)]
         [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
-        public void SPA_ProcessCase_CreateBilling(string sJsonInput)
+        public void SPA_ProcessCase_GetStatus()
         {
             string sFuncName = string.Empty;
-            string sReturnResult = string.Empty;
+            string sCardCode = string.Empty;
+            string sCategory = string.Empty;
+            string sUserName = string.Empty;
             try
             {
-                sFuncName = "SPA_ProcessCase_CreateBilling()";
+                sFuncName = "SPA_ProcessCase_GetStatus()";
                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
 
-                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_ProcessCase_CreateBilling() ", sFuncName);
-                sReturnResult = oProcessCase.SPA_ProcessCase_CreateBilling(sJsonInput, new DataTable());
-                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_ProcessCase_CreateBilling() ", sFuncName);
-                if (sReturnResult == "SUCCESS")
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_ProcessCase_Status() ", sFuncName);
+                DataTable dt = oProcessCase.SPA_ProcessCase_Status();
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_ProcessCase_Status() ", sFuncName);
+                List<ValidValues> lstValues = new List<ValidValues>();
+                if (dt != null && dt.Rows.Count > 0)
                 {
-                    result objResult = new result();
-                    objResult.Result = "Success";
-                    objResult.DisplayMessage = "Create Billing is successfull in SAP";
-                    lstResult.Add(objResult);
-                    Context.Response.Output.Write(js.Serialize(lstResult));
-                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
+                    foreach (DataRow r in dt.Rows)
+                    {
+                        ValidValues _Info = new ValidValues();
+
+                        _Info.Id = r["Id"].ToString();
+                        _Info.Name = r["Name"].ToString();
+                        lstValues.Add(_Info);
+                    }
                 }
                 else
                 {
-                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
-                    result objResult = new result();
-                    objResult.Result = "Error";
-                    objResult.DisplayMessage = sReturnResult;
-                    lstResult.Add(objResult);
-                    Context.Response.Output.Write(js.Serialize(lstResult));
+                    ValidValues _Info = new ValidValues();
+
+                    _Info.Id = "-- Select --";
+                    _Info.Name = "-- Select --";
+                    lstValues.Add(_Info);
                 }
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Status Information ", sFuncName);
+                Context.Response.Output.Write(js.Serialize(lstValues));
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Status Information , the Serialized data is ' " + js.Serialize(lstValues) + " '", sFuncName);
             }
             catch (Exception ex)
             {
@@ -3529,22 +3612,84 @@ namespace AE_TnN_Mobile_V001
 
                                 GetNextSection oGetNextSection = new GetNextSection();
 
+                                oGetNextSection.CaseNo = dr["CaseNo"].ToString();
+                                oGetNextSection.DocEntry = dr["DocEntry"].ToString();
+                                oGetNextSection.DocNum = dr["DocNum"].ToString();
+                                oGetNextSection.LineNum = dr["LineNum"].ToString();
                                 oGetNextSection.ItemCode = dr["ItemCode"].ToString();
-                                oGetNextSection.ItemName = dr["ItemName"].ToString();
-                                oGetNextSection.INTNO = dr["INTNO"].ToString();
-                                oGetNextSection.U_SORT_CODE = dr["U_SORT_CODE"].ToString();
-                                oGetNextSection.CREATION_DATE = dr["CREATION_DATE"].ToString();
+                                oGetNextSection.Details = dr["Details"].ToString();
+                                oGetNextSection.IntNo = dr["IntNo"].ToString();
+                                oGetNextSection.SortCode = dr["SortCode"].ToString();
+                                oGetNextSection.CreationDate = dr["CreationDate"].ToString();
                                 oGetNextSection.Qty = dr["Qty"].ToString();
-                                oGetNextSection.price = dr["price"].ToString();
-                                oGetNextSection.u_ACTION_BY = dr["u_ACTION_BY"].ToString();
-                                oGetNextSection.LAST_UPDATE = dr["LAST_UPDATE"].ToString();
-                                oGetNextSection.STATUS_DATE = dr["STATUS_DATE"].ToString();
+                                oGetNextSection.Price = dr["Price"].ToString();
+                                oGetNextSection.ActionBy = dr["ActionBy"].ToString();
+                                oGetNextSection.Status = dr["Status"].ToString();
+                                oGetNextSection.LastUpdate = dr["LastUpdate"].ToString();
+                                oGetNextSection.StatusDate = dr["StatusDate"].ToString();
                                 oGetNextSection.TrnspName = dr["TrnspName"].ToString();
                                 oGetNextSection.ForwardParty = dr["ForwardParty"].ToString();
                                 oGetNextSection.ItmsGrpNam = dr["ItmsGrpNam"].ToString();
+                                oGetNextSection.UserRole = dr["UserRole"].ToString();
+                                oGetNextSection.Remarks = dr["Remarks"].ToString();
+
                                 lstGetNextSection.Add(oGetNextSection);
                             }
                         }
+                        else
+                        {
+                            GetNextSection oGetNextSection = new GetNextSection();
+
+                            oGetNextSection.CaseNo = string.Empty;
+                            oGetNextSection.DocEntry = string.Empty;
+                            oGetNextSection.DocNum = string.Empty;
+                            oGetNextSection.LineNum = string.Empty;
+                            oGetNextSection.ItemCode = string.Empty;
+                            oGetNextSection.Details = string.Empty;
+                            oGetNextSection.IntNo = string.Empty;
+                            oGetNextSection.SortCode = string.Empty;
+                            oGetNextSection.CreationDate = string.Empty;
+                            oGetNextSection.Qty = string.Empty;
+                            oGetNextSection.Price = string.Empty;
+                            oGetNextSection.ActionBy = string.Empty;
+                            oGetNextSection.Status = string.Empty;
+                            oGetNextSection.LastUpdate = string.Empty;
+                            oGetNextSection.StatusDate = string.Empty;
+                            oGetNextSection.TrnspName = string.Empty;
+                            oGetNextSection.ForwardParty = string.Empty;
+                            oGetNextSection.ItmsGrpNam = string.Empty;
+                            oGetNextSection.UserRole = string.Empty;
+                            oGetNextSection.Remarks = string.Empty;
+
+                            lstGetNextSection.Add(oGetNextSection);
+                        }
+                    }
+                    else
+                    {
+                        GetNextSection oGetNextSection = new GetNextSection();
+
+                        oGetNextSection.CaseNo = string.Empty;
+                        oGetNextSection.DocEntry = string.Empty;
+                        oGetNextSection.DocNum = string.Empty;
+                        oGetNextSection.LineNum = string.Empty;
+                        oGetNextSection.ItemCode = string.Empty;
+                        oGetNextSection.Details = string.Empty;
+                        oGetNextSection.IntNo = string.Empty;
+                        oGetNextSection.SortCode = string.Empty;
+                        oGetNextSection.CreationDate = string.Empty;
+                        oGetNextSection.Qty = string.Empty;
+                        oGetNextSection.Price = string.Empty;
+                        oGetNextSection.ActionBy = string.Empty;
+                        oGetNextSection.Status = string.Empty;
+                        oGetNextSection.LastUpdate = string.Empty;
+                        oGetNextSection.StatusDate = string.Empty;
+                        oGetNextSection.TrnspName = string.Empty;
+                        oGetNextSection.ForwardParty = string.Empty;
+                        oGetNextSection.ItmsGrpNam = string.Empty;
+                        oGetNextSection.UserRole = string.Empty;
+                        oGetNextSection.Remarks = string.Empty;
+
+                        lstGetNextSection.Add(oGetNextSection);
                     }
                     if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Next section Information ", sFuncName);
                     Context.Response.Output.Write(js.Serialize(lstGetNextSection));
@@ -3586,7 +3731,7 @@ namespace AE_TnN_Mobile_V001
                 if (lstDeserialize.Count > 0)
                 {
                     JSON_NextSection objLstInfo = lstDeserialize[0];
-                    List<GetNextSection> lstGetNextSection = new List<GetNextSection>();
+                    List<GetOptionalItems> lstGetOptionalItems = new List<GetOptionalItems>();
                     sCaseNo = objLstInfo.sCaseNo;
 
                     if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_ProcessCase_GetOptionalItems() ", sFuncName);
@@ -3600,29 +3745,897 @@ namespace AE_TnN_Mobile_V001
                             foreach (DataRow dr in ds.Tables[0].Rows)
                             {
 
-                                GetNextSection oGetNextSection = new GetNextSection();
+                                GetOptionalItems oGetOptionalItems = new GetOptionalItems();
 
-                                oGetNextSection.ItemCode = dr["ItemCode"].ToString();
-                                oGetNextSection.ItemName = dr["ItemName"].ToString();
-                                oGetNextSection.INTNO = dr["U_SORT_CODE"].ToString();
-                                oGetNextSection.U_SORT_CODE = dr["U_SORT_CODE"].ToString();
-                                oGetNextSection.CREATION_DATE = dr["CREATION_DATE"].ToString();
-                                oGetNextSection.Qty = dr["Qty"].ToString();
-                                oGetNextSection.price = dr["price"].ToString();
-                                oGetNextSection.u_ACTION_BY = dr["u_ACTION_BY"].ToString();
-                                oGetNextSection.LAST_UPDATE = dr["LAST_UPDATE"].ToString();
-                                oGetNextSection.STATUS_DATE = dr["STATUS_DATE"].ToString();
-                                oGetNextSection.TrnspName = dr["TrnspName"].ToString();
-                                oGetNextSection.ForwardParty = dr["ForwardParty"].ToString();
-                                oGetNextSection.ItmsGrpNam = dr["ItmsGrpNam"].ToString();
-                                lstGetNextSection.Add(oGetNextSection);
+                                oGetOptionalItems.CaseNo = dr["CaseNo"].ToString();
+                                oGetOptionalItems.DocEntry = dr["DocEntry"].ToString();
+                                oGetOptionalItems.DocNum = dr["DocNum"].ToString();
+                                oGetOptionalItems.LineNum = dr["LineNum"].ToString();
+                                oGetOptionalItems.ItemCode = dr["ItemCode"].ToString();
+                                oGetOptionalItems.Details = dr["Details"].ToString();
+                                oGetOptionalItems.IntNo = dr["IntNo"].ToString();
+                                oGetOptionalItems.SortCode = dr["SortCode"].ToString();
+                                oGetOptionalItems.CreationDate = dr["CreationDate"].ToString();
+                                oGetOptionalItems.Qty = dr["Qty"].ToString();
+                                oGetOptionalItems.Price = dr["Price"].ToString();
+                                oGetOptionalItems.ActionBy = dr["ActionBy"].ToString();
+                                oGetOptionalItems.Status = dr["Status"].ToString();
+                                oGetOptionalItems.LastUpdate = dr["LastUpdate"].ToString();
+                                oGetOptionalItems.StatusDate = dr["StatusDate"].ToString();
+                                oGetOptionalItems.TrnspName = dr["TrnspName"].ToString();
+                                oGetOptionalItems.ForwardParty = dr["ForwardParty"].ToString();
+                                oGetOptionalItems.ItmsGrpNam = dr["ItmsGrpNam"].ToString();
+                                oGetOptionalItems.UserRole = dr["UserRole"].ToString();
+                                oGetOptionalItems.Remarks = dr["Remarks"].ToString();
+
+                                lstGetOptionalItems.Add(oGetOptionalItems);
                             }
+                        }
+                        else
+                        {
+                            GetOptionalItems oGetOptionalItems = new GetOptionalItems();
+
+                            oGetOptionalItems.CaseNo = string.Empty;
+                            oGetOptionalItems.DocEntry = string.Empty;
+                            oGetOptionalItems.DocNum = string.Empty;
+                            oGetOptionalItems.LineNum = string.Empty;
+                            oGetOptionalItems.ItemCode = string.Empty;
+                            oGetOptionalItems.Details = string.Empty;
+                            oGetOptionalItems.IntNo = string.Empty;
+                            oGetOptionalItems.SortCode = string.Empty;
+                            oGetOptionalItems.CreationDate = string.Empty;
+                            oGetOptionalItems.Qty = string.Empty;
+                            oGetOptionalItems.Price = string.Empty;
+                            oGetOptionalItems.ActionBy = string.Empty;
+                            oGetOptionalItems.Status = string.Empty;
+                            oGetOptionalItems.LastUpdate = string.Empty;
+                            oGetOptionalItems.StatusDate = string.Empty;
+                            oGetOptionalItems.TrnspName = string.Empty;
+                            oGetOptionalItems.ForwardParty = string.Empty;
+                            oGetOptionalItems.ItmsGrpNam = string.Empty;
+                            oGetOptionalItems.UserRole = string.Empty;
+                            oGetOptionalItems.Remarks = string.Empty;
+
+                            lstGetOptionalItems.Add(oGetOptionalItems);
                         }
                     }
                     if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Optional Items Information ", sFuncName);
-                    Context.Response.Output.Write(js.Serialize(lstGetNextSection));
-                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Optional Items Informations , the Serialized data is ' " + js.Serialize(lstGetNextSection) + " '", sFuncName);
+                    Context.Response.Output.Write(js.Serialize(lstGetOptionalItems));
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Optional Items Informations , the Serialized data is ' " + js.Serialize(lstGetOptionalItems) + " '", sFuncName);
                 }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_GetOpenSection(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            DataSet ds = new DataSet();
+            string sReturnResult = string.Empty;
+            List<GetOpenSection> lstGetOpenSection = new List<GetOpenSection>();
+            try
+            {
+                sFuncName = "SPA_ProcessCase_GetOpenSection()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+                string sCaseNo = string.Empty;
+
+                sJsonInput = "[" + sJsonInput + "]";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_NextSection> lstDeserialize = js.Deserialize<List<JSON_NextSection>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    JSON_NextSection objLstInfo = lstDeserialize[0];
+
+                    sCaseNo = objLstInfo.sCaseNo;
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_ProcessCase_GetOpenSection() ", sFuncName);
+                    ds = oProcessCase.SPA_ProcessCase_GetOpenSection(sCaseNo);
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_ProcessCase_GetOpenSection() ", sFuncName);
+
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            foreach (DataRow dr in ds.Tables[0].Rows)
+                            {
+
+                                GetOpenSection oGetOpenSection = new GetOpenSection();
+
+                                oGetOpenSection.CaseNo = dr["CaseNo"].ToString();
+                                oGetOpenSection.DocEntry = dr["DocEntry"].ToString();
+                                oGetOpenSection.DocNum = dr["DocNum"].ToString();
+                                oGetOpenSection.LineNum = dr["LineNum"].ToString();
+                                oGetOpenSection.ItemCode = dr["ItemCode"].ToString();
+                                oGetOpenSection.Details = dr["Details"].ToString();
+                                oGetOpenSection.IntNo = dr["IntNo"].ToString();
+                                oGetOpenSection.SortCode = dr["SortCode"].ToString();
+                                oGetOpenSection.CreationDate = dr["CreationDate"].ToString();
+                                oGetOpenSection.Qty = dr["Qty"].ToString();
+                                oGetOpenSection.Price = dr["Price"].ToString();
+                                oGetOpenSection.ActionBy = dr["ActionBy"].ToString();
+                                oGetOpenSection.Status = dr["Status"].ToString();
+                                oGetOpenSection.LastUpdate = dr["LastUpdate"].ToString();
+                                oGetOpenSection.StatusDate = dr["StatusDate"].ToString();
+                                oGetOpenSection.TrnspName = dr["TrnspName"].ToString();
+                                oGetOpenSection.ForwardParty = dr["ForwardParty"].ToString();
+                                oGetOpenSection.ItmsGrpNam = dr["ItmsGrpNam"].ToString();
+                                oGetOpenSection.UserRole = dr["UserRole"].ToString();
+                                oGetOpenSection.Remarks = dr["Remarks"].ToString();
+
+                                lstGetOpenSection.Add(oGetOpenSection);
+                            }
+                        }
+                        else
+                        {
+                            GetOpenSection oGetOpenSection = new GetOpenSection();
+
+                            oGetOpenSection.CaseNo = string.Empty;
+                            oGetOpenSection.DocEntry = string.Empty;
+                            oGetOpenSection.DocNum = string.Empty;
+                            oGetOpenSection.LineNum = string.Empty;
+                            oGetOpenSection.ItemCode = string.Empty;
+                            oGetOpenSection.Details = string.Empty;
+                            oGetOpenSection.IntNo = string.Empty;
+                            oGetOpenSection.SortCode = string.Empty;
+                            oGetOpenSection.CreationDate = string.Empty;
+                            oGetOpenSection.Qty = string.Empty;
+                            oGetOpenSection.Price = string.Empty;
+                            oGetOpenSection.ActionBy = string.Empty;
+                            oGetOpenSection.Status = string.Empty;
+                            oGetOpenSection.LastUpdate = string.Empty;
+                            oGetOpenSection.StatusDate = string.Empty;
+                            oGetOpenSection.TrnspName = string.Empty;
+                            oGetOpenSection.ForwardParty = string.Empty;
+                            oGetOpenSection.ItmsGrpNam = string.Empty;
+                            oGetOpenSection.UserRole = string.Empty;
+                            oGetOpenSection.Remarks = string.Empty;
+
+                            lstGetOpenSection.Add(oGetOpenSection);
+                        }
+                    }
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Open section Information ", sFuncName);
+                    Context.Response.Output.Write(js.Serialize(lstGetOpenSection));
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Open section Informations , the Serialized data is ' " + js.Serialize(lstGetOpenSection) + " '", sFuncName);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_GetPastSection(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            DataSet ds = new DataSet();
+            string sReturnResult = string.Empty;
+            List<GetPastSection> lstGetPastSection = new List<GetPastSection>();
+            try
+            {
+                sFuncName = "SPA_ProcessCase_GetPastSection()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+                string sCaseNo = string.Empty;
+
+                sJsonInput = "[" + sJsonInput + "]";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_NextSection> lstDeserialize = js.Deserialize<List<JSON_NextSection>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    JSON_NextSection objLstInfo = lstDeserialize[0];
+
+                    sCaseNo = objLstInfo.sCaseNo;
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_ProcessCase_GetPastSection() ", sFuncName);
+                    ds = oProcessCase.SPA_ProcessCase_GetPastSection(sCaseNo);
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_ProcessCase_GetPastSection() ", sFuncName);
+
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            foreach (DataRow dr in ds.Tables[0].Rows)
+                            {
+
+                                GetPastSection oGetPastSection = new GetPastSection();
+
+                                oGetPastSection.CaseNo = dr["CaseNo"].ToString();
+                                oGetPastSection.DocEntry = dr["DocEntry"].ToString();
+                                oGetPastSection.DocNum = dr["DocNum"].ToString();
+                                oGetPastSection.LineNum = dr["LineNum"].ToString();
+                                oGetPastSection.ItemCode = dr["ItemCode"].ToString();
+                                oGetPastSection.Details = dr["Details"].ToString();
+                                oGetPastSection.IntNo = dr["IntNo"].ToString();
+                                oGetPastSection.SortCode = dr["SortCode"].ToString();
+                                oGetPastSection.CreationDate = dr["CreationDate"].ToString();
+                                oGetPastSection.Qty = dr["Qty"].ToString();
+                                oGetPastSection.Price = dr["Price"].ToString();
+                                oGetPastSection.ActionBy = dr["ActionBy"].ToString();
+                                oGetPastSection.Status = dr["Status"].ToString();
+                                oGetPastSection.LastUpdate = dr["LastUpdate"].ToString();
+                                oGetPastSection.StatusDate = dr["StatusDate"].ToString();
+                                oGetPastSection.TrnspName = dr["TrnspName"].ToString();
+                                oGetPastSection.ForwardParty = dr["ForwardParty"].ToString();
+                                oGetPastSection.ItmsGrpNam = dr["ItmsGrpNam"].ToString();
+                                oGetPastSection.UserRole = dr["UserRole"].ToString();
+                                oGetPastSection.Remarks = dr["Remarks"].ToString();
+                                oGetPastSection.ResultFile = dr["ResultFile"].ToString();
+
+                                lstGetPastSection.Add(oGetPastSection);
+                            }
+                        }
+                        else
+                        {
+                            GetPastSection oGetPastSection = new GetPastSection();
+
+                            oGetPastSection.CaseNo = string.Empty;
+                            oGetPastSection.DocEntry = string.Empty;
+                            oGetPastSection.DocNum = string.Empty;
+                            oGetPastSection.LineNum = string.Empty;
+                            oGetPastSection.ItemCode = string.Empty;
+                            oGetPastSection.Details = string.Empty;
+                            oGetPastSection.IntNo = string.Empty;
+                            oGetPastSection.SortCode = string.Empty;
+                            oGetPastSection.CreationDate = string.Empty;
+                            oGetPastSection.Qty = string.Empty;
+                            oGetPastSection.Price = string.Empty;
+                            oGetPastSection.ActionBy = string.Empty;
+                            oGetPastSection.Status = string.Empty;
+                            oGetPastSection.LastUpdate = string.Empty;
+                            oGetPastSection.StatusDate = string.Empty;
+                            oGetPastSection.TrnspName = string.Empty;
+                            oGetPastSection.ForwardParty = string.Empty;
+                            oGetPastSection.ItmsGrpNam = string.Empty;
+                            oGetPastSection.UserRole = string.Empty;
+                            oGetPastSection.Remarks = string.Empty;
+                            oGetPastSection.ResultFile = string.Empty;
+
+                            lstGetPastSection.Add(oGetPastSection);
+                        }
+                    }
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Past section Information ", sFuncName);
+                    Context.Response.Output.Write(js.Serialize(lstGetPastSection));
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Past section Informations , the Serialized data is ' " + js.Serialize(lstGetPastSection) + " '", sFuncName);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_GetAlternative(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            DataSet ds = new DataSet();
+            string sReturnResult = string.Empty;
+            List<ProcessCase_GetAlternative> lstGetAlternative = new List<ProcessCase_GetAlternative>();
+            try
+            {
+                sFuncName = "SPA_ProcessCase_GetAlternative()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+                string sCaseNo = string.Empty;
+
+                sJsonInput = "[" + sJsonInput + "]";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_GetAltenative> lstDeserialize = js.Deserialize<List<JSON_GetAltenative>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    JSON_GetAltenative objLstInfo = lstDeserialize[0];
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_ProcessCase_GetPastSection() ", sFuncName);
+                    ds = oProcessCase.SPA_ProcessCase_GetAlternative(objLstInfo.ItemCode);
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_ProcessCase_GetPastSection() ", sFuncName);
+
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            foreach (DataRow dr in ds.Tables[0].Rows)
+                            {
+                                ProcessCase_GetAlternative oGetAlternative = new ProcessCase_GetAlternative();
+                                oGetAlternative.ItemCode = dr["ItemCode"].ToString();
+                                oGetAlternative.ItemName = dr["ItemName"].ToString();
+                                lstGetAlternative.Add(oGetAlternative);
+                            }
+                        }
+                        else
+                        {
+                            ProcessCase_GetAlternative oGetAlternative = new ProcessCase_GetAlternative();
+                            oGetAlternative.ItemCode = string.Empty;
+                            oGetAlternative.ItemName = string.Empty;
+                            lstGetAlternative.Add(oGetAlternative);
+                        }
+                    }
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Alternative Items Information ", sFuncName);
+                    Context.Response.Output.Write(js.Serialize(lstGetAlternative));
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Alternative Items Informations , the Serialized data is ' " + js.Serialize(lstGetAlternative) + " '", sFuncName);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_CanCloseCurrentSection(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            DataSet ds = new DataSet();
+            string sReturnResult = string.Empty;
+            List<CloseCurrentSection> lstCanClose = new List<CloseCurrentSection>();
+            try
+            {
+                sFuncName = "SPA_ProcessCase_CanCloseCurrentSection()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+                string sCaseNo = string.Empty;
+
+                sJsonInput = "[" + sJsonInput + "]";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_NextSection> lstDeserialize = js.Deserialize<List<JSON_NextSection>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    JSON_NextSection objLstInfo = lstDeserialize[0];
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_ProcessCase_CanCloseCurrentSection() ", sFuncName);
+                    ds = oProcessCase.SPA_ProcessCase_CanCloseCurrentSection(objLstInfo.sCaseNo);
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_ProcessCase_CanCloseCurrentSection() ", sFuncName);
+
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            foreach (DataRow dr in ds.Tables[0].Rows)
+                            {
+                                CloseCurrentSection oCanClose = new CloseCurrentSection();
+                                oCanClose.Result = dr["Result"].ToString();
+                                lstCanClose.Add(oCanClose);
+                            }
+                        }
+                        else
+                        {
+                            CloseCurrentSection oCanClose = new CloseCurrentSection();
+                            oCanClose.Result = "N";
+                            lstCanClose.Add(oCanClose);
+                        }
+                    }
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the CanCloseCurrentSection Information ", sFuncName);
+                    Context.Response.Output.Write(js.Serialize(lstCanClose));
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the CanCloseCurrentSection Informations , the Serialized data is ' " + js.Serialize(lstCanClose) + " '", sFuncName);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_UpdateAlternative(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            try
+            {
+                sFuncName = "SPA_ProcessCase_UpdateAlternative";
+
+                sJsonInput = "[" + sJsonInput + "]";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<ProcessCase_UpdateAlternative> lstDeserialize = js.Deserialize<List<ProcessCase_UpdateAlternative>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    ProcessCase_UpdateAlternative objLstInfo = lstDeserialize[0];
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Converting Json to Datatable , Calling the method SPA_ProcessCase_UpdateAlternativeItem()", sFuncName);
+                    string sResult = oProcessCase.SPA_ProcessCase_UpdateAlternativeItem(
+                        objLstInfo.sOldItemCode, objLstInfo.sNewItemCode, objLstInfo.sItemName, objLstInfo.sDocEntry, objLstInfo.sLineNum);
+                    if (sResult == "SUCCESS")
+                    {
+                        if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
+                        result objResult = new result();
+                        objResult.Result = "SUCCESS";
+                        objResult.DisplayMessage = "Altenative Item Updated";
+                        lstResult.Add(objResult);
+                        Context.Response.Output.Write(js.Serialize(lstResult));
+                    }
+                    else
+                    {
+                        if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                        result objResult = new result();
+                        objResult.Result = "ERROR";
+                        objResult.DisplayMessage = sResult;
+                        lstResult.Add(objResult);
+                        Context.Response.Output.Write(js.Serialize(lstResult));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        // Process case Pop up functionalities
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_SaveClick(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            try
+            {
+                sFuncName = "SPA_ProcessCase_GenerateClick()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+                string sCaseNo = string.Empty;
+
+                sJsonInput = "[" + sJsonInput + "]";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<GetOpenSection> lstDeserialize = js.Deserialize<List<GetOpenSection>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    DataTable dt = ToDataTable(lstDeserialize);
+                    string sResult = oProcessCase.SPA_ProcessCase_Save(dt);
+                    if (sResult == "SUCCESS")
+                    {
+                        result objResult = new result();
+                        objResult.Result = "SUCCESS";
+                        objResult.DisplayMessage = "Successfuly Saved";
+                        lstResult.Add(objResult);
+                    }
+                    else
+                    {
+                        result objResult = new result();
+                        objResult.Result = "Error";
+                        objResult.DisplayMessage = sResult;
+                        lstResult.Add(objResult);
+                    }
+
+                    Context.Response.Output.Write(js.Serialize(lstResult));
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_UploadClick(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            DataTable dt = new DataTable();
+            try
+            {
+                sFuncName = "SPA_ProcessCase_UploadClick()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+                string sCaseNo = string.Empty;
+                string sDocName = string.Empty;
+                result oUpdate = new result();
+                List<result> oUpdateLst = new List<result>();
+
+                sJsonInput = "[" + sJsonInput + "]";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_ProcessCase_Upload> lstDeserialize = js.Deserialize<List<JSON_ProcessCase_Upload>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    JSON_ProcessCase_Upload oUpload = new JSON_ProcessCase_Upload();
+                    oUpload = lstDeserialize[0];
+                    dt = ToDataTable(lstDeserialize);
+
+                    string strdocPath = null;
+                    string EncryptToPath = null;
+                    string strSDocPath = null;
+                    sDocName = dt.Rows[0]["FileName"].ToString();
+
+                    strdocPath = FileUploadPath + sDocName;
+                    EncryptToPath = FileUploadEncryptedPath + sDocName;
+                    strSDocPath = SDocFilePath + sDocName;
+
+                    // Convert the Uploaded File to Encrypted Format and Save it to Location
+                    clsEncypt.EncryptFile(strdocPath, EncryptToPath);
+                    byte[] bytes = SPA_ConvertUploadFiletoBinary(strdocPath);
+
+                    File.Copy(strdocPath, strSDocPath);
+                    File.Delete(strdocPath);
+                    
+                    //Calling Gopi webservice to get the generated Document 
+                    var doc = new ReadDocument.Service1SoapClient();
+                    bool sResult = doc.NeutralCheck(oUpload.ItemCode, bytes, sDocName, oUpload.CaseNo);
+
+                    string sConvertedResult = sResult == true ? "0" : "1";
+
+                    string sUpdatedResult = oProcessCase.SPA_ProcessCase_BrowseUpload(dt, SDocFile.ToString().Replace(@"\", "/") + sDocName, sConvertedResult);
+                    if (sUpdatedResult == "SUCCESS")
+                    {
+                        oUpdate.Result = sUpdatedResult;
+                        oUpdate.DisplayMessage = "File Uploaded and Saved Succesfully";
+                        oUpdateLst.Add(oUpdate);
+                    }
+                    else
+                    {
+                        oUpdate.Result = "FAILURE";
+                        oUpdate.DisplayMessage = sUpdatedResult;
+                        oUpdateLst.Add(oUpdate);
+                    }
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Upload Click ", sFuncName);
+                    Context.Response.Output.Write(js.Serialize(oUpdateLst));
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Upload Click, the Serialized data is ' " + js.Serialize(oUpdateLst) + " '", sFuncName);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_GenerateClick(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            DataTable dt = new DataTable();
+            try
+            {
+                sFuncName = "SPA_ProcessCase_GenerateClick()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+                string sCaseNo = string.Empty;
+                ProcessCase_Generate oUpdate = new ProcessCase_Generate();
+                List<ProcessCase_Generate> oUpdateLst = new List<ProcessCase_Generate>();
+
+                sJsonInput = "[" + sJsonInput + "]";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_ProcessCase_Generate> lstDeserialize = js.Deserialize<List<JSON_ProcessCase_Generate>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    JSON_ProcessCase_Generate oGenerate = new JSON_ProcessCase_Generate();
+                    oGenerate = lstDeserialize[0];
+                    dt = ToDataTable(lstDeserialize);
+                    //Calling Gopi webservice to get the generated Document 
+                    var doc = new GenerateDocument.Service1SoapClient();
+                    string sResult = doc.GenDoc(oGenerate.ItemCode, oGenerate.CaseNo);
+
+                    //Take the generated file and Copy in the IIS Deployed folder and send that folder to
+                    if (sResult.Contains(".pdf"))
+                    {
+                        string[] stringCutted = sResult.Split('\\');
+                        stringCutted.Last();
+
+                        File.Copy(sResult, GDocFilePath + stringCutted.Last());
+
+                        // The following code is for getting the path from AE_Setup table
+                        string sPath = oProcessCase.SPA_ProcessCase_GetFilePath();
+
+                        if (sPath != string.Empty)
+                        {
+                            string folderCheck = sPath + oGenerate.CaseNo;
+
+                            bool exists = System.IO.Directory.Exists(folderCheck);
+
+                            if (!exists)
+                                System.IO.Directory.CreateDirectory(folderCheck);
+
+                            string FiletoUpdate = folderCheck + "\\" + stringCutted.Last();
+                            File.Copy(sResult, FiletoUpdate);
+                            //oGenerate.ItemCode
+                            //string sUpdatedResult = oProcessCase.SPA_ProcessCase_UpdatePathtoSAP(FiletoUpdate, oGenerate.CaseNo, "100005", oGenerate.DocEntry,
+                            //    oGenerate.DocNum, oGenerate.LineNum);
+                            string sUpdatedResult = oProcessCase.SPA_ProcessCase_BrowseGenerate(FiletoUpdate, dt); ;
+                            if (sUpdatedResult == "SUCCESS")
+                            {
+                                oUpdate.sResult = sUpdatedResult;
+                                oUpdate.sDisplayMessage = "File Generated and Saved Succesfully";
+                                oUpdate.sFileLocation = GDocFile.ToString().Replace(@"\", "/") + stringCutted.Last();
+                                oUpdateLst.Add(oUpdate);
+                            }
+                            else
+                            {
+                                oUpdate.sResult = "FAILURE";
+                                oUpdate.sDisplayMessage = sUpdatedResult;
+                                oUpdate.sFileLocation = string.Empty;
+                                oUpdateLst.Add(oUpdate);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        oUpdate.sResult = "FAILURE";
+                        oUpdate.sDisplayMessage = sResult;
+                        oUpdate.sFileLocation = string.Empty;
+                        oUpdateLst.Add(oUpdate);
+                    }
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Generate Click ", sFuncName);
+                    Context.Response.Output.Write(js.Serialize(oUpdateLst));
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Generate Click, the Serialized data is ' " + js.Serialize(oUpdateLst) + " '", sFuncName);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_UpdateStatusClick(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            try
+            {
+                sFuncName = "SPA_ProcessCase_UpdateStatusClick()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+                string sCaseNo = string.Empty;
+
+                sJsonInput = "[" + sJsonInput + "]";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_NextSection> lstDeserialize = js.Deserialize<List<JSON_NextSection>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    DataTable dt = ToDataTable(lstDeserialize);
+                    string sResult = oProcessCase.SPA_ProcessCase_UpdateStatus(dt);
+                    if (sResult == "SUCCESS")
+                    {
+                        result objResult = new result();
+                        objResult.Result = "SUCCESS";
+                        objResult.DisplayMessage = "Successfuly Saved";
+                        lstResult.Add(objResult);
+                    }
+                    else
+                    {
+                        result objResult = new result();
+                        objResult.Result = "Error";
+                        objResult.DisplayMessage = sResult;
+                        lstResult.Add(objResult);
+                    }
+
+                    Context.Response.Output.Write(js.Serialize(lstResult));
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_CreateBillingClick(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            string sReturnResult = string.Empty;
+            try
+            {
+                sFuncName = "SPA_ProcessCase_CreateBilling()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<ProcessCase_CreateBilling> lstDeserialize = js.Deserialize<List<ProcessCase_CreateBilling>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    DataTable dt = ToDataTable(lstDeserialize);
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_ProcessCase_CreateBilling() ", sFuncName);
+                    sReturnResult = oProcessCase.SPA_ProcessCase_CreateBilling(dt);
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_ProcessCase_CreateBilling() ", sFuncName);
+                    if (sReturnResult == "SUCCESS")
+                    {
+                        result objResult = new result();
+                        objResult.Result = "Success";
+                        objResult.DisplayMessage = "Create Billing is successfull in SAP";
+                        lstResult.Add(objResult);
+                        Context.Response.Output.Write(js.Serialize(lstResult));
+                        if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
+                    }
+                    else
+                    {
+                        if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                        result objResult = new result();
+                        objResult.Result = "Error";
+                        objResult.DisplayMessage = sReturnResult;
+                        lstResult.Add(objResult);
+                        Context.Response.Output.Write(js.Serialize(lstResult));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_CloseCase(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            try
+            {
+                sFuncName = "SPA_ProcessCase_CloseCase()";
+                string sCaseNo = string.Empty;
+                string sUserName = string.Empty;
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                sJsonInput = "[" + sJsonInput + "]";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<ProcessCase_CloseCase> lstDeserialize = js.Deserialize<List<ProcessCase_CloseCase>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    sCaseNo = lstDeserialize[0].sCaseNo;
+                    sUserName = lstDeserialize[0].sUserName;
+
+                    //The following code is for getting the  temp OCRD records from DB
+                    //DataSet ds = oCase.SPA_AddCase_GetTempOCRD(sCardCode, sCategory, sUserName);
+
+                    //if (ds != null && ds.Tables.Count > 0)
+                    //{
+                    //    if (ds.Tables[0].Rows.Count > 0)
+                    //    {
+                    //string sResult = oCase.SPA_AddCase(ds.Tables[0]);
+                    //if (sResult == "SUCCESS")
+                    //{
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
+                    result objResult = new result();
+                    objResult.Result = "SUCCESS";
+                    objResult.DisplayMessage = "Case " + sCaseNo + " Closed Successfully.";
+                    lstResult.Add(objResult);
+                    Context.Response.Output.Write(js.Serialize(lstResult));
+                    //        }
+                    //        else
+                    //        {
+                    //            if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                    //            result objResult = new result();
+                    //            objResult.Result = "ERROR";
+                    //            objResult.DisplayMessage = sResult;
+                    //            lstResult.Add(objResult);
+                    //            Context.Response.Output.Write(js.Serialize(lstResult));
+                    //        }
+                    //    }
+                    //}
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_ProcessCase_GenDoc()
+        {
+            string sFuncName = string.Empty;
+            try
+            {
+                var doc = new GenerateDocument.Service1SoapClient();
+                string s = doc.GenDoc("100001", "1500000002");
+                var data = s;
+                Context.Response.Output.Write(s);
             }
             catch (Exception ex)
             {
@@ -3645,6 +4658,13 @@ namespace AE_TnN_Mobile_V001
 
         class result
         {
+            public string Result { get; set; }
+            public string DisplayMessage { get; set; }
+        }
+
+        class result_Case
+        {
+            public string CaseNo { get; set; }
             public string Result { get; set; }
             public string DisplayMessage { get; set; }
         }
@@ -4082,6 +5102,8 @@ namespace AE_TnN_Mobile_V001
             public string LSTCHG_BRANCH { get; set; }
             public string LSTCHG_PANO { get; set; }
             public string LSTCHG_PRSTNO { get; set; }
+            public string LSTCHG_PRSTLINK { get; set; }
+            public string TITLELINK { get; set; }
         }
 
         class JSON_AddCase_AddProperty
@@ -4111,6 +5133,8 @@ namespace AE_TnN_Mobile_V001
             public string LSTCHG_BRANCH { get; set; }
             public string LSTCHG_PANO { get; set; }
             public string LSTCHG_PRSTNO { get; set; }
+            public string LSTCHG_PRSTLINK { get; set; }
+            public string TITLELINK { get; set; }
         }
 
         class JSON_AddCase_AddIndividualSearch
@@ -4140,6 +5164,8 @@ namespace AE_TnN_Mobile_V001
             public string CorresAddr5 { get; set; }
             public string AddressToUse { get; set; }
             public string LastUpdatedOn { get; set; }
+            public string ScanFrontICLocation { get; set; }
+            public string ScanBackICLocation { get; set; }
         }
 
         class JSON_AddCase_ScanIC
@@ -4153,7 +5179,7 @@ namespace AE_TnN_Mobile_V001
         class ScanIC
         {
             public string Message { get; set; }
-            public string ScanICLocation { get; set; }
+            //public string ScanICLocation { get; set; }
             public string ScanFrontICLocation { get; set; }
             public string ScanBackICLocation { get; set; }
             public string Code { get; set; }
@@ -4476,19 +5502,204 @@ namespace AE_TnN_Mobile_V001
 
         public class GetNextSection
         {
+            public string CaseNo { get; set; }
+            public string DocEntry { get; set; }
+            public string DocNum { get; set; }
+            public string LineNum { get; set; }
             public string ItemCode { get; set; }
-            public string ItemName { get; set; }
-            public string INTNO { get; set; }
-            public string U_SORT_CODE { get; set; }
-            public string CREATION_DATE { get; set; }
+            public string Details { get; set; }
+            public string IntNo { get; set; }
+            public string SortCode { get; set; }
+            public string CreationDate { get; set; }
             public string Qty { get; set; }
-            public string price { get; set; }
-            public string u_ACTION_BY { get; set; }
-            public string LAST_UPDATE { get; set; }
-            public string STATUS_DATE { get; set; }
+            public string Price { get; set; }
+            public string ActionBy { get; set; }
+            public string Status { get; set; }
+            public string LastUpdate { get; set; }
+            public string StatusDate { get; set; }
             public string TrnspName { get; set; }
             public string ForwardParty { get; set; }
             public string ItmsGrpNam { get; set; }
+            public string UserRole { get; set; }
+            public string Remarks { get; set; }
+        }
+
+        public class GetOpenSection
+        {
+            public string CaseNo { get; set; }
+            public string DocEntry { get; set; }
+            public string DocNum { get; set; }
+            public string LineNum { get; set; }
+            public string ItemCode { get; set; }
+            public string Details { get; set; }
+            public string IntNo { get; set; }
+            public string SortCode { get; set; }
+            public string CreationDate { get; set; }
+            public string Qty { get; set; }
+            public string Price { get; set; }
+            public string ActionBy { get; set; }
+            public string Status { get; set; }
+            public string LastUpdate { get; set; }
+            public string StatusDate { get; set; }
+            public string TrnspName { get; set; }
+            public string ForwardParty { get; set; }
+            public string ItmsGrpNam { get; set; }
+            public string UserRole { get; set; }
+            public string Remarks { get; set; }
+        }
+
+        public class GetPastSection
+        {
+            public string CaseNo { get; set; }
+            public string DocEntry { get; set; }
+            public string DocNum { get; set; }
+            public string LineNum { get; set; }
+            public string ItemCode { get; set; }
+            public string Details { get; set; }
+            public string IntNo { get; set; }
+            public string SortCode { get; set; }
+            public string CreationDate { get; set; }
+            public string Qty { get; set; }
+            public string Price { get; set; }
+            public string ActionBy { get; set; }
+            public string Status { get; set; }
+            public string LastUpdate { get; set; }
+            public string StatusDate { get; set; }
+            public string TrnspName { get; set; }
+            public string ForwardParty { get; set; }
+            public string ItmsGrpNam { get; set; }
+            public string UserRole { get; set; }
+            public string Remarks { get; set; }
+            public string ResultFile { get; set; }
+        }
+
+        public class GetOptionalItems
+        {
+            public string CaseNo { get; set; }
+            public string DocEntry { get; set; }
+            public string DocNum { get; set; }
+            public string LineNum { get; set; }
+            public string ItemCode { get; set; }
+            public string Details { get; set; }
+            public string IntNo { get; set; }
+            public string SortCode { get; set; }
+            public string CreationDate { get; set; }
+            public string Qty { get; set; }
+            public string Price { get; set; }
+            public string ActionBy { get; set; }
+            public string Status { get; set; }
+            public string LastUpdate { get; set; }
+            public string StatusDate { get; set; }
+            public string TrnspName { get; set; }
+            public string ForwardParty { get; set; }
+            public string ItmsGrpNam { get; set; }
+            public string UserRole { get; set; }
+            public string Remarks { get; set; }
+        }
+
+        public class ProcessCase_GetAlternative
+        {
+            public string ItemCode { get; set; }
+            public string ItemName { get; set; }
+        }
+
+        public class CloseCurrentSection
+        {
+            public string Result { get; set; }
+        }
+
+        public class JSON_GetAltenative
+        {
+            public string ItemCode { get; set; }
+        }
+
+        public class ProcessCase_CreateBilling
+        {
+            //public string CaseNo { get; set; }
+            //public string DocEntry { get; set; }
+            //public string DocNum { get; set; }
+            //public string LineNum { get; set; }
+            //public string ItemCode { get; set; }
+            //public string Details { get; set; }
+            //public string Qty { get; set; }
+            //public string price { get; set; }
+            //public string u_ACTION_BY { get; set; }
+            //public string U_STATUS { get; set; }
+            //public string LAST_UPDATE { get; set; }
+            //public string STATUS_DATE { get; set; }
+            //public string TrnspName { get; set; }
+            //public string ForwardParty { get; set; }
+            //public string UserRole { get; set; }
+            //public string Status { get; set; }
+            //public string Remarks { get; set; }
+            //public string UserName { get; set; }
+
+            public string CaseNo { get; set; }
+            public string DocEntry { get; set; }
+            public string DocNum { get; set; }
+            public string LineNum { get; set; }
+            public string ItemCode { get; set; }
+            public string Details { get; set; }
+            public string IntNo { get; set; }
+            public string SortCode { get; set; }
+            public string CreationDate { get; set; }
+            public string Qty { get; set; }
+            public string Price { get; set; }
+            public string ActionBy { get; set; }
+            public string Status { get; set; }
+            public string LastUpdate { get; set; }
+            public string StatusDate { get; set; }
+            public string TrnspName { get; set; }
+            public string ForwardParty { get; set; }
+            public string ItmsGrpNam { get; set; }
+            public string UserRole { get; set; }
+            public string Remarks { get; set; }
+            public string UserName { get; set; }
+        }
+
+        public class ProcessCase_UpdateAlternative
+        {
+            public string sOldItemCode { get; set; }
+            public string sNewItemCode { get; set; }
+            public string sItemName { get; set; }
+            public string sDocEntry { get; set; }
+            public string sLineNum { get; set; }
+        }
+
+        public class ProcessCase_CloseCase
+        {
+            public string sCaseNo { get; set; }
+            public string sUserName { get; set; }
+        }
+
+        public class JSON_ProcessCase_Generate
+        {
+            public string CaseNo { get; set; }
+            public string ItemCode { get; set; }
+            public string DocEntry { get; set; }
+            public string DocNum { get; set; }
+            public string LineNum { get; set; }
+            public string TrnspName { get; set; }
+            public string UserName { get; set; }
+        }
+
+        public class ProcessCase_Generate
+        {
+            public string sResult { get; set; }
+            public string sDisplayMessage { get; set; }
+            public string sFileLocation { get; set; }
+        }
+
+        public class JSON_ProcessCase_Upload
+        {
+            public string CaseNo { get; set; }
+            public string ItemCode { get; set; }
+            public string DocEntry { get; set; }
+            public string DocNum { get; set; }
+            public string LineNum { get; set; }
+            public string TrnspName { get; set; }
+            public string UserName { get; set; }
+            public string FileName { get; set; }
         }
 
         #endregion
@@ -4692,8 +5903,11 @@ namespace AE_TnN_Mobile_V001
                 // This following part of code is for converting and saving the Binary stream to PDF File.
                 string strdocPath = null;
                 string EncryptToPath = null;
+                string strICPath = null;
+
                 strdocPath = FileUploadPath + sDocName;
                 EncryptToPath = FileUploadEncryptedPath + sDocName;
+                strICPath = ICFilePath + sDocName;
 
                 byte[] bytes = SPA_ConvertUploadFiletoBinary(strdocPath);
 
@@ -4701,7 +5915,6 @@ namespace AE_TnN_Mobile_V001
 
                 var client = new ReadDocument.Service1SoapClient();
 
-                oDatatable = client.ReadDocument(sItemCode, bytes, sDocName);
                 if (sICType == "Front")
                 {
                     sCode = "100021";
@@ -4710,6 +5923,8 @@ namespace AE_TnN_Mobile_V001
                 {
                     sCode = "100022";
                 }
+                oDatatable = client.ReadDocument(sCode, bytes, sDocName);
+
                 DataSet ds = oCase.SPA_AddCase_ScanDocumentMapping_RELPARTY(sCode);
                 if (ds != null && ds.Tables.Count > 0)
                 {
@@ -4727,11 +5942,21 @@ namespace AE_TnN_Mobile_V001
                         }
                     }
                 }
-                //oDatatable.Columns["Marks"].ColumnName = "SubjectMarks";
 
                 // Convert the Uploaded File to Encrypted Format and Save it to Location
                 clsEncypt.EncryptFile(strdocPath, EncryptToPath);
 
+                File.Copy(strdocPath, strICPath);
+                File.Delete(strdocPath);
+
+                if (sICType == "Front")
+                {
+                    oDatatable.Rows.Add("FRONTIC", ICFile.ToString().Replace(@"\", "/") + sDocName);
+                }
+                if (sICType == "Back")
+                {
+                    oDatatable.Rows.Add("BACKIC", ICFile.ToString().Replace(@"\", "/") + sDocName);
+                }
                 // Delete the file stored in the temp folder from mobile app
                 //File.Delete(strdocPath);
 
@@ -4764,8 +5989,11 @@ namespace AE_TnN_Mobile_V001
                 // This following part of code is for converting and saving the Binary stream to PDF File.
                 string strdocPath = null;
                 string EncryptToPath = null;
+                string strPropertyPath = null;
+
                 strdocPath = FileUploadPath + sDocName;
                 EncryptToPath = FileUploadEncryptedPath + sDocName;
+                strPropertyPath = PropertyFilePath + sDocName;
 
                 byte[] bytes = SPA_ConvertUploadFiletoBinary(strdocPath);
 
@@ -4793,41 +6021,32 @@ namespace AE_TnN_Mobile_V001
                     }
                 }
 
-                //Pass the byte array to gopi web service
-
                 // Convert the Uploaded File to Encrypted Format and Save it to Location
-
                 clsEncypt.EncryptFile(strdocPath, EncryptToPath);
 
-                //byte[] Encryptedbytes = SPA_ConvertUploadFiletoBinary(strdocPath);
+                File.Copy(strdocPath, strPropertyPath);
+                File.Delete(strdocPath);
 
-                //FileStream objfilestream = new FileStream(EncryptToPath, FileMode.Create, FileAccess.ReadWrite);
-                //objfilestream.Write(Encryptedbytes, 0, Encryptedbytes.Length);
-                //objfilestream.Close();
-
-                //File.Delete(strdocPath);
+                oDatatable.Rows.Add("LSTCHG_PRSTLINK", "");
+                oDatatable.Rows.Add("TITLELINK", PropertyFile.ToString().Replace(@"\", "/") + sDocName);
 
                 // Update the Encrypted Location in SAP
-
-
-
-                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Attached file is saved Properly ", sFuncName);
-
-                // The following part of code is for Update the Selected ItemCode and ItemName in the Temp table [AE_OCRD]
                 SqlConnection con = new SqlConnection(ConnectionString);
                 SqlCommand command = con.CreateCommand();
+                command.CommandText = "Update [AE_OCRD] set U_TITLE_LINK ='" + PropertyFile.ToString().Replace(@"\", "/") + sDocName + "' where Code ='" + sCardCode + "'";
+                con.Open();
+                command.ExecuteNonQuery();
+                con.Close();
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Attached file is saved Properly ", sFuncName);
+                // The following part of code is for Update the Selected ItemCode and ItemName in the Temp table [AE_OCRD]
+
                 command.CommandText = "Update [AE_OCRD] set ItemCode ='" + sItemCode + "',ItemName ='" + sItemName + "' where Code ='" + sCardCode + "'";
                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Executing the Query : " + command.CommandText, sFuncName);
 
                 con.Open();
                 command.ExecuteNonQuery();
                 con.Close();
-
-                // The following part of code is for Calling the Web method by passing the Binary file as Input to read the Fields from the file.
-
-
-                //oDataset = new DataSet();
-
             }
             catch (Exception Ex)
             {

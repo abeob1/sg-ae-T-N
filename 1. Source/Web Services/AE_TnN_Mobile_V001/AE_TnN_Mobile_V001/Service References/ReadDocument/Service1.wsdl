@@ -42,6 +42,21 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="GenDoc">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ItemCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CaseNumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GenDocResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GenDocResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="ReadDocumentSoapIn">
@@ -56,6 +71,12 @@
   <wsdl:message name="NeutralCheckSoapOut">
     <wsdl:part name="parameters" element="tns:NeutralCheckResponse" />
   </wsdl:message>
+  <wsdl:message name="GenDocSoapIn">
+    <wsdl:part name="parameters" element="tns:GenDoc" />
+  </wsdl:message>
+  <wsdl:message name="GenDocSoapOut">
+    <wsdl:part name="parameters" element="tns:GenDocResponse" />
+  </wsdl:message>
   <wsdl:portType name="Service1Soap">
     <wsdl:operation name="ReadDocument">
       <wsdl:input message="tns:ReadDocumentSoapIn" />
@@ -64,6 +85,10 @@
     <wsdl:operation name="NeutralCheck">
       <wsdl:input message="tns:NeutralCheckSoapIn" />
       <wsdl:output message="tns:NeutralCheckSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GenDoc">
+      <wsdl:input message="tns:GenDocSoapIn" />
+      <wsdl:output message="tns:GenDocSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="Service1Soap" type="tns:Service1Soap">
@@ -86,6 +111,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GenDoc">
+      <soap:operation soapAction="http://tempuri.org/GenDoc" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="Service1Soap12" type="tns:Service1Soap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -100,6 +134,15 @@
     </wsdl:operation>
     <wsdl:operation name="NeutralCheck">
       <soap12:operation soapAction="http://tempuri.org/NeutralCheck" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenDoc">
+      <soap12:operation soapAction="http://tempuri.org/GenDoc" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -25,6 +25,10 @@ namespace AE_TnN_Mobile_V001.ReadDocument {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/NeutralCheck", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         AE_TnN_Mobile_V001.ReadDocument.NeutralCheckResponse NeutralCheck(AE_TnN_Mobile_V001.ReadDocument.NeutralCheckRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GenDoc", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        string GenDoc(string ItemCode, string CaseNumber);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -171,6 +175,10 @@ namespace AE_TnN_Mobile_V001.ReadDocument {
             inValue.CaseID = CaseID;
             AE_TnN_Mobile_V001.ReadDocument.NeutralCheckResponse retVal = ((AE_TnN_Mobile_V001.ReadDocument.Service1Soap)(this)).NeutralCheck(inValue);
             return retVal.NeutralCheckResult;
+        }
+        
+        public string GenDoc(string ItemCode, string CaseNumber) {
+            return base.Channel.GenDoc(ItemCode, CaseNumber);
         }
     }
 }

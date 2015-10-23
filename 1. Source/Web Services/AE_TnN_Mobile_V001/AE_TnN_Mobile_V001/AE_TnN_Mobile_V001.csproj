@@ -61,10 +61,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\DataSources\System.Data.DataTable.datasource" />
+    <None Include="Service References\GenerateDocument\Service1.wsdl" />
     <None Include="Service References\ReadDocument\Service1.disco" />
     <None Include="Service References\ReadDocument\configuration91.svcinfo" />
     <None Include="Service References\ReadDocument\configuration.svcinfo" />
     <None Include="Service References\ReadDocument\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\GenerateDocument\Service1.disco" />
+    <None Include="Service References\GenerateDocument\configuration91.svcinfo" />
+    <None Include="Service References\GenerateDocument\configuration.svcinfo" />
+    <None Include="Service References\GenerateDocument\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
@@ -90,6 +98,11 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\GenerateDocument\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Service References\ReadDocument\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -117,6 +130,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\GenerateDocument\" />
     <WCFMetadataStorage Include="Service References\ReadDocument\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -20,6 +20,8 @@ E:\Abeo-Projects\TnN\SourceCode\Web Service\AE_TnN_Mobile_V001\AE_TnN_Mobile_V00
 E:\Abeo-Projects\TnN\SourceCode\Web Service\AE_TnN_Mobile_V001\AE_TnN_Mobile_V001\obj\Debug\AE_TnN_Mobile_V001.csproj.ResolveComReference.cache
 E:\Abeo-Projects\TnN\SourceCode\Web Service\AE_TnN_Mobile_V001\AE_TnN_Mobile_V001\obj\Debug\AE_TnN_Mobile_V001.dll
 E:\Abeo-Projects\TnN\SourceCode\Web Service\AE_TnN_Mobile_V001\AE_TnN_Mobile_V001\obj\Debug\AE_TnN_Mobile_V001.pdb
+E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_V001\obj\Debug\Interop.SAPbobsCOM.dll
+E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_V001\obj\Debug\AE_TnN_Mobile_V001.csproj.ResolveComReference.cache
 E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_V001\bin\AE_TnN_Mobile_V001.dll
 E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_V001\bin\AE_TnN_Mobile_V001.pdb
 E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_V001\bin\AE_TnN_Mobile_BLL.dll
@@ -27,7 +29,5 @@ E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mob
 E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_V001\bin\AE_TnN_Mobile_BLL.pdb
 E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_V001\bin\AE_TnN_Mobile_Common.pdb
 E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_V001\obj\Debug\AE_TnN_Mobile_V001.csprojResolveAssemblyReference.cache
-E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_V001\obj\Debug\Interop.SAPbobsCOM.dll
-E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_V001\obj\Debug\AE_TnN_Mobile_V001.csproj.ResolveComReference.cache
 E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_V001\obj\Debug\AE_TnN_Mobile_V001.dll
 E:\Abeo-Projects\Github\TnN\1. Source\Web Services\AE_TnN_Mobile_V001\AE_TnN_Mobile_V001\obj\Debug\AE_TnN_Mobile_V001.pdb
