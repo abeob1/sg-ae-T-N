@@ -1,13 +1,20 @@
 package com.abeo.tia.noordin;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 public class RestService 
 {
+	
+	
+	
 	//private static final String BASE_URL = "http://192.168.0.107/Service1.asmx/";
-    private static final String BASE_URL = "http://54.251.51.69:3878/SPAMobile.asmx/";
+    //private static final String BASE_URL = "http://54.251.51.69:3878/SPAMobile.asmx/";
+	private static String BASE_URL = "";
 	
 	//private static final String BASE_URL = "http://"+SettingsActivity.url+"/";
 	private static AsyncHttpClient client = new AsyncHttpClient();
@@ -41,5 +48,9 @@ public class RestService
 
 	private static String getAbsoluteUrl(String relativeUrl) {
 		return BASE_URL + relativeUrl;
+	}
+	
+	public static void setBurl(String relativeUrl) {
+		 BASE_URL = relativeUrl;
 	}
 }

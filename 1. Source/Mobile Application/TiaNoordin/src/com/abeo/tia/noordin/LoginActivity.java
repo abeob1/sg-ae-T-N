@@ -1,5 +1,7 @@
 package com.abeo.tia.noordin;
 
+import java.net.InetAddress;
+
 import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,9 +14,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -28,13 +34,13 @@ public class LoginActivity extends Activity {
 	private String tb_tm_NewCasesPro = "", tb_tm_ClosedCasesPro = "", tb_lm_NewCasesPro = "", tb_lm_ClosedCasesPro = "",FirstName="";
 	private String tb_tm_NewCases = "", tb_tm_ClosedCases = "", tb_lm_NewCases = "", tb_lm_ClosedCases = "";
 	private String ys_tm_turnaround = "", ys_tm_totaloutput = "", ys_lm_turnaround = "", ys_lm_totaloutput = "";
-	private String priority = "", action = "", open = "";
+	private String priority = "", action = "", open = "",URol;
 	String status = "";
-	String message = "";
+	String message = "",BURL;
 	ProgressDialog dialog = null;
 	JSONArray arrayResponse;
 	JSONObject jsonResponse;
-	Button login;
+	Button login,settings;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -42,13 +48,41 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
+		
+		SharedPreferences prefLoginReturn = getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+		BURL = prefLoginReturn.getString("apiurl", "");
+		
+		if(BURL.isEmpty() || BURL.equals(null))
+		{
+			SharedPreferences.Editor edit = prefLoginReturn.edit();
+			edit.putString("apiurl", "http://54.251.51.69:3878/spamobile.asmx/");
+			edit.commit();
+			BURL = prefLoginReturn.getString("apiurl", "");
+			RestService.setBurl(BURL);
+		}
+		else
+		{
+			RestService.setBurl(BURL);
+		}
+		
+		
+		
 
 		login = (Button) findViewById(R.id.button_login);
+		settings = (Button) findViewById(R.id.button_settings);
+		
+		settings.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View arg0) {
+				Intent i = new Intent(LoginActivity.this, Settings.class);
+				startActivity(i);
+			}
+		});
 
 		login.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View arg0) {
-				Toast.makeText(LoginActivity.this, "Button Clicked!", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(LoginActivity.this, "Button Clicked!", Toast.LENGTH_SHORT).show();
 			    System.out.println("Login Method Invoke");
 			    
 			    //bypass login check 
@@ -85,40 +119,29 @@ public class LoginActivity extends Activity {
 					  String sPassword = userPassword.getText().toString();
 					  String sCategory = "SPA";
 					// call WebService
-				userLogin(sUserName, sPassword, sCategory);
+					  if(isOnline())
+						  userLogin(sUserName, sPassword, sCategory);
+					  else
+						  Toast.makeText(LoginActivity.this, "Kindly check your internet connectivity!", Toast.LENGTH_LONG).show();
 				}
 
 			}
 		});
 	}
+	
+	  public boolean onTouchEvent(MotionEvent event) {
+	        InputMethodManager imm = (InputMethodManager)getSystemService(Context.
+	                                                        INPUT_METHOD_SERVICE);
+	        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+	        return true;
+	    }
 
 	public void userLogin(String UserName,String Password,String Category  ) {
 		
 		try {
 			// On login click save related data in shared preference
 			dialog = ProgressDialog.show(LoginActivity.this, "", "Credentials Authentication...", true);
-			SharedPreferences prefLogin = getSharedPreferences("LoginData", Context.MODE_PRIVATE);
-
-			// We need an editor object to make changes
-			SharedPreferences.Editor edit = prefLogin.edit();
-
-			// Set/Store data
-			edit.putString("sUserName", UserName);
-			edit.putString("sPassword", Password);
-			edit.putString("sCategory", Category);
-
-			// Commit the changes
-			edit.commit();
-
-			// Find the SharedPreferences value
-			SharedPreferences prefLoginReturn = getSharedPreferences("LoginData", Context.MODE_PRIVATE);
-			System.out.println("LOGIN DATA");
-			String user_name = prefLoginReturn.getString("sUserName", "");
-			System.out.println(user_name);
-			String Pswd = prefLoginReturn.getString("sPassword", "");
-			System.out.println(Pswd);
-			String catg = prefLoginReturn.getString("sCategory", "");
-			System.out.println(catg);
+			
 
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("sUserName", UserName);
@@ -127,13 +150,15 @@ public class LoginActivity extends Activity {
 
 			RequestParams param = new RequestParams();
 			param.put("sJsonInput", jsonObject.toString());
-			System.out.println("testthom");
+			
 			RestService.post(METHOD_NAME, param, new BaseJsonHttpResponseHandler<String>() {
 
 				@Override
 				public void onFailure(int arg0, Header[] arg1, Throwable arg2, String arg3, String arg4) {
 					// TODO Auto-generated method stub
 					System.out.println(arg3);
+					dialog.dismiss();
+					Toast.makeText(getApplicationContext(), "Kindly Check Your Webservice Url", Toast.LENGTH_LONG).show();
 				}
 
 				@Override
@@ -161,10 +186,52 @@ public class LoginActivity extends Activity {
 						priority = jsonResponse.getString("Priority").toString();
 						action = jsonResponse.getString("Action").toString();
 						open = jsonResponse.getString("Open").toString();
+						URol = jsonResponse.getString("SubRole").toString();
+						
+						String sUserName = jsonResponse.getString("UserName").toString();
+						String sPassword = jsonResponse.getString("Password").toString();
+						String sCategory = jsonResponse.getString("Category").toString();
+						String sUserrole = jsonResponse.getString("SubRole").toString();
+						//String sUserrole = jsonResponse.getString("SubRole").toString();
+						
+						
+						
+						SharedPreferences prefLogin = getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+
+						// We need an editor object to make changes
+						SharedPreferences.Editor edit = prefLogin.edit();
+
+						// Set/Store data
+						edit.putString("sUserName", sUserName);
+						edit.putString("sPassword", sPassword);
+						edit.putString("sCategory", sCategory);
+						edit.putString("sUserRole", sUserrole);
+						edit.putString("CaseNo", "");						
+						edit.putString("FIRSETNAME", FirstName);
+
+						// Commit the changes
+						edit.commit();
+
+						// Find the SharedPreferences value
+						SharedPreferences prefLoginReturn = getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+						System.out.println("LOGIN DATA");
+						String user_name = prefLoginReturn.getString("sUserName", "");
+						System.out.println(user_name);
+						String Pswd = prefLoginReturn.getString("sPassword", "");
+						System.out.println(Pswd);
+						String catg = prefLoginReturn.getString("sCategory", "");
+						System.out.println(catg);
+						String sUserRole = prefLoginReturn.getString("sUserRole", "");
+						System.out.println(sUserRole);
+						
+						
+						
+						
 
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						dialog.dismiss();
 					}
 					if (status.equals("true")) {
 						Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
@@ -237,4 +304,25 @@ public class LoginActivity extends Activity {
 			System.out.println(e.toString());
 		}
 	}
+
+	 public boolean isOnline() {
+	        boolean connected = false;
+			try {
+	            ConnectivityManager connectivityManager = (ConnectivityManager) this
+	                        .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+	        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+	        connected = networkInfo != null && networkInfo.isAvailable() &&
+	                networkInfo.isConnected();
+	        return connected;
+
+
+	        } catch (Exception e) {
+	            System.out.println("CheckConnectivity Exception: " + e.getMessage());
+	           // Log.v("connectivity", e.toString());
+	        }
+	        return connected;
+	    }
+
 }
+

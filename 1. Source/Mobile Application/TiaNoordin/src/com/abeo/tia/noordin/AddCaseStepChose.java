@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddCaseStepChose extends BaseActivity {
@@ -53,6 +54,12 @@ public class AddCaseStepChose extends BaseActivity {
 		// load icons from strings.xml
 		navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
 		set(navMenuTitles, navMenuIcons);
+		
+		// Find the SharedPreferences Firstname
+				SharedPreferences FirstName = getSharedPreferences("LoginData", Context.MODE_PRIVATE);		
+				String FirName = FirstName.getString("FIRSETNAME", "");
+				TextView welcome = (TextView)findViewById(R.id.textView_welcome);		
+				welcome.setText("Welcome "+FirName);
 
 		// Find button by Id
 		uc = (Button) findViewById(R.id.button_readoffer);

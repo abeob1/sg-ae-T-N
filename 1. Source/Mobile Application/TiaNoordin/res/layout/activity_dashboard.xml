@@ -67,8 +67,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:text="@string/welcome"
+                                android:paddingRight="10dp"                               
                                 android:textColor="@color/aqua"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -240,7 +239,7 @@
                                                     android:max="330"
                                                     android:paddingTop="1dp"
                                                     android:progressDrawable="@drawable/progressbar"
-                                                    android:secondaryProgress="165" />
+                                                     />
                                             </LinearLayout>
 
                                             <LinearLayout
@@ -250,7 +249,7 @@
                                                 android:orientation="horizontal" >
 
                                                 <TextView
-                                                    android:id="@+id/textView10"
+                                                    android:id="@+id/tmn"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_weight="1"
@@ -293,7 +292,7 @@
                                                     android:max="330"
                                                     android:paddingTop="1dp"
                                                     android:progressDrawable="@drawable/progressbar"
-                                                    android:secondaryProgress="165"  />
+                                                     />
 
                                                 </LinearLayout>
 
@@ -304,7 +303,7 @@
                                                     android:orientation="horizontal" >
 
                                                    <TextView
-                                                    android:id="@+id/textView11"
+                                                    android:id="@+id/tmc"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_weight="1"
@@ -409,7 +408,7 @@
                                                 android:orientation="horizontal" >
 
                                                 <TextView
-                                                    android:id="@+id/textView12"
+                                                    android:id="@+id/lmn"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_weight="1"
@@ -459,7 +458,7 @@
                                                     android:orientation="horizontal" >
 
                                                     <TextView
-                                                    android:id="@+id/textView13"
+                                                    android:id="@+id/lmc"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_weight="1"
@@ -710,7 +709,7 @@
                                                 android:paddingTop="1dp" >
 
                                                 <TextView
-                                                    android:id="@+id/textView14"
+                                                    android:id="@+id/tmtd"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_weight="1"
@@ -733,7 +732,7 @@
                                                     android:gravity="center" >
 
                                                     <TextView
-                                                    android:id="@+id/textView16"
+                                                    android:id="@+id/tmto"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                      android:gravity="center"
@@ -798,7 +797,7 @@
                                                 android:paddingTop="1dp" >
 
                                                 <TextView
-                                                    android:id="@+id/textView15"
+                                                    android:id="@+id/lmtd"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_weight="1"
@@ -820,7 +819,7 @@
                                                     android:orientation="horizontal" >
 
                                                     <TextView
-                                                    android:id="@+id/textView17"
+                                                    android:id="@+id/lmto"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_weight="1"
@@ -979,15 +978,13 @@
     <ListView
         android:id="@+id/left_drawer"
         android:layout_width="260dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#1a1a1a"
+        android:background="#ffffff"
         android:choiceMode="singleChoice"
-        android:divider="#1a1a1a"
-        android:dividerHeight="10dp"
-        android:paddingBottom="@dimen/paddingBottom_twenty"
-        android:paddingLeft="@dimen/paddingLeft_twenty"
-        android:paddingRight="@dimen/paddingRight_twenty"
+        android:divider="#5b5b5b"
+        android:dividerHeight="1dp"
+        android:paddingBottom="@dimen/paddingBottom_twenty"        
         android:paddingTop="@dimen/paddingTop_twenty" />
 
 </android.support.v4.widget.DrawerLayout>

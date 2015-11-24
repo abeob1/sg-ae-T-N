@@ -11,14 +11,19 @@ import com.loopj.android.http.RequestParams;
 
 import abeo.tia.noordin.R;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class WalkInActivity extends BaseActivity {
@@ -54,7 +59,7 @@ public class WalkInActivity extends BaseActivity {
 			corresAddr2C = "", corresAddr3C = "", corresAddr4C = "", corresAddr5C = "", addressToUseC = "",
 			lastUpdatedOnC = "", dirCode1C = "", dirName1C = "", dirContactNum1C = "", dirName2C = "",
 			dirContactNum2C = "", dirName3C = "", dirContactNum3C = "", dirName4C = "", dirContactNum4C = "",
-			dirName5C = "", dirContactNum5C = "";
+			dirName5C = "", dirContactNum5C = "",FrontIC = "",BackIC="";
 
 	// Find JSON Array
 	JSONArray arrayResponse = null;
@@ -82,13 +87,19 @@ public class WalkInActivity extends BaseActivity {
 		// Find button by Id
 		buttonIndividualSearch = (Button) findViewById(R.id.Button_WalkinSearchIndividual);
 		buttonCorporateSearch = (Button) findViewById(R.id.Button_WalkinSearchCorporate);
+		
+		// Find the SharedPreferences Firstname
+					SharedPreferences FirstName = getSharedPreferences("LoginData", Context.MODE_PRIVATE);		
+					String FirName = FirstName.getString("FIRSETNAME", "");
+					TextView welcome = (TextView)findViewById(R.id.textView_welcome);		
+					welcome.setText("Welcome "+FirName);
 
 		buttonIndividualSearch.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				Toast.makeText(WalkInActivity.this, "Walk-in individual Search button click", Toast.LENGTH_LONG).show();
+				//Toast.makeText(WalkInActivity.this, "Walk-in individual Search button click", Toast.LENGTH_LONG).show();
 				Log.e(tag, "Walk-in individual search Button Clicked");
 
 				// call edit webservice for property details
@@ -101,7 +112,7 @@ public class WalkInActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 
-				Toast.makeText(WalkInActivity.this, " Corporate Search button click", Toast.LENGTH_LONG).show();
+				//Toast.makeText(WalkInActivity.this, " Corporate Search button click", Toast.LENGTH_LONG).show();
 				Log.e(tag, "Walk-in Corporate search Button Clicked");
 				// Find the Search corporate Function
 				searchCorporateDataDetails();
@@ -126,10 +137,10 @@ public class WalkInActivity extends BaseActivity {
 				if (comName.equals("")) {
 					Toast.makeText(WalkInActivity.this, "Fill Company Name:XXXX", Toast.LENGTH_SHORT).show();
 				}
-				if (regNum.equals("")) {
+				else if (regNum.equals("")) {
 					Toast.makeText(WalkInActivity.this, "Fill BRN NO:XXXX-A", Toast.LENGTH_SHORT).show();
 				}
-				if (addr1.equals("")) {
+				else if (addr1.equals("")) {
 					Toast.makeText(WalkInActivity.this, "Fill Address1", Toast.LENGTH_SHORT).show();
 				}
 			} else {
@@ -470,7 +481,7 @@ public class WalkInActivity extends BaseActivity {
 	}
 
 	public void searchIndividualDataDetails() {
-		Toast.makeText(WalkInActivity.this, "Search individual", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(WalkInActivity.this, "Search individual", Toast.LENGTH_SHORT).show();
 
 		// Passing value in JSON format in first fields
 		JSONObject jsonObject = new JSONObject();
@@ -485,10 +496,10 @@ public class WalkInActivity extends BaseActivity {
 				if (fullName.equals("")) {
 					Toast.makeText(WalkInActivity.this, "Fill Full Name", Toast.LENGTH_SHORT).show();
 				}
-				if (mobNum.equals("")) {
+				else if (mobNum.equals("")) {
 					Toast.makeText(WalkInActivity.this, "Fill Mobile No", Toast.LENGTH_SHORT).show();
 				}
-				if (idNum.equals("")) {
+				else if (idNum.equals("")) {
 					Toast.makeText(WalkInActivity.this, "Fill Id No", Toast.LENGTH_SHORT).show();
 				}
 			} else {
@@ -550,6 +561,8 @@ public class WalkInActivity extends BaseActivity {
 							corresAddr5 = jsonResponse.getString("CorresAddr5").toString();
 							addressToUse = jsonResponse.getString("AddressToUse").toString();
 							lastUpdatedOn = jsonResponse.getString("LastUpdatedOn").toString();
+							FrontIC = jsonResponse.getString("FrontIC").toString();
+							BackIC = jsonResponse.getString("BackIC").toString();
 
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -569,7 +582,7 @@ public class WalkInActivity extends BaseActivity {
 						 */
 						// Find Intent to call view property details
 						Intent i = new Intent(WalkInActivity.this, IndividualActivity.class);
-						Toast.makeText(WalkInActivity.this, "Item Clicked", Toast.LENGTH_SHORT).show();
+						//Toast.makeText(WalkInActivity.this, "Item Clicked", Toast.LENGTH_SHORT).show();
 
 						// Send the property details in property UI through
 						// intent
@@ -622,6 +635,12 @@ public class WalkInActivity extends BaseActivity {
 						System.out.println(addressToUse);
 						i.putExtra("LastUpdatedOn_T", lastUpdatedOn);
 						System.out.println(lastUpdatedOn);
+						
+						i.putExtra("FrontIC_T", FrontIC);
+						System.out.println(lastUpdatedOn);
+						
+						i.putExtra("BackIC_T", BackIC);
+						System.out.println(lastUpdatedOn);
 
 						startActivity(i);
 
@@ -644,6 +663,14 @@ public class WalkInActivity extends BaseActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+	}
+	
+
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+		return super.dispatchTouchEvent(ev);
 
 	}
 }

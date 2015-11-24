@@ -40,8 +40,10 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -49,6 +51,7 @@ import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -68,6 +71,12 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 	private final String METHOD_PROPERTY_BDS_DROPDOWN = "SPA_Property_GetDropdownValues";
 	private final String METHOD_ADD_CASE2 = "SPA_AddCase_AddPropery";
 	
+	ArrayList<HashMap<String, String>> jsonCaselist;
+	// Find Case list items
+		String CaseList_CaseFileNo = "", CaseList_RelatedFileNo = "", CaseList_BranchCode = "",
+				CaseList_FileOpenedDate = "", CaseList_IC = "", CaseList_CaseType = "", CaseList_ClientName = "",
+				CaseList_BankName = "", CaseList_Branch = "", CaseList_LOTNo = "", CaseList_CaseAmount = "",
+				CaseList_UserCode = "", CaseList_Status = "", CaseList_FileClosedDate = "";
 	
 	String codeDetailResponse = "", titleTypeDetailResponse = "", titleNoDetailResponse = "",
 			lotTypeDetailResponse = "", lotNoDetailResponse = "", formerlyDetailResponse = "", bpmDetailResponse = "",
@@ -76,11 +85,11 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 			developerDetailResponse = "", projectDetailResponse = "", DevlicNoDetailResponse = "",
 			devSolictorCodeResponse = "", devSolictorDetailResponse = "", devSolictorLocDetailResponse = "",
 			bankCodeResponse = "", bankDetailResponse = "", branchDetailResponse = "", panNoDetailResponse = "",
-			prsentDetailResponse = "";
+			prsentDetailResponse = "",TITLELINK="",LSTCHG_PRSTLINK="";
 	
-
+	CheckBox QryGroup13;
 	EditText edittextFile;
-	Button buttonOk, buttonconfirm,btnClosePopup;
+	Button buttonOk, buttonconfirm,btnClosePopup,walkin;
 	ZoomButton btnpdf1, btnpdf2;
 	ListView listViewItem;
 
@@ -113,7 +122,7 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 				spinnerpropertyDEVSOLICTOR;
 		
 		EditText Title , LotType , LotNo , Knownas , Pekan ,Daerah ,Nageri,LotArea ,LastUpdate ,DevLicense ,DevSolictor ,SolicitorLoc ,
-		Branch , PAName ,PresentaionNo ;
+		Branch , PAName ,PresentaionNo,PurchasePrice;
 		Button buttonChooseDoc, buttonFileBrowser, buttonconfirm2,btnfind;
 		
 		
@@ -143,17 +152,23 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 		// load icons from strings.xml
 		navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
 		set(navMenuTitles, navMenuIcons);
-		Toast.makeText(AddCaseStep2of4.this, "reachec in AddCaseStep1of 4", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(AddCaseStep2of4.this, "reachec in AddCaseStep1of 4", Toast.LENGTH_SHORT).show();
+		
+		
+		
+		
+		
 		
 		// Find the SharedPreferences Firstname
-				SharedPreferences FirstName = getSharedPreferences("FirstName", Context.MODE_PRIVATE);		
-				String FirName = FirstName.getString("FirstName", "");
+				SharedPreferences FirstName = getSharedPreferences("LoginData", Context.MODE_PRIVATE);		
+				String FirName = FirstName.getString("FIRSETNAME", "");
 				TextView welcome = (TextView)findViewById(R.id.textView_welcome);		
 				welcome.setText("Welcome "+FirName);
 
 		// Find Mesaage Text and Edit field by Id
 		messageText = (TextView) findViewById(R.id.messageText);
 		edittextFile = (EditText) findViewById(R.id.editText_AddCaseStep1Browse);
+		
 
 		// Find By Id spinner Address To Use
 				spinnerpropertyTitleType = (Spinner) findViewById(R.id.TitleType);
@@ -161,6 +176,8 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 				spinnerpropertyLSTCHG_BANKNAME = (Spinner) findViewById(R.id.banksp);
 				spinnerpropertyDEVELOPER = (Spinner) findViewById(R.id.developersp);
 				spinnerpropertyDEVSOLICTOR = (Spinner) findViewById(R.id.DevSolisp);
+				
+				QryGroup13 = (CheckBox) findViewById(R.id.PropetyCharged);
 				
 				
 
@@ -285,8 +302,9 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 
 		// Find button by Id
 		btnpdf1 = (ZoomButton) findViewById(R.id.zoomButton_propertyPdf1);
-		btnpdf2 = (ZoomButton) findViewById(R.id.zoomButton_propertyPdf2);
+		//btnpdf2 = (ZoomButton) findViewById(R.id.zoomButton_propertyPdf2);
 		buttonconfirm = (Button) findViewById(R.id.button_PropertyConfirm);
+		walkin = (Button) findViewById(R.id.button_PropertyWalkin);
 		
 		
 		// Find EditText Fields
@@ -305,15 +323,39 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 		Branch = (EditText) findViewById(R.id.editText_PropertyBranch);
 		PAName = (EditText) findViewById(R.id.editText_PropertyPAName);
 		PresentaionNo = (EditText) findViewById(R.id.editText_PropertyPresentaionNo);
+		PurchasePrice = (EditText) findViewById(R.id.editText_PurchasePrice);
 		
 
 		
 		btnpdf1.setOnClickListener(this);
-		btnpdf2.setOnClickListener(this);
+		//btnpdf2.setOnClickListener(this);
 		buttonconfirm.setOnClickListener(this);
+		walkin.setOnClickListener(this);
 		
-		Toast.makeText(AddCaseStep2of4.this, " Can't Read The Scanned Files. Kindly Key In the Data.", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(AddCaseStep2of4.this, " Can't Read The Scanned Files. Kindly Key In the Data.", Toast.LENGTH_SHORT).show();
 		
+		
+		//Get Data From Document
+		
+		 Intent intent = getIntent();
+
+			
+		  String jsonArray = intent.getStringExtra("jsonArray");
+	        if(!jsonArray.isEmpty())
+	        {
+		        try {
+		            JSONObject array = new JSONObject(jsonArray);
+		           
+		            setallvalues(array);
+		        } catch (JSONException e) {
+		            e.printStackTrace();
+		        }
+	        }
+	        else
+	        	Toast.makeText(AddCaseStep2of4.this, " Can't Read The Scanned Files. Kindly Key In the Data.", Toast.LENGTH_SHORT).show();
+	        
+	        
+	        
 		try {
 			dropdownTitle();
 			dropdownBankDeveloperSolicitor();
@@ -324,13 +366,21 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 		}
 
 	}
+	
+	public boolean dispatchTouchEvent(MotionEvent ev) {	       
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.
+                INPUT_METHOD_SERVICE);
+imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        return super.dispatchTouchEvent(ev);
+
+        } 
 
 	@Override
 	public void onClick(View v) {
 		if (v == btnpdf1) {
 			//initiatePopupWindow();
 			
-			String pdfurl = "http://54.251.51.69:3878/PDF/MBB.pdf"; //YOUR URL TO PDF
+			String pdfurl = "http://54.251.51.69:3878"+TITLELINK; //YOUR URL TO PDF
 			   String googleDocsUrl = "http://docs.google.com/viewer?url="+ pdfurl;
 			   Intent intent = new Intent(Intent.ACTION_VIEW);
 			   intent.setDataAndType(Uri.parse(googleDocsUrl ), "text/html");
@@ -338,25 +388,42 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 			   
 			   
 		} else if (v == btnpdf2) {
-			 Intent intent = new Intent(this, PdfViewer.class);
-		     intent.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME, "http://54.251.51.69:3878/PDF/MBB.pdf");
-		     startActivity(intent);
+			String pdfurl = "http://54.251.51.69:3878"+LSTCHG_PRSTLINK; //YOUR URL TO PDF
+			   String googleDocsUrl = "http://docs.google.com/viewer?url="+ pdfurl;
+			   Intent intent = new Intent(Intent.ACTION_VIEW);
+			   intent.setDataAndType(Uri.parse(googleDocsUrl ), "text/html");
+			   startActivity(intent);
 		} else if (v == buttonconfirm) {
-			btnconfirm();
+			if(val())
+				btnconfirm();
+		}
+		else if(v==walkin)
+		{
+			Intent i = new Intent(AddCaseStep2of4.this, WalkInActivity.class);
+			startActivity(i);
 		}
 	}
 
-
 	private void btnconfirm() {
 		
-
+		// Find the SharedPreferences pass Login value
+				SharedPreferences prefLoginReturn = getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+				System.out.println("LOGIN DATA");
+				String userName = prefLoginReturn.getString("sUserName", "");
+				
+				String category = prefLoginReturn.getString("sCategory", "");
+				System.out.println(category);
+				String CardCode = prefLoginReturn.getString("CardCode", "");
+				System.out.println(CardCode);
+				
 		JSONObject jsonObject = new JSONObject();
 		// jsonObject.put("Category", "SPA");
 		try {
 			// Find confirmation message
 			// messageResult = jsonObject.getString("Result").toString();
 
-			jsonObject.put("CODE", "11");
+			jsonObject.put("CODE", "");
+			jsonObject.put("CARDCODE", CardCode);
 			jsonObject.put("TITLETYPE", titleValue);
 			jsonObject.put("TITLENO", Title.getText().toString());
 			jsonObject.put("LOTTYPE", LotType.getText().toString() );			
@@ -382,6 +449,13 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 			
 			jsonObject.put("LSTCHG_PANO", PAName.getText().toString());
 			jsonObject.put("LSTCHG_PRSTNO", PresentaionNo.getText().toString());
+			jsonObject.put("PurchasePrice", PurchasePrice.getText().toString());
+			
+			
+			if(QryGroup13.isChecked())
+				jsonObject.put("PROPERTYCHARGED", "Y");
+			else
+				jsonObject.put("PROPERTYCHARGED", "N");
 
 			
 			
@@ -401,7 +475,7 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 		params.put("sJsonInput", jsonObject.toString());
 		System.out.println("params");
 		System.out.println(params);
-
+		dialog = ProgressDialog.show(AddCaseStep2of4.this, "", "Loading...", true);
 		RestService.post(METHOD_ADD_CASE2, params, new BaseJsonHttpResponseHandler<String>() {
 
 			@Override
@@ -409,6 +483,7 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 				// TODO Auto-generated method stub
 				System.out.println(arg3);
 				System.out.println("onFailure");
+				dialog.dismiss();
 
 			}
 
@@ -418,23 +493,114 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 				System.out.println("onFailure");
 				System.out.println("AddCase2 Details Add Confirmed");
 				System.out.println(arg2);
+				dialog.dismiss();
 
 				// Find status Response
 				try {
 					StatusResult = jsonResponse.getString("Result").toString();
 					messageDisplay = jsonResponse.getString("DisplayMessage").toString();
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				
 				if (StatusResult.equals("SUCCESS")) {
 					Intent iAddBack = new Intent(AddCaseStep2of4.this, AddCaseStep3of4.class);
+					
 					startActivity(iAddBack);
 
 					Toast.makeText(AddCaseStep2of4.this, messageDisplay, Toast.LENGTH_SHORT).show();
-				} else {
+				} else if(jsonResponse.getString("CaseFileNo").toString()!="") {
+					// Find Response for ListView
+					try {
+
+						
+						jsonCaselist = new ArrayList<HashMap<String, String>>();
+
+						for (int i = 0; i < arrayResponse.length(); i++) {
+							jsonResponse = arrayResponse.getJSONObject(i);
+							/*
+							 * [ { "CaseFileNo": "1500000006", "RelatedFileNo":
+							 * "", "BranchCode": "", "FileOpenedDate":
+							 * "8/1/2015 12:00:00 AM", "IC": "3", "CaseType":
+							 * "SPA", "ClientName": "", "BankName": "",
+							 * "Branch": "", "LOTNo": "", "CaseAmount": "",
+							 * "UserCode": "", "Status": "OPEN",
+							 * "FileClosedDate": "" } ]
+							 */
+
+							CaseList_CaseFileNo = jsonResponse.getString("CaseFileNo").toString();
+							CaseList_RelatedFileNo = jsonResponse.getString("RelatedFileNo").toString();
+							CaseList_BranchCode = jsonResponse.getString("BranchCode").toString();
+							CaseList_FileOpenedDate = jsonResponse.getString("FileOpenedDate").toString();
+							CaseList_IC = jsonResponse.getString("IC").toString();
+							CaseList_CaseType = jsonResponse.getString("CaseType").toString();
+							CaseList_ClientName = jsonResponse.getString("ClientName").toString();
+							CaseList_BankName = jsonResponse.getString("BankName").toString();
+							// CaseList_Branch =
+							// jsonResponse.getString("Branch").toString();
+							CaseList_LOTNo = jsonResponse.getString("LOTNo").toString();
+							CaseList_CaseAmount = jsonResponse.getString("CaseAmount").toString();
+							CaseList_UserCode = jsonResponse.getString("UserCode").toString();
+							CaseList_Status = jsonResponse.getString("Status").toString();
+							CaseList_FileClosedDate = jsonResponse.getString("FileClosedDate").toString();
+
+							// SEND JSON DATA INTO CASELIST
+							HashMap<String, String> caseListProperty = new HashMap<String, String>();
+
+							// Send JSON Data to list activity
+							System.out.println("SEND JSON CASE LIST");
+
+							caseListProperty.put("CaseFileNo_List", CaseList_CaseFileNo);
+							System.out.println(CaseList_CaseFileNo);
+							caseListProperty.put("RelatedFileNo_List", CaseList_RelatedFileNo);
+							System.out.println(CaseList_RelatedFileNo);
+							caseListProperty.put("BranchCode_List", CaseList_BranchCode);
+							System.out.println(CaseList_BranchCode);
+							caseListProperty.put("FileOpenedDate_List", CaseList_FileOpenedDate);
+							System.out.println(CaseList_FileOpenedDate);
+							caseListProperty.put("IC_List", CaseList_IC);
+							System.out.println(CaseList_IC);
+							caseListProperty.put("CaseType_List", CaseList_CaseType);
+							System.out.println(CaseList_CaseType);
+							caseListProperty.put("ClientName_List", CaseList_ClientName);
+							System.out.println(CaseList_ClientName);
+							caseListProperty.put("BankName_List", CaseList_BankName);
+							System.out.println(CaseList_BankName);
+							// caseListProperty.put("Branch_List",CaseList_Branch);
+							// System.out.println(CaseList_Branch);
+							caseListProperty.put("LOTNo_List", CaseList_LOTNo);
+							System.out.println(CaseList_LOTNo);
+							caseListProperty.put("CaseAmount_List", CaseList_CaseAmount);
+							System.out.println(CaseList_CaseAmount);
+							caseListProperty.put("UserCode_List", CaseList_UserCode);
+							System.out.println(CaseList_UserCode);
+							caseListProperty.put("Status_List", CaseList_Status);
+							System.out.println(CaseList_Status);
+							caseListProperty.put("FileClosedDate", CaseList_FileClosedDate);
+							System.out.println(CaseList_FileClosedDate);
+							System.out.println(" END SEND JSON CASE LIST");
+
+							jsonCaselist.add(caseListProperty);
+							System.out.println("JSON CASELIST");
+							System.out.println(jsonCaselist);
+						}
+
+					} catch (JSONException e) { // TODO Auto-generated catc
+												// block
+						e.printStackTrace();
+					}
+					//Toast.makeText(PropertyActivity.this, "Case Item Found", Toast.LENGTH_SHORT).show();
+					Intent intentList = new Intent(AddCaseStep2of4.this, PropertyRelatedCaseListActivity.class);
+					intentList.putExtra("ProjectJsonList", jsonCaselist);
+					startActivity(intentList);
+					System.out.println(arg2);
+
+				}
+				else {
 					Toast.makeText(AddCaseStep2of4.this, messageDisplay, Toast.LENGTH_SHORT).show();
 
+				}
+				
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 
@@ -456,7 +622,6 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 
 	}
 		
-	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
@@ -479,20 +644,20 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 		}
 	}
 
-	
 	public void addCaseListOfItems() {
 
 		RequestParams params = null;
 		params = new RequestParams();
 		
 		
-
+		
 		RestService.post(METHOD_ADDCASE_ITEMLIST, params, new BaseJsonHttpResponseHandler<String>() {
 
 			@Override
 			public void onFailure(int arg0, Header[] arg1, Throwable arg2, String arg3, String arg4) {
 				// TODO Auto-generated method stub
 				System.out.println(arg3);
+				
 
 			}
 
@@ -536,7 +701,7 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 											// block
 					e.printStackTrace();
 				}
-				Toast.makeText(AddCaseStep2of4.this, "AddCase Item Found", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(AddCaseStep2of4.this, "AddCase Item Found", Toast.LENGTH_SHORT).show();
 				dialog.dismiss();
 				// Simple Adapter for List
 				SimpleAdapter simpleAdapter = new SimpleAdapter(AddCaseStep2of4.this, jsonItemList,
@@ -557,8 +722,8 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 						{
 							get().setActivated(false);
 						}
-						Toast.makeText(AddCaseStep2of4.this, "You Clicked at " + jsonItemList.get(position),
-								Toast.LENGTH_SHORT).show();
+						//Toast.makeText(AddCaseStep2of4.this, "You Clicked at " + jsonItemList.get(position),
+							//	Toast.LENGTH_SHORT).show();
 						System.out.println(position);
 
 						//int mSelectedItem = position;		
@@ -569,9 +734,25 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 						TextView c = (TextView) view.findViewById(R.id.listAddCaseHeader_ItemCodeText);
 						itemCode = c.getText().toString();
 						System.out.println(itemCode);
+						
+						TextView D = (TextView) view.findViewById(R.id.listAddCaseHeader_ItemNameText);
+						itemName = D.getText().toString();			
+						
 						String data = (String) parent.getItemAtPosition(position).toString();
 						System.out.println(data);
 						set(view);
+						
+						//store itemname and code in session
+						SharedPreferences prefLogin = getSharedPreferences("ItemData", Context.MODE_PRIVATE);
+
+						// We need an editor object to make changes
+						SharedPreferences.Editor edit = prefLogin.edit();
+
+						// Set/Store data
+						edit.putString("ItemCode", itemCode);
+						edit.putString("ItemName", itemName);
+						// Commit the changes
+						edit.commit();
 
 					}
 
@@ -583,6 +764,9 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 					}
 				});
 
+				
+				
+				spinnerpropertyPROJECT.setSelection(2);
 			}
 
 			@Override
@@ -598,6 +782,69 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 			}
 		});
 
+	}
+	
+	public boolean val()
+	{
+	
+		if(titleValue.toString().equals("-- Select --"))
+		{
+			slog("Kindly Select Title Type");
+			return false;
+		}
+		if(Title.toString().equals(""))
+		{
+			slog("Kindly Fill Title No");
+			return false;
+		}
+		if(LotType.toString().equals(""))
+		{
+			slog("Kindly Fill LotType");
+			return false;
+		}
+		if(LotNo.toString().equals(""))
+		{
+			slog("Kindly Fill Lot No");
+			return false;
+		}
+		if(titleValue.toString().equals("-- Select --"))
+		{
+			slog("Kindly Fill Title No");
+			return false;
+		}
+		if(developerValue.toString().equals("-- Select --"))
+		{
+			slog("Kindly Select Developer Value");
+			return false;
+		}
+		if(ProjectValue.toString().equals("-- Select --"))
+		{
+			slog("Kindly Select Project Value");
+			return false;
+		}
+		if(solicitorValue.toString().equals("-- Select --"))
+		{
+			slog("Kindly Select Solicitor Value");
+			return false;
+		}
+		if(bankValue.toString().equals("-- Select --"))
+		{
+			slog("Kindly Select Bank Value");
+			return false;
+		}
+		//System.out.println(PurchasePrice.toString());
+		if(PurchasePrice.getText().toString().equals("") || PurchasePrice.getText().toString().isEmpty() || PurchasePrice.getText().toString().length() == 0 || PurchasePrice.getText().toString() == null )
+		{
+			slog("Kindly Enter Purchase Price Value");
+			return false;
+		}
+		return true;
+		
+	}
+	
+	public void slog(String s)
+	{
+		Toast.makeText(AddCaseStep2of4.this, s, Toast.LENGTH_LONG).show();
 	}
 
 	public void dropdownTitle() throws JSONException {
@@ -690,7 +937,6 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 		});
 
 	}
-
 
 	public void dropdownBankDeveloperSolicitor() {
 
@@ -933,30 +1179,65 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 
 	}
 
-	private PopupWindow pwindo;
-	
-	private void initiatePopupWindow() {
-		try {
-		// We need to get the instance of the LayoutInflater
-		LayoutInflater inflater = (LayoutInflater) AddCaseStep2of4.this	.getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
-		View layout = inflater.inflate(R.layout.zoompdf,(ViewGroup) findViewById(R.id.popup_element),false);
-		pwindo = new PopupWindow(layout, 600, 670, true);
-		pwindo.showAtLocation(layout, Gravity.CENTER, 0, 0);
-		
+	public void setallvalues(Object data) throws JSONException {
 
-		btnClosePopup = (Button) layout.findViewById(R.id.btn_close_popup);
-		btnClosePopup.setOnClickListener(cancel_button_click_listener);
-		buttonconfirm  = (Button) layout.findViewById(R.id.button_PropertyConfirm);
 		
+		//JSONObject jObj =  new JSONObject(data.toString());
+		JSONObject jObj = (JSONObject) data;
+		//JSONObject jObj = arr.getJSONObject(0);
 		
+		System.out.println(jObj);
+		String compareValue = "some value";
+		//int spinnerPosition = sAdapPROJ.
 		
 			
-
-		} catch (Exception e) {
-		e.printStackTrace();
-		}
-		}
+			
+		spinnerpropertyPROJECT.setSelection(1);
+		
+		
+		
+		
+		//titleValue.setText(jObj.getString("TITLETYPE"));
+		Title.setText(jObj.getString("TITLENO"));
+		
+		LotType.setText(jObj.getString("LOTTYPE"));
+		LotNo.setText(jObj.getString("LOTNO"));
+		Knownas.setText(jObj.getString("FORMERLY_KNOWN_AS"));
+		projectDetailResponse = "I";
+		
+		Pekan.setText(jObj.getString("BPM"));
+		Daerah.setText(jObj.getString("STATE"));
+		Nageri.setText(jObj.getString("AREA"));
+		LotArea.setText(jObj.getString("LOTAREA"));
+		LastUpdate.setText(jObj.getString("LASTUPDATEDON"));
+		//developerValue.setText(jObj.getString("DEVELOPER"));
+		//developerValue_id.setText(jObj.getString("DVLPR_CODE"));
+		//ProjectValue_id.setText(jObj.getString("PROJECT_CODE"));
+		//ProjectValue.setText(jObj.getString("PROJECTNAME"));
+		DevLicense.setText(jObj.getString("DEVLICNO"));
+		//solicitorValue.setText(jObj.getString("DEVSOLICTOR"));
+		SolicitorLoc.setText(jObj.getString("DVLPR_LOC"));
+		//bankValue_id.setText(jObj.getString("LSTCHG_BANKCODE"));
+		//bankValue.setText(jObj.getString("LSTCHG_BANKNAME"));
+		Branch.setText(jObj.getString("LSTCHG_BRANCH"));
+		PAName.setText(jObj.getString("LSTCHG_PANO"));
+		PresentaionNo.setText(jObj.getString("LSTCHG_PRSTNO"));
+		
+		
+		LSTCHG_PRSTLINK = jObj.getString("LSTCHG_PRSTLINK");
+		TITLELINK = jObj.getString("TITLELINK");
+		
+		
+		if(jObj.getString("PROPERTYCHARGED").equals("Y"))
+			QryGroup13.setChecked(true);
+		if(jObj.getString("PROPERTYCHARGED").equals("N"))
+			QryGroup13.setChecked(false);
+		PurchasePrice.setText(jObj.getString("PurchasePrice"));
+		
+		
+	}
 	
+	private PopupWindow pwindo;
 	
 	private OnClickListener cancel_button_click_listener = new OnClickListener() {
 		public void onClick(View v) {

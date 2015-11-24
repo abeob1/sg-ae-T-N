@@ -37,7 +37,7 @@ public class AddCaseQuestion3 extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(AddCaseQuestion3.this, "Commercial", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(AddCaseQuestion3.this, "Commercial", Toast.LENGTH_SHORT).show();
 
 				// On Commercial click save related data in shared preference
 				SharedPreferences prefQuest3Commercial = getSharedPreferences("AddCaseQuestion3Commercial",
@@ -54,7 +54,7 @@ public class AddCaseQuestion3 extends BaseActivity {
 				SharedPreferences prefQuest3CommercialReturn = getSharedPreferences("AddCaseQuestion3Commercial",
 						Context.MODE_PRIVATE);
 				qryGroup7 = prefQuest3CommercialReturn.getString("QryGroup7", "");
-				Toast.makeText(AddCaseQuestion3.this, "QryGroup7:" + qryGroup7, Toast.LENGTH_SHORT).show();
+				//Toast.makeText(AddCaseQuestion3.this, "QryGroup7:" + qryGroup7, Toast.LENGTH_SHORT).show();
 				Intent comIntent = new Intent(AddCaseQuestion3.this, AddCaseQuestion4.class);
 				startActivity(comIntent);
 
@@ -65,7 +65,7 @@ public class AddCaseQuestion3 extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(AddCaseQuestion3.this, "Landed", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(AddCaseQuestion3.this, "Landed", Toast.LENGTH_SHORT).show();
 				// On Landed click save related data in shared preference
 				SharedPreferences prefQuest3Landed = getSharedPreferences("AddCaseQuestion3Landed",
 						Context.MODE_PRIVATE);
@@ -80,7 +80,7 @@ public class AddCaseQuestion3 extends BaseActivity {
 				SharedPreferences prefQuest3LandedReturn = getSharedPreferences("AddCaseQuestion3Landed",
 						Context.MODE_PRIVATE);
 				qryGroup8 = prefQuest3LandedReturn.getString("QryGroup8", "");
-				Toast.makeText(AddCaseQuestion3.this, "QryGroup8:" + qryGroup8, Toast.LENGTH_SHORT).show();
+				//Toast.makeText(AddCaseQuestion3.this, "QryGroup8:" + qryGroup8, Toast.LENGTH_SHORT).show();
 				Intent comIntent = new Intent(AddCaseQuestion3.this, AddCaseQuestion4.class);
 				startActivity(comIntent);
 
@@ -90,7 +90,7 @@ public class AddCaseQuestion3 extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(AddCaseQuestion3.this, "Apartment", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(AddCaseQuestion3.this, "Apartment", Toast.LENGTH_SHORT).show();
 				// On Sub Sell click save related data in shared preference
 				SharedPreferences prefQuest3Apartment = getSharedPreferences("AddCaseQuestion3Apartment",
 						context.MODE_PRIVATE);
@@ -104,7 +104,7 @@ public class AddCaseQuestion3 extends BaseActivity {
 				SharedPreferences prefQuest3ApartmentReturn = getSharedPreferences("AddCaseQuestion3Apartment",
 						Context.MODE_PRIVATE);
 				qryGroup9 = prefQuest3ApartmentReturn.getString("QryGroup9", "");
-				Toast.makeText(AddCaseQuestion3.this, "QryGroup9:" + qryGroup9, Toast.LENGTH_SHORT).show();
+				//Toast.makeText(AddCaseQuestion3.this, "QryGroup9:" + qryGroup9, Toast.LENGTH_SHORT).show();
 				Intent apartIntent = new Intent(AddCaseQuestion3.this, AddCaseQuestion4.class);
 				startActivity(apartIntent);
 			}

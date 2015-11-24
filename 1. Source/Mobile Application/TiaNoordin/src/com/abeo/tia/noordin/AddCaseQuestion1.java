@@ -27,7 +27,7 @@ import android.widget.Toast;
 
 @SuppressLint("Recycle")
 public class AddCaseQuestion1 extends BaseActivity {
-	Button sell, buy, btnconfirm,btnntapplicable,btnactapp;
+	Button sell, buy, btnconfirm,btnntapplicable,btnactapp,walkin;
 	private RadioGroup RadioGroup01,RadioGroup02,RadioGroup03,RadioGroup04,RadioGroup05;
 	private String[] navMenuTitles;
 	private TypedArray navMenuIcons;
@@ -40,7 +40,7 @@ public class AddCaseQuestion1 extends BaseActivity {
 
 		String userName = "", password = "", category = "", qryGroup3 = "", vNDR_RP_FIRM_SELL = "", vNDR_RP_LWYR_SELL = "",
 				qryGroup4 = "", vNDR_RP_FIRM_BUY = "", vNDR_RP_LWYR_BUY = "", qryGroup6 = "", qryGroup5 = "",
-				qryGroup7 = "", qryGroup8 = "", qryGroup9 = "", qryGroup10 = "", qryGroup11 = "",qryGroup17="";
+				qryGroup7 = "", qryGroup8 = "", qryGroup9 = "", qryGroup10 = "", qryGroup11 = "",qryGroup17="",qryGroup21="";
 
 	
 	// Find Json Array
@@ -61,8 +61,8 @@ public class AddCaseQuestion1 extends BaseActivity {
 		set(navMenuTitles, navMenuIcons);
 		
 		// Find the SharedPreferences Firstname
-		SharedPreferences FirstName = getSharedPreferences("FirstName", Context.MODE_PRIVATE);		
-		String FirName = FirstName.getString("FirstName", "");
+		SharedPreferences FirstName = getSharedPreferences("LoginData", Context.MODE_PRIVATE);		
+		String FirName = FirstName.getString("FIRSETNAME", "");
 		TextView welcome = (TextView)findViewById(R.id.textView_welcome);		
 		welcome.setText("Welcome "+FirName);
 
@@ -70,6 +70,8 @@ public class AddCaseQuestion1 extends BaseActivity {
 		sell = (Button) findViewById(R.id.btnsell);
 		buy = (Button) findViewById(R.id.btnbuy);
 		btnconfirm = (Button) findViewById(R.id.btn_confirm);
+		walkin = (Button) findViewById(R.id.button_AddCaseQuestion1Walkin);
+		
 
 		sell.setOnClickListener(new OnClickListener() {
 
@@ -95,11 +97,18 @@ public class AddCaseQuestion1 extends BaseActivity {
 			
 		});
 		
+		walkin.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+		Intent i = new Intent(AddCaseQuestion1.this, WalkInActivity.class);
+		startActivity(i);
+			}
+		});
+		
 		btnconfirm.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(AddCaseQuestion1.this, "Confirm", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(AddCaseQuestion1.this, "Confirm", Toast.LENGTH_SHORT).show();
 				/*shortcut remove once done 
 				Intent qIntent = new Intent(AddCaseQuestion1.this, AddCaseStep3of4.class);
 				Toast.makeText(AddCaseQuestion1.this, messageDisplay, Toast.LENGTH_SHORT).show();
@@ -143,7 +152,10 @@ public class AddCaseQuestion1 extends BaseActivity {
 						{
 							qryGroup17= "Y";					
 						}
-						
+						if(RG3.getText().equals("NO"))
+						{
+							qryGroup21= "Y";					
+						}
 					int q4 = RadioGroup04.getCheckedRadioButtonId();
 					RadioButton RG4 = (RadioButton) findViewById(q4);
 					System.out.println("R4"+RG4.getText());
@@ -167,7 +179,7 @@ public class AddCaseQuestion1 extends BaseActivity {
 						{
 							qryGroup10= "Y";					
 						}
-						if(RG4.getText().equals("COMPLETED"))
+						if(RG5.getText().equals("COMPLETED"))
 						{
 							qryGroup11= "Y";					
 						}
@@ -217,6 +229,7 @@ public class AddCaseQuestion1 extends BaseActivity {
 						jsonObject.put("QryGroup10", qryGroup10);
 						jsonObject.put("QryGroup11", qryGroup11);
 						jsonObject.put("QryGroup17", qryGroup17);
+						jsonObject.put("qryGroup21", qryGroup21);
 
 						RequestParams params = new RequestParams();
 						params.put("sJsonInput", jsonObject.toString());

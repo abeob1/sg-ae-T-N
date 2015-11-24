@@ -13,16 +13,22 @@ import com.loopj.android.http.RequestParams;
 
 import abeo.tia.noordin.R;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -77,9 +83,11 @@ public class PropertyActivity extends BaseActivity {
 	// Find spinner fields
 	Spinner spinnerpropertyTitleType, spinnerpropertyPROJECT, spinnerpropertyLSTCHG_BANKNAME, spinnerpropertyDEVELOPER,
 			spinnerpropertyDEVSOLICTOR;
-
+	
+	CheckBox QryGroup13;
+	
 	// Find String code value from
-	String codeResonse_listview;
+	String codeResonse_listview,TITLELINK;
 	Button buttonWalkIn, buttonFind, buttonAdd, buttonEdit, buttonConfirm, buttonPropertyList, buttonRelatedCaes;
 	ZoomButton ZoomButton_propertyPdf1;
 	ListView listView_property;
@@ -148,7 +156,7 @@ public class PropertyActivity extends BaseActivity {
 		propertyNageriArea = (EditText) findViewById(R.id.editText_PropertyNageriArea);
 
 		propertyLOTAREA_SQM = (EditText) findViewById(R.id.editText_PropertyLotArea);
-		propertyLOTAREA_SQFT = (EditText) findViewById(R.id.editText_PropertySqMeter);
+		//propertyLOTAREA_SQFT = (EditText) findViewById(R.id.editText_PropertySqMeter);
 		propertyLASTUPDATEDON = (EditText) findViewById(R.id.editText_PropertyLastUpdateOn);
 
 		propertyDEVLICNO = (EditText) findViewById(R.id.editText_PropertyDevLicense);
@@ -163,6 +171,14 @@ public class PropertyActivity extends BaseActivity {
 		spinnerpropertyLSTCHG_BANKNAME = (Spinner) findViewById(R.id.spinner_PropertyProjectBank);
 		spinnerpropertyDEVELOPER = (Spinner) findViewById(R.id.spinner_PropertyDevelopoer);
 		spinnerpropertyDEVSOLICTOR = (Spinner) findViewById(R.id.spinner_PropertySolicitor);
+		
+		QryGroup13 = (CheckBox) findViewById(R.id.PropetyCharged);
+		
+		// Find the SharedPreferences Firstname
+					SharedPreferences FirstName = getSharedPreferences("LoginData", Context.MODE_PRIVATE);		
+					String FirName = FirstName.getString("FIRSETNAME", "");
+					TextView welcome = (TextView)findViewById(R.id.textView_welcome);		
+					welcome.setText("Welcome "+FirName);
 
 		// Spinner click listener
 		spinnerpropertyTitleType.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -175,7 +191,7 @@ public class PropertyActivity extends BaseActivity {
 				titleValue = textTitle.getText().toString();
 
 				// Showing selected spinner item
-				Toast.makeText(parent.getContext(), "Selected: " + titleValue, Toast.LENGTH_LONG).show();
+				//Toast.makeText(parent.getContext(), "Selected: " + titleValue, Toast.LENGTH_LONG).show();
 
 			}
 
@@ -197,7 +213,7 @@ public class PropertyActivity extends BaseActivity {
 				projectValue = textProject.getText().toString();
 
 				// Showing selected spinner item
-				Toast.makeText(parent.getContext(), "Selected: " + projectValue, Toast.LENGTH_LONG).show();
+				//Toast.makeText(parent.getContext(), "Selected: " + projectValue, Toast.LENGTH_LONG).show();
 
 			}
 
@@ -219,7 +235,7 @@ public class PropertyActivity extends BaseActivity {
 				developerValue = textDeveloper.getText().toString();
 
 				// Showing selected spinner item
-				Toast.makeText(parent.getContext(), "Selected: " + developerValue, Toast.LENGTH_LONG).show();
+				//Toast.makeText(parent.getContext(), "Selected: " + developerValue, Toast.LENGTH_LONG).show();
 
 			}
 
@@ -240,7 +256,7 @@ public class PropertyActivity extends BaseActivity {
 				solicitorValue = textSolicitor.getText().toString();
 
 				// Showing selected spinner item
-				Toast.makeText(parent.getContext(), "Selected: " + solicitorValue, Toast.LENGTH_LONG).show();
+				//Toast.makeText(parent.getContext(), "Selected: " + solicitorValue, Toast.LENGTH_LONG).show();
 
 			}
 
@@ -263,7 +279,7 @@ public class PropertyActivity extends BaseActivity {
 				bankValue = textBank.getText().toString();
 
 				// Showing selected spinner item
-				Toast.makeText(parent.getContext(), "Selected: " + bankValue, Toast.LENGTH_LONG).show();
+				//Toast.makeText(parent.getContext(), "Selected: " + bankValue, Toast.LENGTH_LONG).show();
 
 			}
 
@@ -368,6 +384,8 @@ public class PropertyActivity extends BaseActivity {
 				spinnerpropertyTitleType.setClickable(true);
 				spinnerpropertyTitleType.setFocusable(true);
 				spinnerpropertyTitleType.setFocusableInTouchMode(true);
+				spinnerpropertyTitleType.setSelection(0);
+				
 
 				propertytitleNo.setEnabled(true);
 				propertytitleNo.setClickable(true);
@@ -409,10 +427,10 @@ public class PropertyActivity extends BaseActivity {
 				propertyLOTAREA_SQM.setFocusableInTouchMode(true);
 				propertyLOTAREA_SQM.setText("");
 
-				propertyLOTAREA_SQFT.setEnabled(true);
-				propertyLOTAREA_SQFT.setClickable(true);
-				propertyLOTAREA_SQFT.setFocusableInTouchMode(true);
-				propertyLOTAREA_SQFT.setText("");
+				//propertyLOTAREA_SQFT.setEnabled(true);
+				//propertyLOTAREA_SQFT.setClickable(true);
+				//propertyLOTAREA_SQFT.setFocusableInTouchMode(true);
+				//propertyLOTAREA_SQFT.setText("");
 
 				propertyLASTUPDATEDON.setEnabled(false);
 				propertyLASTUPDATEDON.setClickable(false);
@@ -422,10 +440,12 @@ public class PropertyActivity extends BaseActivity {
 				spinnerpropertyDEVELOPER.setEnabled(true);
 				spinnerpropertyDEVELOPER.setClickable(true);
 				spinnerpropertyDEVELOPER.setFocusableInTouchMode(true);
+				spinnerpropertyDEVELOPER.setSelection(0);
 
 				spinnerpropertyPROJECT.setEnabled(true);
 				spinnerpropertyPROJECT.setClickable(true);
 				spinnerpropertyPROJECT.setFocusableInTouchMode(true);
+				spinnerpropertyPROJECT.setSelection(0);
 
 				propertyDEVLICNO.setEnabled(true);
 				propertyDEVLICNO.setClickable(true);
@@ -435,6 +455,7 @@ public class PropertyActivity extends BaseActivity {
 				spinnerpropertyDEVSOLICTOR.setEnabled(true);
 				spinnerpropertyDEVSOLICTOR.setClickable(true);
 				spinnerpropertyDEVSOLICTOR.setFocusableInTouchMode(true);
+				spinnerpropertyDEVSOLICTOR.setSelection(0);
 
 				propertyDVLPR_LOC.setEnabled(true);
 				propertyDVLPR_LOC.setClickable(true);
@@ -444,6 +465,7 @@ public class PropertyActivity extends BaseActivity {
 				spinnerpropertyLSTCHG_BANKNAME.setEnabled(true);
 				spinnerpropertyLSTCHG_BANKNAME.setClickable(true);
 				spinnerpropertyLSTCHG_BANKNAME.setFocusableInTouchMode(true);
+				spinnerpropertyLSTCHG_BANKNAME.setSelection(0);
 
 				propertyLSTCHG_BRANCH.setEnabled(true);
 				propertyLSTCHG_BRANCH.setClickable(true);
@@ -463,23 +485,30 @@ public class PropertyActivity extends BaseActivity {
 			}
 		});
 
-		/*
-		 * buttonWalkIn.setOnClickListener(new OnClickListener() {
-		 * 
-		 * @Override public void onClick(View v) { // TODO Auto-generated method
-		 * stub Intent intentWalkIn = new Intent(PropertyActivity.this,
-		 * WalkInActivity.class); startActivity(intentWalkIn);
-		 * 
-		 * } });
-		 */
+		
+		  buttonWalkIn.setOnClickListener(new OnClickListener() {
+		  
+		  @Override public void onClick(View v) { // TODO Auto-generated method
+			  Intent i = new Intent(PropertyActivity.this, WalkInActivity.class);
+				startActivity(i);
+		  
+		  } });
+		 
 
 		// Find ZoomButton for property list
 		ZoomButton_propertyPdf1.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-
-			}
+				if(!TITLELINK.equals(""))
+				{
+				
+				String pdfurl = "http://54.251.51.69:3878"+TITLELINK; //YOUR URL TO PDF
+				   String googleDocsUrl = "http://docs.google.com/viewer?url="+ pdfurl;
+				   Intent intent = new Intent(Intent.ACTION_VIEW);
+				   intent.setDataAndType(Uri.parse(googleDocsUrl ), "text/html");
+				   startActivity(intent);
+				}}
 		});
 
 		// Find Button for edit property details
@@ -559,9 +588,9 @@ public class PropertyActivity extends BaseActivity {
 				propertyLOTAREA_SQM.setEnabled(true);
 				propertyLOTAREA_SQM.setFocusableInTouchMode(true);
 
-				propertyLOTAREA_SQFT.setClickable(true);
-				propertyLOTAREA_SQFT.setEnabled(true);
-				propertyLOTAREA_SQFT.setFocusableInTouchMode(true);
+				//propertyLOTAREA_SQFT.setClickable(true);
+				//propertyLOTAREA_SQFT.setEnabled(true);
+				//propertyLOTAREA_SQFT.setFocusableInTouchMode(true);
 
 				propertyLASTUPDATEDON.setClickable(false);
 				propertyLASTUPDATEDON.setEnabled(false);
@@ -666,7 +695,7 @@ public class PropertyActivity extends BaseActivity {
 				spinnerpropertyTitleType.setClickable(true);
 				spinnerpropertyTitleType.setFocusable(true);
 
-				Toast.makeText(PropertyActivity.this, "Search button clicked!", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(PropertyActivity.this, "Search button clicked!", Toast.LENGTH_SHORT).show();
 				// Call web service
 				webRequestPropertyDetails();
 			}
@@ -680,7 +709,7 @@ public class PropertyActivity extends BaseActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				webRequestPropertyCaseList();
-				Toast.makeText(PropertyActivity.this, "Related case clicked", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(PropertyActivity.this, "Related case clicked", Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -772,9 +801,9 @@ public class PropertyActivity extends BaseActivity {
 
 			lotaresSoftDetailResponse = b.getString("LOTAREA_SQFT_T");
 			System.out.println(lotaresSoftDetailResponse);
-			propertyLOTAREA_SQFT.setEnabled(false);
-			propertyLOTAREA_SQFT.setClickable(false);
-			propertyLOTAREA_SQFT.setText(lotaresSoftDetailResponse);
+			//propertyLOTAREA_SQFT.setEnabled(false);
+			//propertyLOTAREA_SQFT.setClickable(false);
+			propertyLOTAREA_SQM.setText(lotaresSoftDetailResponse);
 
 			lastupDateDetailResponse = b.getString("LASTUPDATEDON_T");
 			System.out.println(lastupDateDetailResponse);
@@ -846,6 +875,13 @@ public class PropertyActivity extends BaseActivity {
 			propertyLSTCHG_PRSTNO.setEnabled(false);
 			propertyLSTCHG_PRSTNO.setClickable(false);
 			propertyLSTCHG_PRSTNO.setText(prsentDetailResponse);
+			
+			TITLELINK = b.getString("TITLELINK_T");
+			
+			if(b.getString("PROPERTYCHARGED_T").equals("Y"))
+				QryGroup13.setChecked(true);
+			if(b.getString("PROPERTYCHARGED_T").equals("N"))
+				QryGroup13.setChecked(false);
 
 		}
 		// Dropdown function title type
@@ -1313,7 +1349,7 @@ public class PropertyActivity extends BaseActivity {
 												// block
 						e.printStackTrace();
 					}
-					Toast.makeText(PropertyActivity.this, "Case Item Found", Toast.LENGTH_SHORT).show();
+					//Toast.makeText(PropertyActivity.this, "Case Item Found", Toast.LENGTH_SHORT).show();
 					Intent intentList = new Intent(PropertyActivity.this, PropertyRelatedCaseListActivity.class);
 					intentList.putExtra("ProjectJsonList", jsonCaselist);
 					startActivity(intentList);
@@ -1375,8 +1411,8 @@ public class PropertyActivity extends BaseActivity {
 			jsonObject.put("STATE", propertyDaerahState.getText().toString());
 			jsonObject.put("AREA", propertyNageriArea.getText().toString());
 
-			jsonObject.put("LOTAREA_SQM", propertyLOTAREA_SQM.getText().toString());
-			jsonObject.put("LOTAREA_SQFT", propertyLOTAREA_SQFT.getText().toString());
+			jsonObject.put("LOTAREA", propertyLOTAREA_SQM.getText().toString());
+			//jsonObject.put("LOTAREA_SQFT", propertyLOTAREA_SQFT.getText().toString());
 			jsonObject.put("LASTUPDATEDON", propertyLASTUPDATEDON.getText().toString());
 			jsonObject.put("DVLPR_CODE", developerValue_id);
 			jsonObject.put("DEVELOPER", developerValue);
@@ -1392,6 +1428,13 @@ public class PropertyActivity extends BaseActivity {
 			jsonObject.put("LSTCHG_BRANCH", propertyLSTCHG_BRANCH.getText().toString());
 			jsonObject.put("LSTCHG_PANO", propertyLSTCHG_PANO.getText().toString());
 			jsonObject.put("LSTCHG_PRSTNO", propertyLSTCHG_PRSTNO.getText().toString());
+			
+			if(QryGroup13.isChecked())
+				jsonObject.put("PROPERTYCHARGED", "Y");
+			else
+				jsonObject.put("PROPERTYCHARGED", "N");
+			
+			
 
 			RequestParams params = new RequestParams();
 			params.put("sJsonInput", jsonObject.toString());
@@ -1481,8 +1524,8 @@ public class PropertyActivity extends BaseActivity {
 			jsonObject.put("STATE", propertyDaerahState.getText().toString());
 			jsonObject.put("AREA", propertyNageriArea.getText().toString());
 
-			jsonObject.put("LOTAREA_SQM", propertyLOTAREA_SQM.getText().toString());
-			jsonObject.put("LOTAREA_SQFT", propertyLOTAREA_SQFT.getText().toString());
+			jsonObject.put("LOTAREA", propertyLOTAREA_SQM.getText().toString());
+			//jsonObject.put("LOTAREA_SQFT", propertyLOTAREA_SQFT.getText().toString());
 			jsonObject.put("LASTUPDATEDON", propertyLASTUPDATEDON.getText().toString());
 			jsonObject.put("DVLPR_CODE", developerValue_id);
 			jsonObject.put("DEVELOPER", developerValue);
@@ -1498,6 +1541,13 @@ public class PropertyActivity extends BaseActivity {
 			jsonObject.put("LSTCHG_BRANCH", propertyLSTCHG_BRANCH.getText().toString());
 			jsonObject.put("LSTCHG_PANO", propertyLSTCHG_PANO.getText().toString());
 			jsonObject.put("LSTCHG_PRSTNO", propertyLSTCHG_PRSTNO.getText().toString());
+			
+			if(QryGroup13.isChecked())
+				jsonObject.put("PROPERTYCHARGED", "Y");
+			else
+				jsonObject.put("PROPERTYCHARGED", "N");
+			
+			
 			RequestParams params = new RequestParams();
 			params.put("sJsonInput", jsonObject.toString());
 			System.out.println(params);
@@ -1576,6 +1626,8 @@ public class PropertyActivity extends BaseActivity {
 			jsonObject.put("BPM", propertyBandarPekanMukin.getText().toString());
 			jsonObject.put("STATE", propertyDaerahState.getText().toString());
 			jsonObject.put("AREA", propertyNageriArea.getText().toString());
+			
+			
 
 			RequestParams params = new RequestParams();
 			params.put("sJsonInput", jsonObject.toString());
@@ -1645,7 +1697,7 @@ public class PropertyActivity extends BaseActivity {
 						e.printStackTrace();
 					}
 
-					Toast.makeText(PropertyActivity.this, "Data Found", Toast.LENGTH_SHORT).show();
+					//Toast.makeText(PropertyActivity.this, "Data Found", Toast.LENGTH_SHORT).show();
 					Intent intentList = new Intent(PropertyActivity.this, PropertyListActivity.class);
 					intentList.putExtra("ProjectJsonList", jsonlist);
 					startActivity(intentList);
@@ -1675,4 +1727,14 @@ public class PropertyActivity extends BaseActivity {
 		}
 
 	}
+	
+
+	public boolean dispatchTouchEvent(MotionEvent ev) {	       
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.
+                INPUT_METHOD_SERVICE);
+imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        return super.dispatchTouchEvent(ev);
+
+        } 
+
 }

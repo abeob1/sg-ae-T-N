@@ -198,95 +198,121 @@ namespace AE_TnN_Mobile_BLL
             string sFuncName = string.Empty;
             string sReturnResult = string.Empty;
             string sCode = string.Empty;
+            string sExistingCheck = string.Empty;
+            DataTable ExistingCheck = new DataTable();
             try
             {
                 sFuncName = "SPA_AddIndividual";
 
-                DataTable results = new DataTable();
                 SqlConnection con = new SqlConnection(ConnectionString);
                 SqlCommand command = con.CreateCommand();
-                command.CommandText = "SELECT REPLICATE('0', (12-LEN(ISNULL(MAX(SUBSTRING(Code,4,LEN(Code)))+1,1)))) " +
-                                        " + CONVERT(VARCHAR, ISNULL(MAX(SUBSTRING(Code,4,LEN(Code)))+1,1)) [Code] FROM [@AE_RELATEDPARTY]";
                 con.Open();
 
-                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-                dataAdapter.Fill(results);
-
-                if (results.Rows[0][0].ToString().Length > 0)
-                {
-                    sCode = results.Rows[0][0].ToString();
-                }
+                command.CommandText = "select Code, DocEntry from [@AE_RELATEDPARTY] WITH (NOLOCK) where U_IDNO_F1 = '" + dtDatatable.Rows[0]["IDNo1"].ToString().Replace("\n", "").ToString() + "'";
+                SqlDataAdapter dataAdapter1 = new SqlDataAdapter(command);
+                dataAdapter1.Fill(ExistingCheck);
 
                 con.Close();
 
-                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Connecting to target company ", sFuncName);
-                oDICompany = oLogin.ConnectToTargetCompany(ConnectionString);
-
-                SAPbobsCOM.GeneralService oGeneralService = null;
-                SAPbobsCOM.GeneralData oGeneralData;
-                SAPbobsCOM.CompanyService oCompanyService = oDICompany.GetCompanyService();
-                oGeneralService = oCompanyService.GetGeneralService("RELATEDPARTY");
-
-                oGeneralData = (SAPbobsCOM.GeneralData)oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData);
-
-                string[] sIDSplitUp = dtDatatable.Rows[0]["IDNo1"].ToString().Split('-');
-                string sIDNo2 = dtDatatable.Rows[0]["IDNo1"].ToString();
-                string sAddressId = dtDatatable.Rows[0]["IDAddress1"].ToString() + System.Environment.NewLine + dtDatatable.Rows[0]["IDAddress2"].ToString() + System.Environment.NewLine
-                                    + dtDatatable.Rows[0]["IDAddress3"].ToString() + System.Environment.NewLine +
-                                    dtDatatable.Rows[0]["IDAddress4"].ToString() + System.Environment.NewLine + dtDatatable.Rows[0]["IDAddress5"].ToString();
-                string sCorrespondAddressId = dtDatatable.Rows[0]["CorresAddr1"].ToString() + System.Environment.NewLine + dtDatatable.Rows[0]["CorresAddr2"].ToString() + System.Environment.NewLine
-                                    + dtDatatable.Rows[0]["CorresAddr3"].ToString() + System.Environment.NewLine +
-                                    dtDatatable.Rows[0]["CorresAddr4"].ToString() + System.Environment.NewLine + dtDatatable.Rows[0]["CorresAddr5"].ToString();
-
-                //Adding the Informations
-                oGeneralData.SetProperty("Code", sCode);
-                //oGeneralData.SetProperty("DocEntry", dtDatatable.Rows[0]["DocEntry"].ToString());
-                oGeneralData.SetProperty("U_NAME", dtDatatable.Rows[0]["EmployeeName"].ToString());
-                oGeneralData.SetProperty("U_INDIVIDUAL_TITLE", dtDatatable.Rows[0]["Title"].ToString());
-                oGeneralData.SetProperty("U_GENDER", dtDatatable.Rows[0]["Gender"].ToString());
-                oGeneralData.SetProperty("U_IDNO_F1", dtDatatable.Rows[0]["IDNo1"].ToString());
-                oGeneralData.SetProperty("U_IDNO_F2", sIDNo2.Replace("-", ""));
-                oGeneralData.SetProperty("U_IDNO_F3", dtDatatable.Rows[0]["IDNo3"].ToString());
-                if (sIDSplitUp.Length > 0)
+                if (ExistingCheck.Rows.Count == 0)
                 {
-                    if (sIDSplitUp.Length >= 1)
+                    //if (ExistingCheck.Rows[0][0].ToString().Length == 0)
+                    //{
+                    DataTable results = new DataTable();
+                    command.CommandText = "SELECT REPLICATE('0', (12-LEN(ISNULL(MAX(SUBSTRING(Code,4,LEN(Code)))+1,1)))) " +
+                                            " + CONVERT(VARCHAR, ISNULL(MAX(SUBSTRING(Code,4,LEN(Code)))+1,1)) [Code] FROM [@AE_RELATEDPARTY] WITH (NOLOCK)";
+                    con.Open();
+
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                    dataAdapter.Fill(results);
+
+                    if (results.Rows[0][0].ToString().Length > 0)
                     {
-                        oGeneralData.SetProperty("U_IDSEC1", sIDSplitUp[0]);
+                        sCode = results.Rows[0][0].ToString();
                     }
-                    if (sIDSplitUp.Length >= 2)
+
+                    con.Close();
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Connecting to target company ", sFuncName);
+                    oDICompany = oLogin.ConnectToTargetCompany(ConnectionString);
+
+                    SAPbobsCOM.GeneralService oGeneralService = null;
+                    SAPbobsCOM.GeneralData oGeneralData;
+                    SAPbobsCOM.CompanyService oCompanyService = oDICompany.GetCompanyService();
+                    oGeneralService = oCompanyService.GetGeneralService("RELATEDPARTY");
+
+                    oGeneralData = (SAPbobsCOM.GeneralData)oGeneralService.GetDataInterface(SAPbobsCOM.GeneralServiceDataInterfaces.gsGeneralData);
+
+                    string[] sIDSplitUp = dtDatatable.Rows[0]["IDNo1"].ToString().Split('-');
+                    string sIDNo2 = dtDatatable.Rows[0]["IDNo1"].ToString();
+                    string sAddressId = dtDatatable.Rows[0]["IDAddress1"].ToString() + System.Environment.NewLine + dtDatatable.Rows[0]["IDAddress2"].ToString() + System.Environment.NewLine
+                                        + dtDatatable.Rows[0]["IDAddress3"].ToString() + System.Environment.NewLine +
+                                        dtDatatable.Rows[0]["IDAddress4"].ToString() + System.Environment.NewLine + dtDatatable.Rows[0]["IDAddress5"].ToString();
+                    string sCorrespondAddressId = dtDatatable.Rows[0]["CorresAddr1"].ToString() + System.Environment.NewLine + dtDatatable.Rows[0]["CorresAddr2"].ToString() + System.Environment.NewLine
+                                        + dtDatatable.Rows[0]["CorresAddr3"].ToString() + System.Environment.NewLine +
+                                        dtDatatable.Rows[0]["CorresAddr4"].ToString() + System.Environment.NewLine + dtDatatable.Rows[0]["CorresAddr5"].ToString();
+
+                    //Adding the Informations
+                    oGeneralData.SetProperty("Code", sCode);
+                    //oGeneralData.SetProperty("DocEntry", dtDatatable.Rows[0]["DocEntry"].ToString());
+                    oGeneralData.SetProperty("U_NAME", dtDatatable.Rows[0]["EmployeeName"].ToString());
+                    oGeneralData.SetProperty("U_INDIVIDUAL_TITLE", dtDatatable.Rows[0]["Title"].ToString());
+                    oGeneralData.SetProperty("U_GENDER", dtDatatable.Rows[0]["Gender"].ToString());
+                    oGeneralData.SetProperty("U_IDNO_F1", dtDatatable.Rows[0]["IDNo1"].ToString());
+                    oGeneralData.SetProperty("U_IDNO_F2", sIDNo2.Replace("-", ""));
+                    oGeneralData.SetProperty("U_IDNO_F3", dtDatatable.Rows[0]["IDNo3"].ToString());
+                    if (sIDSplitUp.Length > 0)
                     {
-                        oGeneralData.SetProperty("U_IDSEC2", sIDSplitUp[1]);
+                        if (sIDSplitUp.Length >= 1)
+                        {
+                            oGeneralData.SetProperty("U_IDSEC1", sIDSplitUp[0]);
+                        }
+                        if (sIDSplitUp.Length >= 2)
+                        {
+                            oGeneralData.SetProperty("U_IDSEC2", sIDSplitUp[1]);
+                        }
+                        if (sIDSplitUp.Length >= 3)
+                        {
+                            oGeneralData.SetProperty("U_IDSEC3", sIDSplitUp[2]);
+                        }
                     }
-                    if (sIDSplitUp.Length >= 3)
-                    {
-                        oGeneralData.SetProperty("U_IDSEC3", sIDSplitUp[2]);
-                    }
+                    oGeneralData.SetProperty("U_IDTYPE", "INDIVIDUAL");
+                    oGeneralData.SetProperty("U_TAXNOFORMAT1", dtDatatable.Rows[0]["TaxNo"].ToString());
+                    oGeneralData.SetProperty("U_CONTACT_MOBILE", dtDatatable.Rows[0]["MobileNo"].ToString());
+                    oGeneralData.SetProperty("U_CONTACT_TELEPHONE", dtDatatable.Rows[0]["Telephone"].ToString());
+                    oGeneralData.SetProperty("U_SYARIKATNO", dtDatatable.Rows[0]["OfficeNo"].ToString());
+                    oGeneralData.SetProperty("U_ADDSEG1", dtDatatable.Rows[0]["IDAddress1"].ToString());
+                    oGeneralData.SetProperty("U_ADDSEG2", dtDatatable.Rows[0]["IDAddress2"].ToString());
+                    oGeneralData.SetProperty("U_ADDSEG3", dtDatatable.Rows[0]["IDAddress3"].ToString());
+                    oGeneralData.SetProperty("U_ADDSEG4", dtDatatable.Rows[0]["IDAddress4"].ToString());
+                    oGeneralData.SetProperty("U_ADDSEG5", dtDatatable.Rows[0]["IDAddress5"].ToString());
+                    oGeneralData.SetProperty("U_ADDRESS_ID", sAddressId);
+                    oGeneralData.SetProperty("U_CADDSEG1", dtDatatable.Rows[0]["CorresAddr1"].ToString());
+                    oGeneralData.SetProperty("U_CADDSEG2", dtDatatable.Rows[0]["CorresAddr2"].ToString());
+                    oGeneralData.SetProperty("U_CADDSEG3", dtDatatable.Rows[0]["CorresAddr3"].ToString());
+                    oGeneralData.SetProperty("U_CADDSEG4", dtDatatable.Rows[0]["CorresAddr4"].ToString());
+                    oGeneralData.SetProperty("U_CADDSEG5", dtDatatable.Rows[0]["CorresAddr5"].ToString());
+                    oGeneralData.SetProperty("U_ADDRESS_CORRESPOND", sCorrespondAddressId);
+                    oGeneralData.SetProperty("U_ADDRESS_TOUSE", dtDatatable.Rows[0]["AddressToUse"].ToString());
+                    oGeneralData.SetProperty("U_BANK", "N");
+                    oGeneralData.SetProperty("U_DEVELOPER", "N");
+                    oGeneralData.SetProperty("U_SOLICITOR", "N");
+                    //oGeneralData.SetProperty("LastUpdatedOn", dtDatatable.Rows[0]["LastUpdatedOn"].ToString());
+                    oGeneralData.SetProperty("U_IDSCAN1", dtDatatable.Rows[0]["ScanFrontICLocation"].ToString());
+                    oGeneralData.SetProperty("U_IDSCAN2", dtDatatable.Rows[0]["ScanBackICLocation"].ToString());
+
+                    oGeneralService.Add(oGeneralData);
+                    //}
+
+                    //else
+                    //{
+                    //    SPA_EditIndividual(dtDatatable, ExistingCheck.Rows[0][0].ToString(), ExistingCheck.Rows[0][1].ToString());
+                    //}
                 }
-                oGeneralData.SetProperty("U_IDTYPE", "INDIVIDUAL");
-                oGeneralData.SetProperty("U_TAXNOFORMAT1", dtDatatable.Rows[0]["TaxNo"].ToString());
-                oGeneralData.SetProperty("U_CONTACT_MOBILE", dtDatatable.Rows[0]["MobileNo"].ToString());
-                oGeneralData.SetProperty("U_CONTACT_TELEPHONE", dtDatatable.Rows[0]["Telephone"].ToString());
-                oGeneralData.SetProperty("U_SYARIKATNO", dtDatatable.Rows[0]["OfficeNo"].ToString());
-                oGeneralData.SetProperty("U_ADDSEG1", dtDatatable.Rows[0]["IDAddress1"].ToString());
-                oGeneralData.SetProperty("U_ADDSEG2", dtDatatable.Rows[0]["IDAddress2"].ToString());
-                oGeneralData.SetProperty("U_ADDSEG3", dtDatatable.Rows[0]["IDAddress3"].ToString());
-                oGeneralData.SetProperty("U_ADDSEG4", dtDatatable.Rows[0]["IDAddress4"].ToString());
-                oGeneralData.SetProperty("U_ADDSEG5", dtDatatable.Rows[0]["IDAddress5"].ToString());
-                oGeneralData.SetProperty("U_ADDRESS_ID", sAddressId);
-                oGeneralData.SetProperty("U_CADDSEG1", dtDatatable.Rows[0]["CorresAddr1"].ToString());
-                oGeneralData.SetProperty("U_CADDSEG2", dtDatatable.Rows[0]["CorresAddr2"].ToString());
-                oGeneralData.SetProperty("U_CADDSEG3", dtDatatable.Rows[0]["CorresAddr3"].ToString());
-                oGeneralData.SetProperty("U_CADDSEG4", dtDatatable.Rows[0]["CorresAddr4"].ToString());
-                oGeneralData.SetProperty("U_CADDSEG5", dtDatatable.Rows[0]["CorresAddr5"].ToString());
-                oGeneralData.SetProperty("U_ADDRESS_CORRESPOND", sCorrespondAddressId);
-                oGeneralData.SetProperty("U_ADDRESS_TOUSE", dtDatatable.Rows[0]["AddressToUse"].ToString());
-                oGeneralData.SetProperty("U_BANK", "N");
-                oGeneralData.SetProperty("U_DEVELOPER", "N");
-                oGeneralData.SetProperty("U_SOLICITOR", "N");
-                //oGeneralData.SetProperty("LastUpdatedOn", dtDatatable.Rows[0]["LastUpdatedOn"].ToString());
-
-                oGeneralService.Add(oGeneralData);
-
+                else
+                {
+                    SPA_EditIndividual(dtDatatable, ExistingCheck.Rows[0][0].ToString(), ExistingCheck.Rows[0][1].ToString());
+                }
                 sReturnResult = "SUCCESS";
             }
             catch (Exception Ex)
@@ -300,7 +326,7 @@ namespace AE_TnN_Mobile_BLL
             return sReturnResult;
         }
 
-        public string SPA_EditIndividual(DataTable dtDatatable)
+        public string SPA_EditIndividual(DataTable dtDatatable, string sExistingCode, string sDocEntry)
         {
             string sFuncName = string.Empty;
             string sReturnResult = string.Empty;
@@ -314,6 +340,27 @@ namespace AE_TnN_Mobile_BLL
 
                 string[] TimeSplit = DateTime.Now.TimeOfDay.ToString().Split(':');
                 string[] sIDSplitUp = dtDatatable.Rows[0]["IDNo1"].ToString().Split('-');
+
+                string s1 = string.Empty;
+                string s2 = string.Empty;
+
+                if (sExistingCode == string.Empty)
+                {
+                    s1 = dtDatatable.Rows[0]["Code"].ToString();
+                }
+                else
+                {
+                    s1 = sExistingCode;
+                }
+
+                if (sDocEntry == string.Empty)
+                {
+                    s2 = dtDatatable.Rows[0]["DocEntry"].ToString();
+                }
+                else
+                {
+                    s2 = sExistingCode;
+                }
 
                 string sIDNo2 = dtDatatable.Rows[0]["IDNo1"].ToString();
                 string sAddressId = dtDatatable.Rows[0]["IDAddress1"].ToString() + System.Environment.NewLine + dtDatatable.Rows[0]["IDAddress2"].ToString() + System.Environment.NewLine
@@ -369,8 +416,10 @@ namespace AE_TnN_Mobile_BLL
                 + "U_ADDRESS_CORRESPOND= '" + sCorrespondAddressId + "',"
                 + "U_ADDRESS_TOUSE= '" + dtDatatable.Rows[0]["AddressToUse"] + "',"
                 + "UpdateDate= '" + DateTime.Now.Date + "',"
-                + "Updatetime = '" + TimeSplit[0] + TimeSplit[1] + "'"
-                + " WHERE Code = '" + dtDatatable.Rows[0]["Code"] + "' AND DocEntry = '" + dtDatatable.Rows[0]["DocEntry"] + "'";
+                + "Updatetime = '" + TimeSplit[0] + TimeSplit[1] + "',"
+                + "U_IDSCAN1= '" + dtDatatable.Rows[0]["ScanFrontICLocation"] + "',"
+                + "U_IDSCAN2= '" + dtDatatable.Rows[0]["ScanBackICLocation"] + "'"
+                + " WHERE Code = '" + s1 + "' AND DocEntry = '" + s2 + "'";
 
                 con.Open();
 

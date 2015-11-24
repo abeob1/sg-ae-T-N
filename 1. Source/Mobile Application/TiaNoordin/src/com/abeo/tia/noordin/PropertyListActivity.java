@@ -12,7 +12,9 @@ import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import abeo.tia.noordin.R;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.View;
@@ -39,7 +41,7 @@ public class PropertyListActivity extends BaseActivity {
 			LOTAREA_SQM_details = "", LOTAREA_SQFT_detail = "", LASTUPDATEDON_detail = "", DEVELOPER_detail = "",
 			DVLPR_CODE_detail = "", PROJECT_detail = "", DEVLICNO_detail = "", DEVSOLICTOR_detail = "",
 			DVLPR_SOL_CODE_detail = "", DVLPR_LOC_detail = "", LSTCHG_BANKCODE_detail = "", LSTCHG_BANKNAME_detail = "",
-			LSTCHG_BRANCH_detail = "", LSTCHG_PANO_detail = "", LSTCHG_PRSTNO_detail = "";
+			LSTCHG_BRANCH_detail = "", LSTCHG_PANO_detail = "", LSTCHG_PRSTNO_detail = "",PROPERTYCHARGED="",TITLELINK="";
 
 	JSONArray arrayResponse;
 	JSONObject jsonResponse;
@@ -80,6 +82,11 @@ public class PropertyListActivity extends BaseActivity {
 
 		myArrayList = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("ProjectJsonList");
 
+		// Find the SharedPreferences Firstname
+					SharedPreferences FirstName = getSharedPreferences("LoginData", Context.MODE_PRIVATE);		
+					String FirName = FirstName.getString("FIRSETNAME", "");
+					TextView welcome = (TextView)findViewById(R.id.textView_welcome);		
+					welcome.setText("Welcome "+FirName);
 		// Adapter
 		SimpleAdapter simpleAdapter = new SimpleAdapter(PropertyListActivity.this, myArrayList,
 				R.layout.listview_column_property,
@@ -97,8 +104,8 @@ public class PropertyListActivity extends BaseActivity {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Toast.makeText(PropertyListActivity.this, "You Clicked at " + myArrayList.get(position),
-						Toast.LENGTH_SHORT).show();
+				//Toast.makeText(PropertyListActivity.this, "You Clicked at " + myArrayList.get(position),
+				//		Toast.LENGTH_SHORT).show();
 				System.out.println(position);
 				// Intent myIntent = new Intent(view.getContext(),
 				// PropertyActivity.class);
@@ -158,8 +165,8 @@ public class PropertyListActivity extends BaseActivity {
 						STATE_detail = jsonResponse.getString("STATE").toString();
 						AREA_detail = jsonResponse.getString("AREA").toString();
 
-						LOTAREA_SQM_details = jsonResponse.getString("LOTAREA_SQM").toString();
-						LOTAREA_SQFT_detail = jsonResponse.getString("LOTAREA_SQFT").toString();
+						//LOTAREA_SQM_details = jsonResponse.getString("LOTAREA_SQM").toString();
+						LOTAREA_SQFT_detail = jsonResponse.getString("LOTAREA").toString();
 						LASTUPDATEDON_detail = jsonResponse.getString("LASTUPDATEDON").toString();
 						DEVELOPER_detail = jsonResponse.getString("DEVELOPER").toString();
 						DVLPR_CODE_detail = jsonResponse.getString("DVLPR_CODE").toString();
@@ -173,6 +180,8 @@ public class PropertyListActivity extends BaseActivity {
 						LSTCHG_BRANCH_detail = jsonResponse.getString("LSTCHG_BRANCH").toString();
 						LSTCHG_PANO_detail = jsonResponse.getString("LSTCHG_PANO").toString();
 						LSTCHG_PRSTNO_detail = jsonResponse.getString("LSTCHG_PRSTNO").toString();
+						PROPERTYCHARGED = jsonResponse.getString("PROPERTYCHARGED").toString();
+						TITLELINK = jsonResponse.getString("TITLELINK").toString();
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -180,7 +189,7 @@ public class PropertyListActivity extends BaseActivity {
 
 					// Find Intent to call view property details
 					Intent i = new Intent(PropertyListActivity.this, PropertyActivity.class);
-					Toast.makeText(PropertyListActivity.this, "Item Clicked", Toast.LENGTH_SHORT).show();
+					//Toast.makeText(PropertyListActivity.this, "Item Clicked", Toast.LENGTH_SHORT).show();
 
 					// Send the property details in property UI through intent
 
@@ -256,7 +265,15 @@ public class PropertyListActivity extends BaseActivity {
 
 					i.putExtra("LSTCHG_PRSTNO_T", LSTCHG_PRSTNO_detail);
 					System.out.println(LSTCHG_PRSTNO_detail);
-
+					
+					i.putExtra("TITLELINK_T", TITLELINK);
+					System.out.println(TITLELINK);
+					
+					
+					
+					i.putExtra("PROPERTYCHARGED_T", PROPERTYCHARGED);
+					System.out.println(PROPERTYCHARGED);
+					
 					startActivity(i);
 
 				}

@@ -3,6 +3,14 @@ package com.abeo.tia.noordin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -14,13 +22,21 @@ import com.loopj.android.http.RequestParams;
 
 import abeo.tia.noordin.R;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -30,6 +46,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ZoomButton;
 
 @SuppressLint("Recycle")
 public class IndividualActivity extends BaseActivity {
@@ -44,17 +61,35 @@ public class IndividualActivity extends BaseActivity {
 	private final String METHOD_EDIT_INDIVIDUAL = "SPA_EditIndividual";
 	// Find FIND INDIVIDUAL related case web method
 	private final String METHOD_RELATEDCASE_CORPORATE = "SPA_RelatedCases";
+	
+	private static final String METHOD_ADDCASE_DOCUMENT = "SPA_AddCase_ScanIC";
 
 	// Find Navigation title
 	private String[] navMenuTitles;
 	private TypedArray navMenuIcons;
+	private File selectedFile;
+	public String fileName;
+	ProgressDialog dialog = null;
+	
+	String itemCode = "", itemName = "";
+	
+	/********** File Path *************/
+	int serverResponseCode = 0;
+	String upLoadServerUri = null;
+	String selectedImagePath;
+	final String uploadFilePath = Environment.getExternalStorageDirectory().getPath();
+	final String uploadFileName = "/go.png";
+	
+	ZoomButton btnpdf1, btnpdf2;
+	
+	String CARPORINDU = "INDIVIDUAL",FILEUPLOADRESULT = "",FILEUPLOADRESULT2="",pdflink1="",pdflink2="";
 
 	// Spinner element
 	Spinner spinnerTitle, spinnerGender, spinnerAddressToUSe;
 
 	// Find Button
 	Button buttonIndividualWalkIn, buttonIndividualFind, buttonIndividualAdd, buttonIndividualEdit,
-			buttonIndividualConfirm, buttonIndividualRelatedCases;
+			buttonIndividualConfirm, buttonIndividualRelatedCases,btnFontIc,btnBackIc;
 
 	// Find Edit Text field
 	EditText individualFullName, individualIdNo1, individualIdNo3, individualTax, individualMobile, individualTelephone,
@@ -63,7 +98,13 @@ public class IndividualActivity extends BaseActivity {
 			individualCrpAddress4, individualCrpAddress5, individualLastUpdate;
 
 	SimpleAdapter sAdap;
+	
+	private static final int REQUEST_PICK_FILE = 1;
+	private static final int REQUEST_PICK_FILE2 = 2;
 
+	private final String METHOD_ADDFILE = "http://54.251.51.69:3878/SPAMobile.asmx/Attachments";
+	
+	
 	// Find String passing in Individaul UI Response
 	String codeResponse, docEntryResponse, employeeNameResponse = "", titleResponse = "", genderResponse = "",
 			iDNo1Response = "", iDNo3Response = "", taxNoResponse = "", mobileNoResponse = "", telephoneResponse = "",
@@ -97,12 +138,23 @@ public class IndividualActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_individual);
+		
+		
 
 		// load titles from strings.xml
 		navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
 		// load icons from strings.xml
 		navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
 		set(navMenuTitles, navMenuIcons);
+		
+		btnpdf1 = (ZoomButton) findViewById(R.id.frntic);
+		btnpdf2 = (ZoomButton) findViewById(R.id.backic);
+		
+		// Find the SharedPreferences Firstname
+					SharedPreferences FirstName = getSharedPreferences("LoginData", Context.MODE_PRIVATE);		
+					String FirName = FirstName.getString("FIRSETNAME", "");
+					TextView welcome = (TextView)findViewById(R.id.textView_welcome);		
+					welcome.setText("Welcome "+FirName);
 
 		// Find Button by Id
 		buttonIndividualWalkIn = (Button) findViewById(R.id.button_IndividualWalkin);
@@ -111,6 +163,9 @@ public class IndividualActivity extends BaseActivity {
 		buttonIndividualEdit = (Button) findViewById(R.id.button_IndividualEdit);
 		buttonIndividualConfirm = (Button) findViewById(R.id.button_IndividualConfirm);
 		buttonIndividualRelatedCases = (Button) findViewById(R.id.button_IndividualRelateCases);
+		
+		btnFontIc = (Button) findViewById(R.id.button_AddCaseStep3FontIc);
+		btnBackIc = (Button) findViewById(R.id.button_AddCaseStep3BackIc);
 
 		// Find Edit Text field by Id
 		individualFullName = (EditText) findViewById(R.id.editText_IndividualFullName);
@@ -137,6 +192,8 @@ public class IndividualActivity extends BaseActivity {
 		spinnerTitle = (Spinner) findViewById(R.id.spinner_IndividualTitle);
 		spinnerGender = (Spinner) findViewById(R.id.spinner_IndividualGender);
 		spinnerAddressToUSe = (Spinner) findViewById(R.id.spinner_IndividualAddressToUse);
+		
+		
 
 		// Spinner Title click listener
 		spinnerTitle.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -147,7 +204,7 @@ public class IndividualActivity extends BaseActivity {
 				titleValue = textTitle.getText().toString();
 
 				// Showing selected spinner item
-				Toast.makeText(parent.getContext(), "Selected: " + titleValue, Toast.LENGTH_LONG).show();
+				//Toast.makeText(parent.getContext(), "Selected: " + titleValue, Toast.LENGTH_LONG).show();
 
 			}
 
@@ -168,7 +225,7 @@ public class IndividualActivity extends BaseActivity {
 				genderValue = textGender.getText().toString();
 
 				// Showing selected spinner item
-				Toast.makeText(parent.getContext(), "Selected: " + genderValue, Toast.LENGTH_LONG).show();
+				//Toast.makeText(parent.getContext(), "Selected: " + genderValue, Toast.LENGTH_LONG).show();
 
 			}
 
@@ -187,7 +244,7 @@ public class IndividualActivity extends BaseActivity {
 				textAddress = (TextView) view.findViewById(R.id.Id);
 				addressUseToValue = textAddress.getText().toString();
 				// Showing selected spinner item
-				Toast.makeText(parent.getContext(), "Selected: " + addressUseToValue, Toast.LENGTH_LONG).show();
+				//Toast.makeText(parent.getContext(), "Selected: " + addressUseToValue, Toast.LENGTH_LONG).show();
 
 			}
 
@@ -472,8 +529,125 @@ public class IndividualActivity extends BaseActivity {
 			lastUpdatedOnResponse = b.getString("LastUpdatedOn_T");
 			System.out.println(lastUpdatedOnResponse);
 			individualLastUpdate.setText(lastUpdatedOnResponse);
+			
+			FILEUPLOADRESULT= b.getString("FrontIC_T");
+			 FILEUPLOADRESULT2 = b.getString("BackIC_T");
+			 
+			
+			if(!FILEUPLOADRESULT.isEmpty())
+			{
+				System.out.println("DDDDD");
+				 System.out.println(FILEUPLOADRESULT);
+				btnpdf1.setClickable(true);
+				btnpdf1.setEnabled(true);
+			}
+			else
+			{
+				btnpdf1.setClickable(false);
+				btnpdf1.setEnabled(false);
+			}
+			
+			if(!FILEUPLOADRESULT2.isEmpty())
+			{
+				btnpdf2.setClickable(true);				
+				btnpdf2.setEnabled(true);
+			}
+			else
+			{
+				btnpdf2.setClickable(false);				
+				btnpdf2.setEnabled(false);
+			}
+			
+			
+			
+			
+			
+			
 
 		}
+		// Find on Front Ic  button click Listener
+		btnFontIc.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						//initiatePopupWindow();
+						System.out.println("Clicked btnFontIc");
+						Intent intent = new Intent(IndividualActivity.this, FilePicker.class);
+						startActivityForResult(intent, REQUEST_PICK_FILE);
+
+					}
+				});
+				
+		
+		// Find on Back Ic button click Listener
+		btnpdf1.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						//initiatePopupWindow();
+						System.out.println("Clicked btnBackIc");
+						 if(!FILEUPLOADRESULT.isEmpty())
+						   {
+							 String googleDocsUrl;
+							 String filenameArray[] = FILEUPLOADRESULT.split("\\.");
+						        String extension = filenameArray[filenameArray.length-1];
+								if(extension.equals("pdf"))
+									googleDocsUrl = "http://docs.google.com/viewer?url=http://54.251.51.69:3878"+ FILEUPLOADRESULT;
+								else			 
+									googleDocsUrl = "http://54.251.51.69:3878"+FILEUPLOADRESULT;
+						   
+						   Intent intent = new Intent(Intent.ACTION_VIEW);
+						   intent.setDataAndType(Uri.parse(googleDocsUrl ), "text/html");
+						   startActivity(intent);
+						   }
+						 else
+						 {
+							 slog("No Files Avilable to Display.");
+						 }
+
+					}
+				});
+		
+		// Find on Back Ic button click Listener
+		btnpdf2.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						//initiatePopupWindow();
+						System.out.println("Clicked btnBackIc");			
+						if(!FILEUPLOADRESULT2.isEmpty())
+						   {
+							String googleDocsUrl;
+							 String filenameArray[] = FILEUPLOADRESULT2.split("\\.");
+						        String extension = filenameArray[filenameArray.length-1];
+								if(extension.equals("pdf"))
+									googleDocsUrl = "http://docs.google.com/viewer?url=http://54.251.51.69:3878"+ FILEUPLOADRESULT2;
+								else			 
+									googleDocsUrl = "http://54.251.51.69:3878"+FILEUPLOADRESULT2;
+						   
+						   Intent intent = new Intent(Intent.ACTION_VIEW);
+						   intent.setDataAndType(Uri.parse(googleDocsUrl ), "text/html");
+						   startActivity(intent);
+						   }
+						else
+						 {
+							 slog("No Files Avilable to Display.");
+						 }
+
+					}
+				});
+				// Find on Back Ic button click Listener
+		btnBackIc.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						//initiatePopupWindow();
+						System.out.println("Clicked btnBackIc");
+						Intent intent = new Intent(IndividualActivity.this, FilePicker.class);
+						startActivityForResult(intent, REQUEST_PICK_FILE2);
+
+					}
+				});
 
 		// Find on Walkin button click Listener
 		buttonIndividualWalkIn.setOnClickListener(new OnClickListener() {
@@ -515,6 +689,15 @@ public class IndividualActivity extends BaseActivity {
 				buttonIndividualConfirm.setEnabled(true);
 				buttonIndividualConfirm.setClickable(true);
 				buttonIndividualConfirm.setTextColor(getApplication().getResources().getColor(R.color.royalBlue));
+				
+				btnBackIc.setClickable(true);
+				btnFontIc.setClickable(true);
+				btnpdf1.setClickable(true);
+				btnpdf2.setClickable(true);
+				btnpdf1.setEnabled(true);
+				btnpdf2.setEnabled(true);
+				
+				
 				
 			}
 		});
@@ -609,6 +792,13 @@ public class IndividualActivity extends BaseActivity {
 
 			}
 		});
+		
+		btnBackIc.setClickable(false);
+		btnFontIc.setClickable(false);
+		//btnpdf1.setClickable(false);
+		//btnpdf2.setClickable(false);
+		//btnpdf1.setEnabled(false);
+		//btnpdf2.setEnabled(false);
 
 		// Find on confirm button click listener
 		buttonIndividualConfirm.setOnClickListener(new OnClickListener() {
@@ -767,7 +957,7 @@ public class IndividualActivity extends BaseActivity {
 												// block
 						e.printStackTrace();
 					}
-					Toast.makeText(IndividualActivity.this, "Case Item Found", Toast.LENGTH_SHORT).show();
+					//Toast.makeText(IndividualActivity.this, "Case Item Found", Toast.LENGTH_SHORT).show();
 					Intent intentList = new Intent(IndividualActivity.this, PropertyRelatedCaseListActivity.class);
 					intentList.putExtra("ProjectJsonList", jsonCaselist);
 					startActivity(intentList);
@@ -1104,7 +1294,18 @@ public class IndividualActivity extends BaseActivity {
 	// Find addDataIndividualDetails function
 	public void addDataIndividualDetails() {
 
-		Toast.makeText(IndividualActivity.this, "Add individual", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(IndividualActivity.this, "Add individual", Toast.LENGTH_SHORT).show();
+		// Find the SharedPreferences pass Login value
+				SharedPreferences prefLoginReturn = getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+				System.out.println("LOGIN DATA");
+				String userName = prefLoginReturn.getString("sUserName", "");
+				
+				String category = prefLoginReturn.getString("sCategory", "");
+				System.out.println(category);
+				String CardCode = prefLoginReturn.getString("CardCode", "");
+				System.out.println(CardCode);
+				
+				
 		/*
 		 * { "Code": "", "DocEntry": "", "EmployeeName": "Vino", "Title": "MR",
 		 * "Gender": "LELAKI", "IDNo1": "484424-08-5248", "IDNo3": "7584298",
@@ -1117,9 +1318,15 @@ public class IndividualActivity extends BaseActivity {
 		 */
 		// Passing value in JSON format in first fields
 		JSONObject jsonObject = new JSONObject();
+		
+		
 
 		try {
 
+			jsonObject.put("CardCode", CardCode);
+			jsonObject.put("Code", codeResponse);
+			jsonObject.put("DocEntry", "");
+			jsonObject.put("IDType", CARPORINDU);
 			jsonObject.put("EmployeeName", individualFullName.getText().toString());
 			jsonObject.put("Title", titleValue);
 			jsonObject.put("Gender", genderValue);
@@ -1141,6 +1348,10 @@ public class IndividualActivity extends BaseActivity {
 			jsonObject.put("CorresAddr5", individualCrpAddress5.getText().toString());
 			jsonObject.put("AddressToUse", addressUseToValue);
 			jsonObject.put("LastUpdatedOn", individualLastUpdate.getText().toString());
+			
+			jsonObject.put("ScanFrontICLocation", pdflink1);
+			
+			jsonObject.put("ScanBackICLocation", pdflink2);
 
 			RequestParams params = new RequestParams();
 			params.put("sJsonInput", jsonObject.toString());
@@ -1203,7 +1414,7 @@ public class IndividualActivity extends BaseActivity {
 	}
 
 	public void editDataIndividualDetails() {
-		Toast.makeText(IndividualActivity.this, "Edit individual", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(IndividualActivity.this, "Edit individual", Toast.LENGTH_SHORT).show();
 		// Passing value in JSON format in first fields
 		JSONObject jsonObject = new JSONObject();
 
@@ -1301,5 +1512,689 @@ public class IndividualActivity extends BaseActivity {
 		}
 
 	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		if (resultCode == RESULT_OK) {
+
+			switch (requestCode) {
+
+			case REQUEST_PICK_FILE:
+
+				if (data.hasExtra(FilePicker.EXTRA_FILE_PATH)) {
+
+					selectedFile = new File(data.getStringExtra(FilePicker.EXTRA_FILE_PATH));
+					fileName = selectedFile.getPath();
+					dialog = ProgressDialog.show(IndividualActivity.this, "", "Uploading file...", true);
+					 new Thread(new Runnable() {
+		                    public void run() {              
+		                    	uploadFile(fileName);
+		                    	
+		                    	
+		                    }
+		                }).start();
+					
+				}
+				break;
+			case REQUEST_PICK_FILE2:
+
+				if (data.hasExtra(FilePicker.EXTRA_FILE_PATH)) {
+
+					selectedFile = new File(data.getStringExtra(FilePicker.EXTRA_FILE_PATH));
+					fileName = selectedFile.getPath();
+					dialog = ProgressDialog.show(IndividualActivity.this, "", "Uploading file...", true);
+					 new Thread(new Runnable() {
+		                    public void run() {              
+		                    	uploadFile2(fileName);
+		                    	
+		                    	
+		                    }
+		                }).start();
+				}
+				break;
+			}
+		}
+	}
+	
+	
+
+	public void addCaseDocumentToRead2() {
+		
+		// Find the SharedPreferences pass Login value
+		SharedPreferences prefLoginReturn = getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+		System.out.println("LOGIN DATA");
+		String userName = prefLoginReturn.getString("sUserName", "");
+		
+		String category = prefLoginReturn.getString("sCategory", "");
+		System.out.println(category);
+		String CardCode = prefLoginReturn.getString("CardCode", "");
+		System.out.println(CardCode);
+		
+		/*
+		 * { "ItemCode": "200046", "ItemName": "ORIGINAL PROPERTY TITLE",
+		 * "FileName": "", "DocBinaryArray": "", "CardCode": "1500000134" }
+		 */
+		// File from File Path
+		String file = fileName.substring(fileName.lastIndexOf('/') + 1);
+		System.out.println(file);
+		System.out.println("ok add case");
+
+		// Passing value in JSON format in first fields
+		JSONObject jsonObject = new JSONObject();
+
+		// jsonObject.put("Category", "SPA");
+		try {
+			
+
+			// Find the SharedPreferences value
+			SharedPreferences ItemData = getSharedPreferences("ItemData", Context.MODE_PRIVATE);
+			System.out.println("ItemData");
+			String ItemCode = ItemData.getString("ItemCode", "");
+			System.out.println(ItemCode);
+			String ItemName = ItemData.getString("ItemName", "");
+			System.out.println(ItemName);
+			
+			
+			
+			System.out.println("Param Inputs");
+			jsonObject.put("ItemCode", ItemCode);
+			System.out.println(itemCode);
+			jsonObject.put("ItemName", ItemName);
+			System.out.println(itemName);
+			jsonObject.put("FileName", FILEUPLOADRESULT2);
+			System.out.println(fileName);
+			//jsonObject.put("sDoc", "");
+			//System.out.println(sb);
+			jsonObject.put("ICType", "Back");
+			System.out.println(CardCode);
+
+			RequestParams params = new RequestParams();
+			params.put("sJsonInput", jsonObject.toString());
+			System.out.println("params");
+			System.out.println(params);
+
+			RestService.post(METHOD_ADDCASE_DOCUMENT, params, new BaseJsonHttpResponseHandler<String>() {
+
+				@Override
+				public void onFailure(int arg0, Header[] arg1, Throwable arg2, String arg3, String arg4) {
+					// TODO Auto-generated method stub
+					System.out.println(arg3);
+					dialog.dismiss();
+
+				}
+
+				@Override
+				public void onSuccess(int arg0, Header[] arg1, String arg2, String arg3) {
+					// TODO Auto-generated method stub
+					System.out.println("Document Send  Confirmed");
+					System.out.println(arg2);
+					try {
+						JSONArray arry = new JSONArray(arg2.toString());				
+						jsonResponse = arry.getJSONObject(0);
+						//setavalubyRC(jsonResponse);
+					} catch (JSONException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					
+
+					String StatusResult = null;
+					String messageDisplay = null;
+					// Find status Response
+					try {
+						//StatusResult = jsonResponse.getString("Result").toString();
+						messageDisplay = jsonResponse.getString("Message").toString();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+
+						
+						dialog.dismiss();
+						try {
+							setallvalues2(jsonResponse);
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					
+				}
+
+				private void setFIC2(String fileName) {
+					// TODO Auto-generated method stub
+					//ImageView imageView=(ImageView) findViewById(R.id.ImageView_AddCaseStep3BackIc);
+					//Picasso.with(context).load("http://54.251.51.69:3878/FileUpload/"+FILEUPLOADRESULT).into(imageView);
+					
+				}
+
+				@Override
+				protected String parseResponse(String arg0, boolean arg1) throws Throwable {
+
+					// Get Json response
+					arrayResponse = new JSONArray(arg0);
+					jsonResponse = arrayResponse.getJSONObject(0);
+
+					System.out.println("Document Details ParseResponse");
+					System.out.println(arg0);
+					return null;
+				}
+			});
+
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+
+	public void addCaseDocumentToRead() {
+		
+		// Find the SharedPreferences pass Login value
+		SharedPreferences prefLoginReturn = getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+		System.out.println("LOGIN DATA");
+		String userName = prefLoginReturn.getString("sUserName", "");
+		
+		String category = prefLoginReturn.getString("sCategory", "");
+		System.out.println(category);
+		String CardCode = prefLoginReturn.getString("CardCode", "");
+		System.out.println(CardCode);
+		
+		/*
+		 * { "ItemCode": "200046", "ItemName": "ORIGINAL PROPERTY TITLE",
+		 * "FileName": "", "DocBinaryArray": "", "CardCode": "1500000134" }
+		 */
+		// File from File Path
+		String file = fileName.substring(fileName.lastIndexOf('/') + 1);
+		System.out.println(file);
+		System.out.println("ok add case");
+
+		// Passing value in JSON format in first fields
+		JSONObject jsonObject = new JSONObject();
+
+		// jsonObject.put("Category", "SPA");
+		try {
+			
+			// Find confirmation message
+			// messageResult = jsonObject.getString("Result").toString();
+			
+			// Find the SharedPreferences value
+			SharedPreferences ItemData = getSharedPreferences("ItemData", Context.MODE_PRIVATE);
+			System.out.println("ItemData");
+			String ItemCode = ItemData.getString("ItemCode", "");
+			System.out.println(ItemCode);
+			String ItemName = ItemData.getString("ItemName", "");
+			System.out.println(ItemName);
+			
+			
+			
+			System.out.println("Param Inputs");
+			jsonObject.put("ItemCode", ItemCode);
+			System.out.println(itemCode);
+			jsonObject.put("ItemName", ItemName);
+			System.out.println(itemName);
+			jsonObject.put("FileName", FILEUPLOADRESULT);
+			System.out.println(fileName);
+			//jsonObject.put("sDoc", "");
+			//System.out.println(sb);
+			jsonObject.put("ICType", "Front");
+			//System.out.println(CardCode);
+
+			RequestParams params = new RequestParams();
+			params.put("sJsonInput", jsonObject.toString());
+			System.out.println("params");
+			System.out.println(params);
+
+			RestService.post(METHOD_ADDCASE_DOCUMENT, params, new BaseJsonHttpResponseHandler<String>() {
+
+				@Override
+				public void onFailure(int arg0, Header[] arg1, Throwable arg2, String arg3, String arg4) {
+					// TODO Auto-generated method stub
+					System.out.println(arg3);
+					dialog.dismiss();
+
+				}
+
+				@Override
+				public void onSuccess(int arg0, Header[] arg1, String arg2, String arg3) {
+					// TODO Auto-generated method stub
+					System.out.println("Document Send  Confirmed");
+					System.out.println(arg2);
+					
+					try {
+						JSONArray arry = new JSONArray(arg2.toString());				
+						jsonResponse = arry.getJSONObject(0);
+						setavalubyRC(jsonResponse);
+					} catch (JSONException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+					String StatusResult = null;
+					String messageDisplay = null;
+					// Find status Response
+					try {
+						//StatusResult = jsonResponse.getString("Result").toString();
+						messageDisplay = jsonResponse.getString("Message").toString();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+						 dialog.dismiss();
+							
+						
+							
+
+					
+					
+				}
+
+				
+				@Override
+				protected String parseResponse(String arg0, boolean arg1) throws Throwable {
+
+					// Get Json response
+					arrayResponse = new JSONArray(arg0);
+					jsonResponse = arrayResponse.getJSONObject(0);
+
+					System.out.println("Document Details ParseResponse");
+					System.out.println(arg0);
+					return null;
+				}
+			});
+
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	
+
+	public void setavalubyRC(Object data) throws JSONException {
+		
+	
+
+		//Toast.makeText(IndividualActivity.this, "You Clicked at " + data,
+			//	Toast.LENGTH_LONG).show();
+		JSONObject jObj =  new JSONObject(data.toString());
+		//JSONObject jObj = arr.getJSONObject(0);
+		System.out.println(jObj);
+		
+		
+		
+		individualFullName.setText(jObj.getString("EmployeeName"));
+		individualIdNo1.setText(jObj.getString("IDNo1"));
+		individualIdNo3.setText(jObj.getString("IDNo3"));
+		individualTax.setText(jObj.getString("TaxNo"));
+		individualMobile.setText(jObj.getString("MobileNo"));
+		individualTelephone.setText(jObj.getString("Telephone"));
+		individualOffice.setText(jObj.getString("OfficeNo"));
+		
+		individualIdAddress1.setText(jObj.getString("IDAddress1"));
+		individualIdAddress2.setText(jObj.getString("IDAddress2"));
+		individualIdAddress3.setText(jObj.getString("IDAddress3"));
+		individualIdAddress4.setText(jObj.getString("IDAddress4"));
+		individualIdAddress5.setText(jObj.getString("IDAddress5"));
+		
+		individualCrpAddress1.setText(jObj.getString("CorresAddr1"));
+		individualCrpAddress2.setText(jObj.getString("CorresAddr2"));
+		individualCrpAddress3.setText(jObj.getString("CorresAddr3"));
+		individualCrpAddress4.setText(jObj.getString("CorresAddr4"));
+		individualCrpAddress5.setText(jObj.getString("CorresAddr5"));
+
+		individualFullName.requestFocus();
+		
+		pdflink1= jObj.getString("ScanFrontICLocation");
+		
+		codeResponse = jObj.getString("Code");
+		
+		//spinnerpropertyTitleType.setEnabled(false);
+		//spinnerpropertyGENDER.setEnabled(false);
+		//spinnerpropertyaddressToUse.setEnabled(false);
+		
+	}
+	
+	
+	
+	public int uploadFile2(String sourceFileUri) {
+
+        String fileName = sourceFileUri;
+
+        HttpURLConnection conn = null;
+        DataOutputStream dos = null;  
+        String lineEnd = "\r\n";
+        String twoHyphens = "--";
+        String boundary = "*****";
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1 * 1024 * 1024; 
+        File sourceFile = new File(sourceFileUri); 
+
+        if (!sourceFile.isFile()) {
+            dialog.dismiss(); 
+            Log.e("uploadFile", "Source File not exist :" +fileName);
+            return 0;
+        }
+        else
+        {
+            try { 
+
+                // open a URL connection to the Servlet
+                FileInputStream fileInputStream = new FileInputStream(sourceFile);
+                URL url = new URL(METHOD_ADDFILE);
+
+                // Open a HTTP  connection to  the URL
+                conn = (HttpURLConnection) url.openConnection(); 
+                conn.setDoInput(true); // Allow Inputs
+                conn.setDoOutput(true); // Allow Outputs
+                conn.setUseCaches(false); // Don't use a Cached Copy
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Connection", "Keep-Alive");
+                conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+                conn.setRequestProperty("uploaded_file", fileName); 
+
+                dos = new DataOutputStream(conn.getOutputStream());
+
+                dos.writeBytes(twoHyphens + boundary + lineEnd); 
+                dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename="+ fileName + "" + lineEnd);
+                dos.writeBytes(lineEnd);
+
+                // create a buffer of  maximum size
+                bytesAvailable = fileInputStream.available(); 
+
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                buffer = new byte[bufferSize];
+
+                // read file and write it into form...
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize);  
+
+                while (bytesRead > 0) {
+
+                    dos.write(buffer, 0, bufferSize);
+                    bytesAvailable = fileInputStream.available();
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);   
+
+                }
+
+                // send multipart form data necesssary after file data...
+                dos.writeBytes(lineEnd);
+                dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+                // Responses from the server (code and message)
+                serverResponseCode = conn.getResponseCode();
+                //serverResponseCode = conn.getContent();
+               // String serverResponseMessage = conn.getResponseMessage();
+                String serverResponseMessage = conn.getContentEncoding();
+
+                Log.i("uploadFile", "HTTP Response is 2 : "+ serverResponseMessage + ": " + serverResponseCode);
+                
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line+"\n");
+                }
+                br.close();
+                JSONArray arry = new JSONArray(sb.toString());
+                System.out.println(arry);
+                JSONObject RESULT = arry.getJSONObject(0);
+                FILEUPLOADRESULT2 = RESULT.get("Result").toString(); 
+
+                if(serverResponseCode == 200){
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                 
+                            addCaseDocumentToRead2();
+                        }
+                    });
+                    
+                }    
+
+                //close the streams //
+                fileInputStream.close();
+                dos.flush();
+                dos.close();
+                
+                
+                
+                
+                
+                
+
+            } catch (MalformedURLException ex) {
+
+                //dialog.dismiss();  
+                ex.printStackTrace();
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+
+                        Toast.makeText(IndividualActivity.this, "MalformedURLException", 
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                Log.e("Upload file to server", "error: " + ex.getMessage(), ex);  
+            } catch (Exception e) {
+
+                //dialog.dismiss();  
+                e.printStackTrace();
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+
+                        Toast.makeText(IndividualActivity.this, "Got Exception : see logcat ", 
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+                Log.e("Upload file to server Exception", "Exception : "
+                        + e.getMessage(), e);  
+            }
+            //dialog.dismiss();       
+            return serverResponseCode; 
+
+        } // End else block 
+    } 
+	
+
+	public int uploadFile(String sourceFileUri) {
+
+        String fileName = sourceFileUri;
+
+        HttpURLConnection conn = null;
+        DataOutputStream dos = null;  
+        String lineEnd = "\r\n";
+        String twoHyphens = "--";
+        String boundary = "*****";
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1 * 1024 * 1024; 
+        File sourceFile = new File(sourceFileUri); 
+
+        if (!sourceFile.isFile()) {
+            dialog.dismiss(); 
+            Log.e("uploadFile", "Source File not exist :" +fileName);
+            return 0;
+        }
+        else
+        {
+            try { 
+
+                // open a URL connection to the Servlet
+                FileInputStream fileInputStream = new FileInputStream(sourceFile);
+                URL url = new URL(METHOD_ADDFILE);
+
+                // Open a HTTP  connection to  the URL
+                conn = (HttpURLConnection) url.openConnection(); 
+                conn.setDoInput(true); // Allow Inputs
+                conn.setDoOutput(true); // Allow Outputs
+                conn.setUseCaches(false); // Don't use a Cached Copy
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Connection", "Keep-Alive");
+                conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+                conn.setRequestProperty("uploaded_file", fileName); 
+
+                dos = new DataOutputStream(conn.getOutputStream());
+
+                dos.writeBytes(twoHyphens + boundary + lineEnd); 
+                dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename="+ fileName + "" + lineEnd);
+                dos.writeBytes(lineEnd);
+
+                // create a buffer of  maximum size
+                bytesAvailable = fileInputStream.available(); 
+
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                buffer = new byte[bufferSize];
+
+                // read file and write it into form...
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize);  
+
+                while (bytesRead > 0) {
+
+                    dos.write(buffer, 0, bufferSize);
+                    bytesAvailable = fileInputStream.available();
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);   
+
+                }
+
+                // send multipart form data necesssary after file data...
+                dos.writeBytes(lineEnd);
+                dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+                // Responses from the server (code and message)
+                serverResponseCode = conn.getResponseCode();
+                //serverResponseCode = conn.getContent();
+               // String serverResponseMessage = conn.getResponseMessage();
+                String serverResponseMessage = conn.getContentEncoding();
+
+                Log.i("uploadFile", "HTTP Response is 1 : "+ serverResponseMessage + ": " + serverResponseCode);
+                
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line+"\n");
+                }
+                br.close();
+                JSONArray arry = new JSONArray(sb.toString());
+                System.out.println(arry);
+                JSONObject RESULT = arry.getJSONObject(0);
+                FILEUPLOADRESULT = RESULT.get("Result").toString(); 
+
+                if(serverResponseCode == 200){
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                 
+                            addCaseDocumentToRead();
+                        }
+                    });
+                    
+                }    
+
+                //close the streams //
+                fileInputStream.close();
+                dos.flush();
+                dos.close();
+                
+                
+                
+                
+                
+                
+
+            } catch (MalformedURLException ex) {
+
+                //dialog.dismiss();  
+                ex.printStackTrace();
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+
+                        Toast.makeText(IndividualActivity.this, "MalformedURLException", 
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                Log.e("Upload file to server", "error: " + ex.getMessage(), ex);  
+            } catch (Exception e) {
+
+                //dialog.dismiss();  
+                e.printStackTrace();
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+
+                        Toast.makeText(IndividualActivity.this, "Got Exception : see logcat ", 
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+                Log.e("Upload file to server Exception", "Exception : "
+                        + e.getMessage(), e);  
+            }
+            //dialog.dismiss();       
+            return serverResponseCode; 
+
+        } // End else block 
+    } 
+	
+
+	public void setallvalues2(Object data) throws JSONException {
+
+		
+		//JSONObject jObj =  new JSONObject(data.toString());
+		JSONObject jObj = (JSONObject) data;
+		//JSONObject jObj = arr.getJSONObject(0);
+		
+		System.out.println(jObj);
+		individualIdNo3.setText(jObj.getString("IDNo3"));
+		pdflink2=jObj.getString("ScanBackICLocation");
+		/*EFullName.setText(jObj.getString("EmployeeName"));
+		IDn1.setText(jObj.getString("IDNo1"));
+		
+		Taxno.setText(jObj.getString("TaxNo"));
+		mobile.setText(jObj.getString("MobileNo"));
+		Telephone.setText(jObj.getString("Telephone"));
+		Office.setText(jObj.getString("OfficeNo"));
+		idaddress1.setText(jObj.getString("IDAddress1"));
+		idaddress2.setText(jObj.getString("IDAddress2"));
+		idaddress3.setText(jObj.getString("IDAddress3"));
+		idaddress4.setText(jObj.getString("IDAddress4"));
+		idaddress5.setText(jObj.getString("IDAddress5"));
+		comaddress1.setText(jObj.getString("CorresAddr1"));
+		comaddress2.setText(jObj.getString("CorresAddr2"));
+		comaddress3.setText(jObj.getString("CorresAddr3"));
+		comaddress4.setText(jObj.getString("CorresAddr4"));
+		comaddress5.setText(jObj.getString("CorresAddr5"));*/
+		
+		
+	}
+	
+	
+	public void slog(String s)
+	{
+		Toast.makeText(IndividualActivity.this, s, Toast.LENGTH_LONG).show();
+	}
+	
+	
+	public boolean dispatchTouchEvent(MotionEvent ev) {	       
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.
+                INPUT_METHOD_SERVICE);
+imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        return super.dispatchTouchEvent(ev);
+
+        } 
 
 }

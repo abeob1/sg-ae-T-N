@@ -26,23 +26,25 @@
     <!-- End String for Dash board -->
 
     <string-array name="nav_drawer_items">
-        <item>CASE ENQUIRY</item>
+       <item>CASE ENQUIRY</item>
         <item>PROPERTY ENQUIRY</item>
         <item>INDIVIDUAL ENQUIRY</item>
         <item>CORPORATE ENQUIRY</item>
         <item>ADD CASE</item>
         <item>DASHBOARD</item>
         <item>LOGOUT</item>
+       
     </string-array>
 
     <array name="nav_drawer_icons">
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/error</item>
+       <item>@drawable/icon1</item>
+        <item>@drawable/icon2</item>
+        <item>@drawable/icon3</item>
+        <item>@drawable/icon4</item>
+        <item>@drawable/icon5</item>
+        <item>@drawable/icon6</item>
+        <item>@drawable/icon7</item>
+      
     </array>
 
     <!-- End String for Add Questions -->

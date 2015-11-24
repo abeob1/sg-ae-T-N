@@ -63,7 +63,7 @@ public class AddCaseQuestion4 extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(AddCaseQuestion4.this, "UC", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(AddCaseQuestion4.this, "UC", Toast.LENGTH_SHORT).show();
 				// On Sub Sell click save related data in shared preference
 				SharedPreferences prefQuest4Uc = getSharedPreferences("AddCaseQuestion4Uc", context.MODE_PRIVATE);
 				// We need an editor object to make changes
@@ -76,7 +76,7 @@ public class AddCaseQuestion4 extends BaseActivity {
 				// Find the SharedPreferences value
 				SharedPreferences prefQuest4UcReturn = getSharedPreferences("AddCaseQuestion4Uc", Context.MODE_PRIVATE);
 				qryGroup10 = prefQuest4UcReturn.getString("QryGroup10", "");
-				Toast.makeText(AddCaseQuestion4.this, "QryGroup10:" + qryGroup10, Toast.LENGTH_SHORT).show();
+				//Toast.makeText(AddCaseQuestion4.this, "QryGroup10:" + qryGroup10, Toast.LENGTH_SHORT).show();
 
 				// Intent ucIntent = new Intent(AddCaseQuestion4.this,
 				// AddCaseStep1of4.class);
@@ -92,7 +92,7 @@ public class AddCaseQuestion4 extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(AddCaseQuestion4.this, "Completed", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(AddCaseQuestion4.this, "Completed", Toast.LENGTH_SHORT).show();
 				// On Sub Sell click save related data in shared preference
 				SharedPreferences prefQuest4Completed = getSharedPreferences("AddCaseQuestion4Completed",
 						context.MODE_PRIVATE);

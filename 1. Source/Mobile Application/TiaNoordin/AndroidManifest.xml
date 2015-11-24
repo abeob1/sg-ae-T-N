@@ -17,6 +17,7 @@
         android:xlargeScreens="true" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -27,10 +28,13 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar" 
+        >
+        
         <activity
             android:name="com.abeo.tia.noordin.LoginActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -118,6 +122,63 @@
             android:name="com.abeo.tia.noordin.PdfViewer"
             android:screenOrientation="landscape" >
         </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.ProcessCaseDetails"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.ProcessCasePurchaser"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.ProcessCaseVendor"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.abeo.tia.noordin.ProcessCaseProperty"
+            android:screenOrientation="landscape" >
+        </activity>
+       
+        <activity
+            android:name="com.abeo.tia.noordin.ProcessCaseLoanPrincipal"
+            android:screenOrientation="landscape" >
+        </activity>
+        
+        <activity
+            android:name="com.abeo.tia.noordin.ProcessCaseProcessTab"
+            android:screenOrientation="landscape" >
+        </activity>
+        
+         <activity
+            android:name="com.abeo.tia.noordin.OutStandingActivity"
+            android:screenOrientation="landscape" >
+        </activity>
+        
+          <activity
+            android:name="com.abeo.tia.noordin.ActionActivity"
+            android:screenOrientation="landscape" >
+        </activity>
+        
+           <activity
+            android:name="com.abeo.tia.noordin.OpenActivity"
+            android:screenOrientation="landscape" >
+        </activity>
+         <activity
+            android:name="com.abeo.tia.noordin.CaseEnq_Activity"
+            android:screenOrientation="landscape" >
+        </activity>
+         <activity
+            android:name="com.abeo.tia.noordin.CaseEnqActivity"
+            android:screenOrientation="landscape" >
+        </activity>
+         <activity
+            android:name="com.abeo.tia.noordin.ProcesscaseLoanSubsidiary"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity android:name="com.abeo.tia.noordin.DirectoryPicker"
+            android:screenOrientation="landscape" />
+         <activity android:name="com.abeo.tia.noordin.Settings"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

@@ -1,15 +1,19 @@
 package com.abeo.tia.noordin;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,10 +40,14 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -54,15 +62,20 @@ public class AddCaseStep1of4 extends BaseActivity implements OnClickListener {
 	// http://54.251.51.69:3878/SPAMobile.asmx?op=SPA_AddCase_ListOfItems
 	// Find list of Add Case Item list web method
 	private final String METHOD_ADDCASE_ITEMLIST = "SPA_AddCase_ListOfItems";
-	private final String METHOD_ADDFILE = "/SPAMobile.asmx/Attachments";
+	private final String SPA_AddCase_DocumentToRead = "SPA_AddCase_DocumentToRead";
+	
+	private final String METHOD_ADDFILE = "http://54.251.51.69:3878/SPAMobile.asmx/Attachments";
+	
 	
 
 	EditText edittextFile;
 	Button buttonChooseDoc, buttonFileBrowser, buttonOk, buttonCancle;
 	ListView listViewItem;
-
+	String upLoadServerUri1 = null;
+	
+	int RESULTRES;
 	// Find Case list items
-	String AddCaseListItemNo_detail = "", AddCaseList_ItemName_detail = "";
+	String AddCaseListItemNo_detail = "", AddCaseList_ItemName_detail = "", FILEUPLOADRESULT = "";
 
 	TextView messageText;
 	ProgressDialog dialog = null;
@@ -72,16 +85,16 @@ public class AddCaseStep1of4 extends BaseActivity implements OnClickListener {
 	String upLoadServerUri = null;
 	private static final int REQUEST_PICK_FILE = 1;
 
-	private static final Object CardCodeResponse = null;
 
-	private static final String METHOD_ADDCASE_DOCUMENT = null;
-	String selectedImagePath;
+	private static final String METHOD_ADDCASE_DOCUMENT = "SPA_AddCase_DocumentToRead";
+	String selectedImagePath,CardCodeResponse;
 	private TextView filePath, msg, pdf;
-	Button Browse, Convert;
+	Button Browse, Convert,walkin;
 	private File selectedFile;
 	public String fileName;
 	String encodedString = "";
 	StringBuilder sb;
+	
 	
 	
 	final String uploadFilePath = Environment.getExternalStorageDirectory().getPath();
@@ -105,13 +118,28 @@ public class AddCaseStep1of4 extends BaseActivity implements OnClickListener {
 		// load icons from strings.xml
 		navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
 		set(navMenuTitles, navMenuIcons);
-		Toast.makeText(AddCaseStep1of4.this, "reachec in AddCaseStep1of 4", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(AddCaseStep1of4.this, "reachec in AddCaseStep1of 4", Toast.LENGTH_SHORT).show();
+		
+		
+		upLoadServerUri1 = "http://54.251.51.69:3878/upload.php";
+		
 		
 		// Find the SharedPreferences Firstname
-				SharedPreferences FirstName = getSharedPreferences("FirstName", Context.MODE_PRIVATE);		
-				String FirName = FirstName.getString("FirstName", "");
+				SharedPreferences FirstName = getSharedPreferences("LoginData", Context.MODE_PRIVATE);		
+				String FirName = FirstName.getString("FIRSETNAME", "");
 				TextView welcome = (TextView)findViewById(R.id.textView_welcome);		
 				welcome.setText("Welcome "+FirName);
+				
+				// Find the SharedPreferences pass Login value
+				SharedPreferences prefLoginReturn = getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+				System.out.println("LOGIN DATA");
+				String userName = prefLoginReturn.getString("sUserName", "");
+				
+				String category = prefLoginReturn.getString("sCategory", "");
+				System.out.println(category);
+				String CardCode = prefLoginReturn.getString("CardCode", "");
+				System.out.println(CardCode);
+				CardCodeResponse = CardCode;
 
 		// Find Mesaage Text and Edit field by Id
 		messageText = (TextView) findViewById(R.id.messageText);
@@ -121,7 +149,7 @@ public class AddCaseStep1of4 extends BaseActivity implements OnClickListener {
 		listViewItem = (ListView) findViewById(R.id.listview_addCaseStep1Doc);
 
 		// Find button by Id
-		//buttonChooseDoc = (Button) findViewById(R.id.button_AddCaseStep1ChooseDoc);
+		walkin = (Button) findViewById(R.id.button_AddCaseStep1Walkin);
 		buttonFileBrowser = (Button) findViewById(R.id.button_AddCaseStep1Browser);
 		buttonOk = (Button) findViewById(R.id.button_AddCaseStep1Ok);
 		buttonCancle = (Button) findViewById(R.id.button_AddCaseStep1Cancle);
@@ -133,9 +161,19 @@ public class AddCaseStep1of4 extends BaseActivity implements OnClickListener {
 		buttonFileBrowser.setOnClickListener(this);
 		buttonOk.setOnClickListener(this);
 		buttonCancle.setOnClickListener(this);
+		walkin.setOnClickListener(this);
 
 	}
 
+	
+	 public boolean dispatchTouchEvent(MotionEvent ev) {	       
+	        InputMethodManager imm = (InputMethodManager)getSystemService(Context.
+                    INPUT_METHOD_SERVICE);
+imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+	        return super.dispatchTouchEvent(ev);
+
+	        } 
+	 
 	@Override
 	public void onClick(View v) {
 		if (v == buttonChooseDoc) {
@@ -143,7 +181,15 @@ public class AddCaseStep1of4 extends BaseActivity implements OnClickListener {
 			dialog = ProgressDialog.show(AddCaseStep1of4.this, "", "Uploading file...", true);
 			addCaseListOfItems();
 
-		} else if (v == buttonFileBrowser) {
+		}
+		 else if (v == buttonCancle) {		
+				
+				Intent intent = new Intent(this, AddCaseQuestion1.class);
+				startActivityForResult(intent, REQUEST_PICK_FILE);
+
+				dialog.dismiss();
+			}
+		 else if (v == buttonFileBrowser) {
 			System.out.println("workingthom");
 			dialog = ProgressDialog.show(AddCaseStep1of4.this, "", "Uploading file...", true);
 			Intent intent = new Intent(this, FilePicker.class);
@@ -153,15 +199,29 @@ public class AddCaseStep1of4 extends BaseActivity implements OnClickListener {
 		} else if (v == buttonOk) {
 			
 			String ed_text = edittextFile.getText().toString().trim();
-			if(ed_text.isEmpty() || ed_text.length() == 0 || ed_text.equals("") || ed_text == null)
+			if(ed_text.isEmpty() || ed_text.length() == 0 || ed_text.equals("") || ed_text == null || itemCode.isEmpty() || itemCode.length() == 0 || itemCode.equals("") || itemCode == null)
 			{
-				Toast.makeText(AddCaseStep1of4.this, "Select File To load..", Toast.LENGTH_SHORT).show();
+				Toast.makeText(AddCaseStep1of4.this, "Kindly Select Item / File", Toast.LENGTH_LONG).show();
 			}
 			else
 			{
 				dialog = ProgressDialog.show(AddCaseStep1of4.this, "", "Uploading file...", true);
-				Intent qIntent = new Intent(AddCaseStep1of4.this, AddCaseStep2of4.class);			
-				startActivity(qIntent);				
+				 new Thread(new Runnable() {
+	                    public void run() {              
+	                    	RESULTRES = uploadFile(fileName);
+	                    	
+	                    	
+	                    }
+	                }).start();  
+				 
+				/* if(RESULTRES==200)
+   					 addCaseDocumentToRead();
+   				 else
+   					 Toast.makeText(AddCaseStep1of4.this, "File Not Uploading.. Check your File.", Toast.LENGTH_SHORT).show();*/
+				 
+				
+				//Intent qIntent = new Intent(AddCaseStep1of4.this, AddCaseStep2of4.class);			
+				//startActivity(qIntent);				
 			}
 			
 			//convertBinary();
@@ -169,141 +229,160 @@ public class AddCaseStep1of4 extends BaseActivity implements OnClickListener {
 			//dialog.dismiss();
 			
 		}
+		else if(v==walkin)
+		{
+			Intent i = new Intent(AddCaseStep1of4.this, WalkInActivity.class);
+			startActivity(i);
+		}
 		
 	}
 	
 	
-	public void uploadfilethom()
-	{
-		SyncHttpClient client = new SyncHttpClient();
-		RequestParams params = new RequestParams();
-		params.put("text", "some string");
-		try {
-			params.put("image", new File(fileName));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		client.post("http://54.251.51.69:3878/upload.php", params, new TextHttpResponseHandler() {
-		  public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-		    // error handling
-			  System.out.println("Failed");
-			  System.out.println(statusCode);
-			  System.out.println(throwable);
-			  
-			  
-				dialog.dismiss();
-		  }
-
-		  public void onSuccess(int statusCode, Header[] headers, String responseString) {
-		    // success
-			  System.out.println("success");
-				dialog.dismiss();
-		  }
-		});
-	}
 	
 	
-	public void uploadfiletoserver() {
-		//params.put("profile_picture", new File("pic.jpg"));
-		SyncHttpClient client = new SyncHttpClient();
-		RequestParams params = new RequestParams();
-		try {
-			params.put("FileName", new File(fileName));
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		System.out.println("params");
-		System.out.println(params);
+	public int uploadFile(String sourceFileUri) {
 
-		client.post("http://54.251.51.69:3878/upload.php", params, new BaseJsonHttpResponseHandler<String>() {
+        String fileName = sourceFileUri;
 
-			@Override
-			public void onFailure(int arg0, Header[] arg1, Throwable arg2, String arg3, String arg4) {
-				// TODO Auto-generated method stub
-				System.out.println(arg3);
-				System.out.println(arg0);
-				System.out.println("Failed");
-				dialog.dismiss();
+        HttpURLConnection conn = null;
+        DataOutputStream dos = null;  
+        String lineEnd = "\r\n";
+        String twoHyphens = "--";
+        String boundary = "*****";
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1 * 1024 * 1024; 
+        File sourceFile = new File(sourceFileUri); 
 
-			}
+        if (!sourceFile.isFile()) {
+            dialog.dismiss(); 
+            Log.e("uploadFile", "Source File not exist :" +fileName);
+            return 0;
+        }
+        else
+        {
+            try { 
 
-			@Override
-			public void onSuccess(int arg0, Header[] arg1, String arg2, String arg3) {
-				// TODO Auto-generated method stub
-				dialog.dismiss();
-				System.out.println("Document Send  Confirmed");
-				System.out.println(arg2);
+                // open a URL connection to the Servlet
+                FileInputStream fileInputStream = new FileInputStream(sourceFile);
+                URL url = new URL(METHOD_ADDFILE);
 
-				String StatusResult = null;
-				String messageDisplay = null;
-				// Find status Response
-				try {
-					StatusResult = jsonResponse.getString("Result").toString();
-					messageDisplay = jsonResponse.getString("DisplayMessage").toString();
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if (StatusResult.equals("Success")) {
-					Intent iAddBack = new Intent(context, PropertyActivity.class);
-					startActivity(iAddBack);
-					dialog.dismiss();
+                // Open a HTTP  connection to  the URL
+                conn = (HttpURLConnection) url.openConnection(); 
+                conn.setDoInput(true); // Allow Inputs
+                conn.setDoOutput(true); // Allow Outputs
+                conn.setUseCaches(false); // Don't use a Cached Copy
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Connection", "Keep-Alive");
+                conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+                conn.setRequestProperty("uploaded_file", fileName); 
 
-					Toast.makeText(AddCaseStep1of4.this, messageDisplay, Toast.LENGTH_SHORT).show();
-				} else {
-					Toast.makeText(AddCaseStep1of4.this, messageDisplay, Toast.LENGTH_SHORT).show();
+                dos = new DataOutputStream(conn.getOutputStream());
 
-				}
-				//dialog.dismiss();
-			}
+                dos.writeBytes(twoHyphens + boundary + lineEnd); 
+                dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename="+ fileName + "" + lineEnd);
+                dos.writeBytes(lineEnd);
 
-			@Override
-			protected String parseResponse(String arg0, boolean arg1) throws Throwable {
+                // create a buffer of  maximum size
+                bytesAvailable = fileInputStream.available(); 
 
-				// Get Json response
-				arrayResponse = new JSONArray(arg0);
-				jsonResponse = arrayResponse.getJSONObject(0);
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                buffer = new byte[bufferSize];
 
-				System.out.println("Document Details ParseResponse");
-				System.out.println(arg0);
-				return null;
-			}
-		});
-		
-	}
-	
-	public void convertBinary() {
-		Toast.makeText(getApplicationContext(), "Convert file in binary", Toast.LENGTH_SHORT).show();
+                // read file and write it into form...
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize);  
 
-		sb = new StringBuilder();
-		System.out.println("fileName");
-		System.out.println(fileName);
-		try (BufferedInputStream is = new BufferedInputStream(new FileInputStream(fileName))) {
-			for (int b; (b = is.read()) != -1;) {
-				// String s = Integer.toHexString(b).toUpperCase();
-				String s = Integer.toBinaryString(b).toUpperCase();
-				if (s.length() == 1) {
-					sb.append('0');
-				}
-				sb.append(s).append(' ');
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Binary Formate of File");
-		System.out.println(sb);
-		// msg.setText(sb);
-		addCaseDocumentToRead();
+                while (bytesRead > 0) {
 
-	}
+                    dos.write(buffer, 0, bufferSize);
+                    bytesAvailable = fileInputStream.available();
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);   
 
+                }
+
+                // send multipart form data necesssary after file data...
+                dos.writeBytes(lineEnd);
+                dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+                // Responses from the server (code and message)
+                serverResponseCode = conn.getResponseCode();
+                //serverResponseCode = conn.getContent();
+               // String serverResponseMessage = conn.getResponseMessage();
+                String serverResponseMessage = conn.getContentEncoding();
+
+                Log.i("uploadFile", "HTTP Response is : "+ serverResponseMessage + ": " + serverResponseCode);
+                
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line+"\n");
+                }
+                br.close(); JSONArray arry = new JSONArray(sb.toString());
+                System.out.println(arry);
+                JSONObject RESULT = arry.getJSONObject(0);
+                FILEUPLOADRESULT = RESULT.get("Result").toString(); 
+
+                if(serverResponseCode == 200){
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+
+                           
+                            
+                            addCaseDocumentToRead();
+                        }
+                    });
+                    
+                }    
+
+                //close the streams //
+                fileInputStream.close();
+                dos.flush();
+                dos.close();
+                
+                
+                
+                
+                
+                
+
+            } catch (MalformedURLException ex) {
+
+                dialog.dismiss();  
+                ex.printStackTrace();
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+
+                        Toast.makeText(AddCaseStep1of4.this, "MalformedURLException", 
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                Log.e("Upload file to server", "error: " + ex.getMessage(), ex);  
+            } catch (Exception e) {
+
+                dialog.dismiss();  
+                e.printStackTrace();
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+
+                        Toast.makeText(AddCaseStep1of4.this, "Got Exception : see logcat ", 
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+                Log.e("Upload file to server Exception", "Exception : "
+                        + e.getMessage(), e);  
+            }
+            dialog.dismiss();       
+            return serverResponseCode; 
+
+        } // End else block 
+    } 
 	
 	public void addCaseDocumentToRead() {
 		/*
@@ -327,9 +406,9 @@ public class AddCaseStep1of4 extends BaseActivity implements OnClickListener {
 			System.out.println(itemCode);
 			jsonObject.put("ItemName", itemName);
 			System.out.println(itemName);
-			jsonObject.put("FileName", file);
+			jsonObject.put("FileName", FILEUPLOADRESULT);
 			System.out.println(fileName);
-			// jsonObject.put("DocBinaryArray", sb);
+			//jsonObject.put("sDoc", "");
 			System.out.println(sb);
 			jsonObject.put("CardCode", CardCodeResponse);
 			System.out.println(CardCodeResponse);
@@ -358,19 +437,24 @@ public class AddCaseStep1of4 extends BaseActivity implements OnClickListener {
 					String messageDisplay = null;
 					// Find status Response
 					try {
-						StatusResult = jsonResponse.getString("Result").toString();
-						messageDisplay = jsonResponse.getString("DisplayMessage").toString();
+						//StatusResult = jsonResponse.getString("Result").toString();
+						messageDisplay = jsonResponse.getString("Message").toString();
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					if (StatusResult.equals("Success")) {
-						Intent iAddBack = new Intent(context, PropertyActivity.class);
+					if (messageDisplay.isEmpty()) {
+						//Toast.makeText(AddCaseStep1of4.this, "Somthing went wrong", Toast.LENGTH_SHORT).show();
+						Intent iAddBack = new Intent(context, AddCaseStep2of4.class);
+						iAddBack.putExtra("jsonArray", jsonResponse.toString());
+						startActivity(iAddBack);
+						dialog.dismiss();
+					} else {
+						Intent iAddBack = new Intent(context, AddCaseStep2of4.class);
+						iAddBack.putExtra("jsonArray", jsonResponse.toString());
 						startActivity(iAddBack);
 						dialog.dismiss();
 
-						Toast.makeText(AddCaseStep1of4.this, messageDisplay, Toast.LENGTH_SHORT).show();
-					} else {
 						Toast.makeText(AddCaseStep1of4.this, messageDisplay, Toast.LENGTH_SHORT).show();
 
 					}
@@ -417,31 +501,6 @@ public class AddCaseStep1of4 extends BaseActivity implements OnClickListener {
 		}
 	}
 	
-	
-	
-
-	
-	private String getRealPathFromURI(Uri contentUri) {
-	    String[] proj = { MediaStore.Images.Media.DATA };
-	    CursorLoader loader = new CursorLoader(getBaseContext(), contentUri, proj, null, null, null);
-	    Cursor cursor = loader.loadInBackground();
-	    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-	    cursor.moveToFirst();
-	    String result = cursor.getString(column_index);
-	    cursor.close();
-	    return result;
-	}
-	
-	
-	/*public String getPath(Uri uri) {
-		System.out.println("workingthom3");
-		String[] projection = { MediaStore.Images.Media.DATA };
-		Cursor cursor = managedQuery(uri, projection, null, null, null);
-		int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-		cursor.moveToFirst();
-		return cursor.getString(column_index);
-	}*/
-
 	
 	
 	public void addCaseListOfItems() {
@@ -498,7 +557,7 @@ public class AddCaseStep1of4 extends BaseActivity implements OnClickListener {
 											// block
 					e.printStackTrace();
 				}
-				Toast.makeText(AddCaseStep1of4.this, "AddCase Item Found", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(AddCaseStep1of4.this, "AddCase Item Found", Toast.LENGTH_SHORT).show();
 				dialog.dismiss();
 				// Simple Adapter for List
 				SimpleAdapter simpleAdapter = new SimpleAdapter(AddCaseStep1of4.this, jsonItemList,
@@ -519,8 +578,8 @@ public class AddCaseStep1of4 extends BaseActivity implements OnClickListener {
 						{
 							get().setActivated(false);
 						}
-						Toast.makeText(AddCaseStep1of4.this, "You Clicked at " + jsonItemList.get(position),
-								Toast.LENGTH_SHORT).show();
+						//Toast.makeText(AddCaseStep1of4.this, "You Clicked at " + jsonItemList.get(position),
+							//	Toast.LENGTH_SHORT).show();
 						System.out.println(position);
 
 						//int mSelectedItem = position;		

@@ -54,8 +54,8 @@ public class NavDrawerListAdapter extends BaseAdapter {
 			txtTitle.setTextColor(context.getResources().getColor(R.color.red));
 			}else{
 				
-				txtTitle.setTextColor(context.getResources().getColor(R.color.royalBlue));
-				imgIcon.setVisibility(View.GONE);
+				txtTitle.setTextColor(context.getResources().getColor(R.color.gray));
+				//imgIcon.setVisibility(View.GONE);
 			
 			}
 		}

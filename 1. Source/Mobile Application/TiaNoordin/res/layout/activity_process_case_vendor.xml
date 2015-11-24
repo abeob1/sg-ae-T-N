@@ -1,0 +1,1451 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <!-- The main content view -->
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <!-- Add content here -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/appbg"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#296894"
+                        android:orientation="horizontal" >
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal" >
+
+                            <TextView
+                                android:id="@+id/textView_evoita"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:text="@string/logo"
+                                android:textColor="@color/white"
+                                android:textSize="40sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView_spa"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/logospa"
+                                android:textColor="@color/aqua"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView_welcome"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:text="@string/welcome"
+                                android:textColor="@color/aqua"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/relativeLayout1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right" >
+
+                            <Button
+                                android:id="@+id/button_VendorWalkin"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Walk-in"
+                                android:textColor="@color/royalBlue" />
+
+                            <Button
+                                android:id="@+id/button_VendorFind"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Find"
+                                android:textColor="@color/gray"  />
+
+                            <Button
+                                android:id="@+id/button_VendorAdd"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Add"
+                                android:textColor="@color/gray"  />
+
+                            <Button
+                                android:id="@+id/button_VendorEdit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Edit"
+                                android:textColor="@color/gray"  />
+
+                            <Button
+                                android:id="@+id/button_VendorConfirm"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="confirm"
+                                android:textColor="@color/royalBlue" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/VendorlineA"
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/blueLight"
+                        android:orientation="vertical" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp" >
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp" >
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:paddingTop="5dp" >
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp" >
+
+                                <TextView
+                                    android:id="@+id/textView_VendorCase"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="left"
+                                    android:text="Case"
+                                    android:textAppearance="?android:attr/textAppearanceLarge"
+                                    android:textColor="@color/blueLight"
+                                    android:textStyle="bold" />
+
+                                <LinearLayout
+                                    android:id="@+id/VendorlineB"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="1dp"
+                                    android:background="@color/blueLight"
+                                    android:orientation="vertical" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal" >
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical" >
+
+                                    <LinearLayout
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal"
+                                        android:paddingBottom="1dp"
+                                        android:paddingLeft="@dimen/paddingLeft_five"
+                                        android:paddingRight="@dimen/paddingRight_five"
+                                        android:paddingTop="1dp" >
+
+                                        <TextView
+                                            android:id="@+id/textView_type"
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:gravity="left"
+                                            android:text="Case Type:"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/activity_small_textsize" />
+
+                                        <EditText
+                                            android:id="@+id/case_type"
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="20dp"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_centerVertical="true"
+                                            android:layout_weight="1"
+                                            android:background="@drawable/rounded_big"
+                                            android:ems="10"
+                                            android:hint="@string/hints"
+                                            android:inputType="text"
+                                            android:paddingLeft="5dp"
+                                            android:paddingRight="5dp"
+                                            android:singleLine="true"
+                                            android:textColor="@color/black"
+                                            android:textSize="@dimen/activity_small_textsize" >
+                                        </EditText>
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal"
+                                        android:paddingBottom="1dp"
+                                        android:paddingLeft="@dimen/paddingLeft_five"
+                                        android:paddingRight="@dimen/paddingRight_five"
+                                        android:paddingTop="1dp" >
+
+                                        <TextView
+                                            android:id="@+id/textView_VendorCaseFileNo"
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:gravity="left"
+                                            android:text="Case File No:"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/activity_small_textsize" />
+
+                                        <EditText
+                                            android:id="@+id/editText_VendorCaseFileNo"
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="20dp"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_centerVertical="true"
+                                            android:layout_weight="1"
+                                            android:background="@drawable/rounded_big"
+                                            android:ems="10"
+                                            android:hint="@string/hints"
+                                            android:inputType="text"
+                                            android:paddingLeft="5dp"
+                                            android:paddingRight="5dp"
+                                            android:singleLine="true"
+                                            android:textColor="@color/black"
+                                            android:textSize="@dimen/activity_small_textsize" >
+                                        </EditText>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical" >
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:paddingBottom="1dp"
+                                    android:paddingLeft="@dimen/paddingLeft_five"
+                                    android:paddingRight="@dimen/paddingRight_five"
+                                    android:paddingTop="1dp">
+
+                                    <TextView
+                                        android:id="@+id/textView_status"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:text="Case Status:"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/activity_small_textsize" />
+
+                                    <Spinner
+                                        android:id="@+id/case_status"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:background="@color/black"
+                                        android:clickable="true"
+                                        android:cursorVisible="true"
+                                        android:ems="10"
+                                        android:enabled="true"
+                                        android:focusable="true"
+                                        android:textColor="@color/gray" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:paddingBottom="1dp"
+                                    android:paddingLeft="@dimen/paddingLeft_five"
+                                    android:paddingRight="@dimen/paddingRight_five"
+                                    android:paddingTop="1dp">
+
+                                    <TextView
+                                        android:id="@+id/textView_ProcessCase1KIV"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:text="KIV:"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/activity_small_textsize" />
+
+                                    <Spinner
+                                        android:id="@+id/spinner_ProcessCase1KIV"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:background="@color/black"
+                                        android:clickable="true"
+                                        android:cursorVisible="true"
+                                        android:ems="10"
+                                        android:enabled="true"
+                                        android:focusable="true"
+                                        android:textColor="@color/gray" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical" >
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:paddingBottom="1dp"
+                                    android:paddingLeft="@dimen/paddingLeft_five"
+                                    android:paddingRight="@dimen/paddingRight_five"
+                                    android:paddingTop="1dp" >
+
+                                    <TextView
+                                        android:id="@+id/textView_VendorFileOpenDate"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:paddingLeft="@dimen/paddingLeft_five"
+                                        android:paddingRight="@dimen/paddingRight_five"
+                                        android:text="File Open Date:"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/activity_small_textsize" />
+
+                                    <EditText
+                                        android:id="@+id/editText_VendorFileOpenDate"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="20dp"
+                                        android:layout_centerHorizontal="true"
+                                        android:layout_centerVertical="true"
+                                        android:layout_weight="1"
+                                        android:background="@drawable/rounded_big"
+                                        android:ems="10"
+                                        android:hint="@string/hints"
+                                        android:inputType="text"
+                                        android:paddingLeft="5dp"
+                                        android:paddingRight="5dp"
+                                        android:singleLine="true"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/activity_small_textsize" >
+                                    </EditText>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/paddingBottom_five"
+                            android:paddingTop="@dimen/paddingTop_five" >
+
+                            <Button
+                                android:id="@+id/button_VendorDetails"
+                                android:layout_width="150dp"
+                                android:layout_height="30dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/btn"
+                                android:text="Details"
+                                android:textColor="@color/black" />
+
+                            <Button
+                                android:id="@+id/button_VendorPurchaser"
+                                android:layout_width="150dp"
+                                android:layout_height="30dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/btn"
+                                android:clickable="false"
+                                android:text="Purchaser"
+                                android:textColor="@color/black" />
+
+                            <Button
+                                android:id="@+id/button_VendorVendor"
+                                android:layout_width="150dp"
+                                android:layout_height="30dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/btn_press"
+                                android:clickable="false"
+                                android:text="Vendor"
+                                android:textColor="@color/white" />
+
+                            <Button
+                                android:id="@+id/button_VendorProperty"
+                                android:layout_width="150dp"
+                                android:layout_height="30dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/btn"
+                                android:clickable="false"
+                                android:text="Property"
+                                android:textColor="@color/black" />
+
+                            <Button
+                                android:id="@+id/button_VendorLoanPrincipal"
+                                android:layout_width="150dp"
+                                android:layout_height="30dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/btn"
+                                android:clickable="false"
+                                android:text="Loan-Principal"
+                                android:textColor="@color/black" />
+
+                            <Button
+                                android:id="@+id/button_VendorLoanSubsidiary"
+                                android:layout_width="150dp"
+                                android:layout_height="30dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/btn"
+                                android:clickable="false"
+                                android:text="Loan-Subsidiary"
+                                android:textColor="@color/black" />
+
+                            <Button
+                                android:id="@+id/button_VendorProcess"
+                                android:layout_width="150dp"
+                                android:layout_height="30dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/btn"
+                                android:clickable="false"
+                                android:text="Process"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/paddingLeft_twenty"
+                            android:paddingRight="@dimen/paddingRight_twenty"
+                            android:paddingTop="@dimen/paddingTop_five" >
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:paddingLeft="@dimen/paddingLeft_twenty"
+                                android:paddingRight="@dimen/paddingRight_twenty" >
+
+                                <CheckBox
+                                    android:id="@+id/VendorCheckBoXFirm"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:checked="true"
+                                    android:clickable="false"
+                                    android:text="Represented By Firm"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/activity_small_textsize" />
+
+                                <CheckBox
+                                    android:id="@+id/VendorCheckBoXLawyer"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:checked="true"
+                                    android:clickable="false"
+                                    android:text="Lawyer Represented"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/activity_small_textsize" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical" >
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:paddingLeft="@dimen/paddingLeft_five"
+                                    android:paddingRight="@dimen/paddingRight_five"
+                                    android:paddingTop="@dimen/paddingTop_twenty" >
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal"
+                                        android:paddingLeft="@dimen/paddingLeft_five"
+                                        android:paddingRight="@dimen/paddingRight_five" >
+
+                                        <TextView
+                                            android:id="@+id/textView_VendorRequestForDeveloperConsent"
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:gravity="left"
+                                            android:text="Request for Developer Consent"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/activity_small_textsize" />
+
+                                        <EditText
+                                            android:id="@+id/editText_VendorRequestForDeveloperConsent"
+                                            android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:clickable="true"
+                                                android:cursorVisible="true"
+                                                android:ems="10"
+                                                android:enabled="true"
+                                                android:focusable="false"
+                                                android:focusableInTouchMode="true"
+                                                android:hint="@string/hints"
+                                                android:editable="false"
+                                        		android:inputType="none"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize">
+                                        </EditText>
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal"
+                                        android:paddingLeft="@dimen/paddingLeft_five"
+                                        android:paddingRight="@dimen/paddingRight_five" >
+
+                                        <TextView
+                                            android:id="@+id/textView_VendorReceiveDeveloperConsent"
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:gravity="left"
+                                            android:text="Receive Developer Consent:"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/activity_small_textsize" />
+
+                                        <EditText
+                                            android:id="@+id/editText_VendorReceiveDeveloperConsent"
+                                           android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:clickable="true"
+                                                android:cursorVisible="true"
+                                                android:ems="10"
+                                                android:enabled="true"
+                                                android:focusable="false"
+                                                android:focusableInTouchMode="true"
+                                                android:hint="@string/hints"
+                                                android:editable="false"
+                                        		android:inputType="none"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" >
+                                        </EditText>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp" >
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/paddingLeft_twenty"
+                        android:paddingRight="@dimen/paddingRight_twenty" >
+
+                        <FrameLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:layout_weight="1"
+                            android:paddingLeft="@dimen/paddingLeft_twenty"
+                            android:paddingRight="@dimen/paddingRight_twenty" >
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:orientation="horizontal" >
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical" >
+
+                                    <LinearLayout
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical" >
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal"
+                                            android:paddingBottom="1dp"
+                                            android:paddingTop="1dp" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorName1St"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="Name 1st:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <EditText
+                                                android:id="@+id/editText_VendorName1st"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:ems="10"
+                                                android:hint="@string/hints"
+                                                android:inputType="text"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" >
+                                            </EditText>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal"
+                                            android:paddingBottom="1dp"
+                                            android:paddingTop="1dp" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorIdBrnNo"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="ID / BRN No:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <EditText
+                                                android:id="@+id/editText_VendorIdBrnNo"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:ems="10"
+                                                android:hint="@string/hints"
+                                                android:inputType="text"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" >
+                                            </EditText>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal"
+                                            android:paddingBottom="1dp"
+                                            android:paddingTop="1dp" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorTaxNo"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="Tax No.:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <EditText
+                                                android:id="@+id/editText_VendorTaxNo"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:ems="10"
+                                                android:hint="@string/hints"
+                                                android:inputType="text"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" >
+                                            </EditText>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal"
+                                            android:paddingBottom="1dp"
+                                            android:paddingTop="1dp" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorContactNo"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="Contact No:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <EditText
+                                                android:id="@+id/editText_VendorContactNo"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:ems="10"
+                                                android:hint="@string/hints"
+                                                android:inputType="text"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" >
+                                            </EditText>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorType"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="Type:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <Spinner
+                                                android:id="@+id/spinner_VendorType"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:enabled="false"
+                                                android:textColor="@color/black" />
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal"
+                                            android:paddingBottom="1dp"
+                                            android:paddingTop="@dimen/paddingTop_ten" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorName2nd"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="Name 2rd:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <EditText
+                                                android:id="@+id/editText_VendorName2nd"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:ems="10"
+                                                android:hint="@string/hints"
+                                                android:inputType="text"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" />
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal"
+                                            android:paddingBottom="1dp"
+                                            android:paddingTop="1dp" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorIdBrnNo2"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="ID / BRN NO:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <EditText
+                                                android:id="@+id/editText_VendorDaerahState"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:ems="10"
+                                                android:hint="@string/hints"
+                                                android:inputType="text"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" >
+                                            </EditText>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal"
+                                            android:paddingBottom="1dp"
+                                            android:paddingTop="1dp" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorTaxNo2"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="Tax No:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <EditText
+                                                android:id="@+id/editText_VendorNageriArea"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:ems="10"
+                                                android:hint="@string/hints"
+                                                android:inputType="text"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" >
+                                            </EditText>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal"
+                                            android:paddingBottom="1dp"
+                                            android:paddingTop="1dp" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorContactNo2"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="Contact No:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <EditText
+                                                android:id="@+id/editText_VendorContactNo2"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:clickable="false"
+                                                android:cursorVisible="false"
+                                                android:ems="10"
+                                                android:enabled="true"
+                                                android:focusable="true"
+                                                android:focusableInTouchMode="true"
+                                                android:hint="@string/hints"
+                                                android:inputType="text"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" >
+                                            </EditText>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorType2"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="Type:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <Spinner
+                                                android:id="@+id/spinner_VendorType2"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:enabled="false"
+                                                android:textColor="@color/black" />
+                                        </LinearLayout>
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_weight="5"
+                                    android:orientation="vertical" >
+
+                                    <ZoomButton
+                                        android:id="@+id/zoomButton_VendorPdf1"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:paddingTop="60dp"
+                                        android:src="@android:drawable/btn_plus" />
+
+                                    <ZoomButton
+                                        android:id="@+id/zoomButton_VendorPdf2"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="bottom"
+                                        android:paddingTop="60dp"
+                                        android:src="@android:drawable/btn_plus" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:layout_weight="1"
+                            android:paddingLeft="@dimen/paddingLeft_twenty"
+                            android:paddingRight="@dimen/paddingRight_twenty" >
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:orientation="horizontal" >
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical" >
+
+                                    <LinearLayout
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical" >
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal"
+                                            android:paddingBottom="1dp"
+                                            android:paddingTop="1dp" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorName3rd"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="Name 3nd:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <EditText
+                                                android:id="@+id/editText_VendorName3rd"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:ems="10"
+                                                android:hint="@string/hints"
+                                                android:inputType="text"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" >
+                                            </EditText>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal"
+                                            android:paddingBottom="1dp"
+                                            android:paddingTop="1dp" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorIdBrnNo3"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="ID / BRN No:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <EditText
+                                                android:id="@+id/editText_VendorIdBrnNo3"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:ems="10"
+                                                android:hint="@string/hints"
+                                                android:inputType="text"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" >
+                                            </EditText>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal"
+                                            android:paddingBottom="1dp"
+                                            android:paddingTop="1dp" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorTaxNo3"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="Tax No.:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <EditText
+                                                android:id="@+id/editText_VendorTaxNo3"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:ems="10"
+                                                android:hint="@string/hints"
+                                                android:inputType="text"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" >
+                                            </EditText>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal"
+                                            android:paddingBottom="1dp"
+                                            android:paddingTop="1dp" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorContactNo3"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="Contact No:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <EditText
+                                                android:id="@+id/editText_VendorContactNo3"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:ems="10"
+                                                android:hint="@string/hints"
+                                                android:inputType="text"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" >
+                                            </EditText>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorType3"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="Type:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <Spinner
+                                                android:id="@+id/spinner_VendorType3"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:enabled="false"
+                                                android:textColor="@color/black" />
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal"
+                                            android:paddingTop="@dimen/paddingTop_ten" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorName4th"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="Name 4th:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <EditText
+                                                android:id="@+id/editText_VendorName4th"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:ems="10"
+                                                android:hint="@string/hints"
+                                                android:inputType="text"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" />
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal"
+                                            android:paddingBottom="1dp"
+                                            android:paddingTop="1dp" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorIdBrnNo4"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="ID / BRN NO:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <EditText
+                                                android:id="@+id/editText_VendorDaerahState4"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:ems="10"
+                                                android:hint="@string/hints"
+                                                android:inputType="text"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" >
+                                            </EditText>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal"
+                                            android:paddingBottom="1dp"
+                                            android:paddingTop="1dp" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorTaxNo4"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="Tax No:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <EditText
+                                                android:id="@+id/editText_VendorNageriArea4"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:ems="10"
+                                                android:hint="@string/hints"
+                                                android:inputType="text"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" >
+                                            </EditText>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal"
+                                            android:paddingBottom="1dp"
+                                            android:paddingTop="1dp" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorContactNo4"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="Contact No:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <EditText
+                                                android:id="@+id/editText_VendorContactNo4"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="20dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:layout_centerVertical="true"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:clickable="false"
+                                                android:cursorVisible="false"
+                                                android:ems="10"
+                                                android:enabled="true"
+                                                android:focusable="true"
+                                                android:focusableInTouchMode="true"
+                                                android:hint="@string/hints"
+                                                android:inputType="text"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp"
+                                                android:singleLine="true"
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/activity_small_textsize" >
+                                            </EditText>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal" >
+
+                                            <TextView
+                                                android:id="@+id/textView_VendorType4"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="left"
+                                                android:text="Type:"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/activity_small_textsize" />
+
+                                            <Spinner
+                                                android:id="@+id/spinner_VendorType4"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
+                                                android:enabled="false"
+                                                android:textColor="@color/black" />
+                                        </LinearLayout>
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                               <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_weight="5"
+                                    android:orientation="vertical">
+
+                                    <ZoomButton
+                                        android:id="@+id/zoomButton_PurchaserPdf3"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:paddingTop="60dp"
+                                        android:src="@android:drawable/btn_plus" />
+
+                                    <ZoomButton
+                                        android:id="@+id/zoomButton_PurchaserPdf4"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="bottom"
+                                        android:paddingTop="60dp"
+                                        android:src="@android:drawable/btn_plus" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </FrameLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- The navigation drawer -->
+
+     <ListView
+        android:id="@+id/left_drawer"
+        android:layout_width="260dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#ffffff"
+        android:choiceMode="singleChoice"
+        android:divider="#5b5b5b"
+        android:dividerHeight="1dp"
+        android:paddingBottom="@dimen/paddingBottom_twenty"        
+        android:paddingTop="@dimen/paddingTop_twenty" />
+
+
+</android.support.v4.widget.DrawerLayout>

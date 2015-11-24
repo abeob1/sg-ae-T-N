@@ -59,7 +59,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/logospa"
-                                android:textColor="@color/white"
+                                android:textColor="@color/aqua"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
 
@@ -70,7 +70,7 @@
                                 android:paddingLeft="10dp"
                                 android:paddingRight="10dp"
                                 android:text="@string/welcome"
-                                android:textColor="@color/white"
+                                android:textColor="@color/aqua"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -90,7 +90,7 @@
                                 android:layout_weight="1"
                                 android:clickable="true"
                                 android:text="Walk-in"
-                                android:textColor="@color/gray" />
+                                android:textColor="@color/royalBlue" />
 
                             <Button
                                 android:id="@+id/button_AddCaseStep3Find"
@@ -99,7 +99,7 @@
                                 android:layout_weight="1"
                                 android:clickable="true"
                                 android:text="Find"
-                                android:textColor="@color/gray" />
+                                android:textColor="@color/royalBlue" />
 
                             <Button
                                 android:id="@+id/button_AddCaseStep3Add"
@@ -126,7 +126,7 @@
                                 android:layout_weight="1"
                                 android:clickable="true"
                                 android:text="confirm"
-                                android:textColor="@color/gray" />
+                                android:textColor="@color/royalBlue" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -196,11 +196,11 @@
 
                             <ScrollView
                                 android:layout_width="fill_parent"
-                                android:layout_height="wrap_content" >
+                                android:layout_height="578dp" >
 
                                 <LinearLayout
                                     android:layout_width="fill_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="655dp"
                                     android:orientation="horizontal"
                                     android:paddingLeft="@dimen/paddingLeft_twenty"
                                     android:paddingRight="@dimen/paddingRight_twenty" >
@@ -487,8 +487,8 @@
                                                         android:ems="10"
                                                         android:enabled="true"
                                                         android:focusable="true"
-                                                        android:hint="Text"
-                                                        android:inputType="text"
+                                                        android:hint="Number"
+                                                        android:inputType="phone"
                                                         android:paddingLeft="5dp"
                                                         android:paddingRight="5dp"
                                                         android:singleLine="true"
@@ -526,8 +526,8 @@
                                                         android:ems="10"
                                                         android:enabled="true"
                                                         android:focusable="true"
-                                                        android:hint="Text"
-                                                        android:inputType="text"
+                                                        android:hint="Number"
+                                                        android:inputType="phone"
                                                         android:paddingLeft="5dp"
                                                         android:paddingRight="5dp"
                                                         android:singleLine="true"
@@ -565,8 +565,8 @@
                                                         android:ems="10"
                                                         android:enabled="true"
                                                         android:focusable="true"
-                                                        android:hint="Text"
-                                                        android:inputType="text"
+                                                        android:hint="Number"
+                                                        android:inputType="phone"
                                                         android:paddingLeft="5dp"
                                                         android:paddingRight="5dp"
                                                         android:singleLine="true"
@@ -720,232 +720,20 @@
                                                     android:orientation="horizontal"
                                                     android:layout_marginBottom="5dp"  >
 
-                                                    <TextView
-                                                        android:id="@+id/textView_address"
-                                                        android:layout_width="fill_parent"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_weight="3"
-                                                        android:gravity="left"
-                                                        android:text="CORESSPONDENCE Address:"
-                                                        android:textColor="@color/white"
-                                                        android:textSize="@dimen/activity_small_textsize" />
+                                                 
                                                 </LinearLayout>
 
-                                                <LinearLayout
-                                                    android:layout_width="fill_parent"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_weight="3"
-                                                    android:orientation="horizontal"
-                                                    android:layout_marginBottom="5dp"
-                                                      >
+                                             
 
-                                                    <TextView
-                                                        android:layout_width="fill_parent"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_weight="3"
-                                                        android:gravity="left"
-                                                        android:text=""
-                                                        android:textColor="@color/white"
-                                                        android:textSize="@dimen/activity_small_textsize" />
-
-                                                    <LinearLayout
-                                                        android:layout_width="fill_parent"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_weight="1"
-                                                        android:orientation="vertical" >
-
-                                                         <EditText
-                                                        android:id="@+id/comaddress1"
-                                                        android:layout_width="fill_parent"
-                                                        android:layout_height="25dp"
-                                                		android:background="@drawable/rounded_big"
-                                                        android:layout_centerHorizontal="true"
-                                                        android:layout_centerVertical="true"
-                                                        android:layout_weight="1"
-                                                        android:clickable="true"
-                                                        android:cursorVisible="true"
-                                                        android:ems="10"
-                                                        android:enabled="true"
-                                                        android:focusable="true"
-                                                        android:hint="Text"
-                                                        android:inputType="text"
-                                                        android:paddingLeft="5dp"
-                                                        android:paddingRight="5dp"
-                                                        android:singleLine="true"
-                                                         android:textColor="@color/black"
-                                                        android:textSize="@dimen/activity_small_textsize" 
-                                                        android:layout_marginBottom="5dp">
-                                                    </EditText>
-                                                    
-                                                         <EditText
-                                                        android:id="@+id/comaddress2"
-                                                        android:layout_width="fill_parent"
-                                                        android:layout_height="25dp"
-                                                		android:background="@drawable/rounded_big"
-                                                        android:layout_centerHorizontal="true"
-                                                        android:layout_centerVertical="true"
-                                                        android:layout_weight="1"
-                                                        android:clickable="true"
-                                                        android:cursorVisible="true"
-                                                        android:ems="10"
-                                                        android:enabled="true"
-                                                        android:focusable="true"
-                                                        android:hint="Text"
-                                                        android:inputType="text"
-                                                        android:paddingLeft="5dp"
-                                                        android:paddingRight="5dp"
-                                                        android:singleLine="true"
-                                                         android:textColor="@color/black"
-                                                        android:textSize="@dimen/activity_small_textsize"
-                                                        android:layout_marginBottom="5dp" >
-                                                    </EditText>
-                                                    
-                                                         <EditText
-                                                        android:id="@+id/comaddress3"
-                                                        android:layout_width="fill_parent"
-                                                        android:layout_height="25dp"
-                                                		android:background="@drawable/rounded_big"
-                                                        android:layout_centerHorizontal="true"
-                                                        android:layout_centerVertical="true"
-                                                        android:layout_weight="1"
-                                                        android:clickable="true"
-                                                        android:cursorVisible="true"
-                                                        android:ems="10"
-                                                        android:enabled="true"
-                                                        android:focusable="true"
-                                                        android:hint="Text"
-                                                        android:inputType="text"
-                                                        android:paddingLeft="5dp"
-                                                        android:paddingRight="5dp"
-                                                        android:singleLine="true"
-                                                         android:textColor="@color/black"
-                                                        android:textSize="@dimen/activity_small_textsize"
-                                                        android:layout_marginBottom="5dp" >
-                                                    </EditText>
-                                                    
-                                                         <EditText
-                                                        android:id="@+id/comaddress4"
-                                                        android:layout_width="fill_parent"
-                                                        android:layout_height="25dp"
-                                                		android:background="@drawable/rounded_big"
-                                                        android:layout_centerHorizontal="true"
-                                                        android:layout_centerVertical="true"
-                                                        android:layout_weight="1"
-                                                        android:clickable="true"
-                                                        android:cursorVisible="true"
-                                                        android:ems="10"
-                                                        android:enabled="true"
-                                                        android:focusable="true"
-                                                        android:hint="Text"
-                                                        android:inputType="text"
-                                                        android:paddingLeft="5dp"
-                                                        android:paddingRight="5dp"
-                                                        android:singleLine="true"
-                                                         android:textColor="@color/black"
-                                                        android:textSize="@dimen/activity_small_textsize"
-                                                        android:layout_marginBottom="5dp" >
-                                                    </EditText>
-                                                    
-                                                         <EditText
-                                                        android:id="@+id/comaddress5"
-                                                        android:layout_width="fill_parent"
-                                                        android:layout_height="25dp"
-                                                		android:background="@drawable/rounded_big"
-                                                        android:layout_centerHorizontal="true"
-                                                        android:layout_centerVertical="true"
-                                                        android:layout_weight="1"
-                                                        android:clickable="true"
-                                                        android:cursorVisible="true"
-                                                        android:ems="10"
-                                                        android:enabled="true"
-                                                        android:focusable="true"
-                                                        android:hint="Text"
-                                                        android:inputType="text"
-                                                        android:paddingLeft="5dp"
-                                                        android:paddingRight="5dp"
-                                                        android:singleLine="true"
-                                                         android:textColor="@color/black"
-                                                        android:textSize="@dimen/activity_small_textsize" 
-                                                        android:layout_marginBottom="5dp">
-                                                    </EditText>
-
-                                                    </LinearLayout>
-                                                </LinearLayout>
-
-                                                <LinearLayout
-                                                    android:layout_width="fill_parent"
-                                                    android:layout_height="wrap_content"
-                                                    android:orientation="horizontal"
-                                                    android:layout_marginBottom="5dp"  >
-
-                                                    <TextView
-                                                        android:id="@+id/textView_adressToUse"
-                                                        android:layout_width="fill_parent"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_weight="2"
-                                                        android:gravity="left"
-                                                        android:text="ADDRESS TO USE:"
-                                                        android:textColor="@color/white"
-                                                        android:textSize="@dimen/activity_small_textsize" />
-
-                                                    <Spinner
-                                                        android:id="@+id/addresstoUsersp"
-                                                        android:layout_width="fill_parent"
-                                                        android:layout_height="wrap_content"
-                                                        
-                                                		android:background="@drawable/rounded_big"
-                                                        android:layout_weight="1"
-                                                        android:clickable="true"
-                                                        android:cursorVisible="true"
-                                                        android:ems="10"
-                                                        android:enabled="true"
-                                                        android:focusable="true"
-                                                        android:textColor="@color/white" />
-                                                </LinearLayout>
-                                                <LinearLayout
-                                                    android:layout_width="fill_parent"
-                                                    android:layout_height="wrap_content"
-                                                    android:orientation="horizontal"
-                                                    android:layout_marginBottom="5dp"  >
-                                                <TextView
-                                                    android:id="@+id/textView_last_update"
-                                                    android:layout_width="fill_parent"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_weight="2"
-                                                    android:gravity="left"
-                                                    android:text="Last Update on:"
-                                                    android:textColor="@color/white"
-                                                    android:textSize="@dimen/activity_small_textsize" />
-
-                                                <EditText
-                                                    android:id="@+id/last_update"
-                                                    android:layout_width="fill_parent"
-                                                    android:layout_height="25dp"
-                                                	android:background="@drawable/rounded_big"
-                                                    android:layout_centerHorizontal="true"
-                                                    android:layout_centerVertical="true"
-                                                    android:layout_weight="1"
-                                                    android:clickable="true"
-                                                    android:cursorVisible="true"
-                                                    android:ems="10"
-                                                    android:enabled="true"
-                                                    android:focusable="true"
-                                                    android:hint="Text"
-                                                    android:inputType="text"
-                                                    android:paddingLeft="5dp"
-                                                    android:paddingRight="5dp"
-                                                    android:singleLine="true"
-                                                    android:textColor="@color/black"
-                                                    android:textSize="@dimen/activity_small_textsize" >
-                                                </EditText>
-                                                </LinearLayout>
+                                                
+                                                
                                             </LinearLayout>
                                         </LinearLayout>
                                     </FrameLayout>
 
                                     <FrameLayout
                                         android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_height="600dp"
                                         android:layout_gravity="left"
                                         android:layout_weight="1"
                                         android:paddingLeft="@dimen/paddingLeft_twenty"
@@ -977,19 +765,19 @@
                                                     android:layout_marginBottom="5dp"
                                                     android:orientation="horizontal" >
 
-                                                    <ImageView
-                                                        android:id="@+id/ImageView_AddCaseStep3FontIc"
-                                                        android:layout_width="124dp"
-                                                        android:layout_height="fill_parent"
-                                                        android:gravity="left"
-                                                        android:src="@drawable/ic_img" />
+                                                     <ZoomButton
+                                                         android:id="@+id/frntic"
+                                                         android:layout_width="wrap_content"
+                                                         android:layout_height="wrap_content"
+                                                         android:gravity="center"
+                                                         android:src="@android:drawable/btn_plus" />
 
                                                     <Button
                                                         android:id="@+id/button_AddCaseStep3FontIc"
                                                         android:layout_width="200dp"
                                                         android:layout_height="wrap_content"
                                                         android:background="@drawable/rcbtn"
-                                                        android:text="Read Font IC"
+                                                        android:text="Read Front IC"
                                                         android:textColor="@color/white"
                                                         android:textSize="@dimen/activity_small_textsize" />
 
@@ -1007,20 +795,19 @@
                                                 android:paddingRight="10dp" >
 
                                                 <LinearLayout
-                                                    android:layout_width="fill_parent"
+                                                    android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_centerHorizontal="true"
                                                     android:layout_centerVertical="true"
                                                     android:layout_weight="1"
-                                                   
                                                     android:orientation="horizontal" >
 
-                                                    <ImageView
-                                                        android:id="@+id/ImageView_AddCaseStep3BackIc"
-                                                        android:layout_width="124dp"
-                                                        android:layout_height="fill_parent"
-                                                        android:gravity="left"
-                                                        android:src="@drawable/ic_img" />
+                                                     <ZoomButton
+                                        android:id="@+id/backic"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:src="@android:drawable/btn_plus" />
 
                                                     <Button
                                                         android:id="@+id/button_AddCaseStep3BackIc"
@@ -1115,12 +902,230 @@
                                                 android:layout_height="wrap_content"
                                                 android:layout_weight="1"
                                                 android:orientation="horizontal" >
+   													<TextView
+                                                        android:layout_width="fill_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_weight="3"
+                                                        android:gravity="left"
+                                                        android:text="CORESSPONDENCE Address:"
+                                                        android:textColor="@color/white"
+                                                        android:textSize="@dimen/activity_small_textsize" />
+                                                <LinearLayout
+                                                    android:layout_width="510dp"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_weight="1"
+                                                        android:orientation="vertical" >
+                                               
+
+                                                <EditText
+                                                    android:id="@+id/comaddress1"
+                                                        android:layout_width="fill_parent"
+                                                        android:layout_height="25dp"
+                                                		android:background="@drawable/rounded_big"
+                                                        android:layout_centerHorizontal="true"
+                                                        android:layout_centerVertical="true"
+                                                        android:layout_weight="1"
+                                                        android:clickable="true"
+                                                        android:cursorVisible="true"
+                                                        android:ems="10"
+                                                        android:enabled="true"
+                                                        android:focusable="true"
+                                                        android:hint="Text"
+                                                        android:inputType="text"
+                                                        android:paddingLeft="5dp"
+                                                        android:paddingRight="5dp"
+                                                        android:singleLine="true"
+                                                         android:textColor="@color/black"
+                                                        android:textSize="@dimen/activity_small_textsize"
+                                                        android:layout_marginBottom="5dp"
+                                                />
+                                                <EditText
+                                                    android:id="@+id/comaddress2"
+                                                        android:layout_width="fill_parent"
+                                                        android:layout_height="25dp"
+                                                		android:background="@drawable/rounded_big"
+                                                        android:layout_centerHorizontal="true"
+                                                        android:layout_centerVertical="true"
+                                                        android:layout_weight="1"
+                                                        android:clickable="true"
+                                                        android:cursorVisible="true"
+                                                        android:ems="10"
+                                                        android:enabled="true"
+                                                        android:focusable="true"
+                                                        android:hint="Text"
+                                                        android:inputType="text"
+                                                        android:paddingLeft="5dp"
+                                                        android:paddingRight="5dp"
+                                                        android:singleLine="true"
+                                                         android:textColor="@color/black"
+                                                        android:textSize="@dimen/activity_small_textsize"
+                                                        android:layout_marginBottom="5dp"
+                                                />
+                                                
+                                                <EditText
+                                                    android:id="@+id/comaddress3"
+                                                        android:layout_width="fill_parent"
+                                                        android:layout_height="25dp"
+                                                		android:background="@drawable/rounded_big"
+                                                        android:layout_centerHorizontal="true"
+                                                        android:layout_centerVertical="true"
+                                                        android:layout_weight="1"
+                                                        android:clickable="true"
+                                                        android:cursorVisible="true"
+                                                        android:ems="10"
+                                                        android:enabled="true"
+                                                        android:focusable="true"
+                                                        android:hint="Text"
+                                                        android:inputType="text"
+                                                        android:paddingLeft="5dp"
+                                                        android:paddingRight="5dp"
+                                                        android:singleLine="true"
+                                                         android:textColor="@color/black"
+                                                        android:textSize="@dimen/activity_small_textsize"
+                                                        android:layout_marginBottom="5dp"
+                                                />
+                                                <EditText
+                                                    android:id="@+id/comaddress4"
+                                                        android:layout_width="fill_parent"
+                                                        android:layout_height="25dp"
+                                                		android:background="@drawable/rounded_big"
+                                                        android:layout_centerHorizontal="true"
+                                                        android:layout_centerVertical="true"
+                                                        android:layout_weight="1"
+                                                        android:clickable="true"
+                                                        android:cursorVisible="true"
+                                                        android:ems="10"
+                                                        android:enabled="true"
+                                                        android:focusable="true"
+                                                        android:hint="Text"
+                                                        android:inputType="text"
+                                                        android:paddingLeft="5dp"
+                                                        android:paddingRight="5dp"
+                                                        android:singleLine="true"
+                                                         android:textColor="@color/black"
+                                                        android:textSize="@dimen/activity_small_textsize"
+                                                        android:layout_marginBottom="5dp"
+                                                />
+                                                <EditText
+                                                    android:id="@+id/comaddress5"
+                                                        android:layout_width="fill_parent"
+                                                        android:layout_height="25dp"
+                                                		android:background="@drawable/rounded_big"
+                                                        android:layout_centerHorizontal="true"
+                                                        android:layout_centerVertical="true"
+                                                        android:layout_weight="1"
+                                                        android:clickable="true"
+                                                        android:cursorVisible="true"
+                                                        android:ems="10"
+                                                        android:enabled="true"
+                                                        android:focusable="true"
+                                                        android:hint="Text"
+                                                        android:inputType="text"
+                                                        android:paddingLeft="5dp"
+                                                        android:paddingRight="5dp"
+                                                        android:singleLine="true"
+                                                         android:textColor="@color/black"
+                                                        android:textSize="@dimen/activity_small_textsize"
+                                                        android:layout_marginBottom="5dp"
+                                                />
+                                                </LinearLayout>
+                                            </LinearLayout>
+                                            
+                                            
+                                            
+                                            
+                                             <LinearLayout
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:orientation="horizontal" 
+                                                android:layout_marginBottom="5dp">
+   													<TextView
+                                                        android:id="@+id/textView_adressToUse"
+                                                        android:layout_width="fill_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_weight="2"
+                                                        android:gravity="left"
+                                                        android:text="ADDRESS TO USE:"
+                                                        android:textColor="@color/white"
+                                                        android:textSize="@dimen/activity_small_textsize" />
+                                                <LinearLayout
+                                                    android:layout_width="fill_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_weight="1"
+                                                        android:orientation="vertical" >
+                                               
+  
+
+                                                    <Spinner
+                                                        android:id="@+id/addresstoUsersp"
+                                                        android:layout_width="fill_parent"
+                                                        android:layout_height="wrap_content"                                                        
+                                                		android:background="@drawable/rounded_big"
+                                                        android:layout_weight="1"
+                                                        android:clickable="true"
+                                                        android:cursorVisible="true"
+                                                        android:ems="10"
+                                                        android:enabled="true"
+                                                        android:focusable="true"
+                                                        android:textColor="@color/white"
+                                                         />
+                                            
+                                                
+                                                </LinearLayout>
+                                            </LinearLayout>
+                                            
+                                             
+                                             
+                                             <LinearLayout
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:orientation="horizontal"
+                                                android:layout_marginBottom="5dp" >
+   													  <TextView
+                                                    android:id="@+id/textView_last_update"
+                                                    android:layout_width="fill_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="2"
+                                                    android:gravity="left"
+                                                    android:text="Last Update on:"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="@dimen/activity_small_textsize" />
+                                                <LinearLayout
+                                                    android:layout_width="fill_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_weight="1"
+                                                        android:orientation="vertical" >
+                                             
+
+                                                <EditText
+                                                    android:id="@+id/last_update"
+                                                    android:layout_width="fill_parent"
+                                                    android:layout_height="25dp"
+                                                	android:background="@drawable/rounded_big"
+                                                    android:layout_centerHorizontal="true"
+                                                    android:layout_centerVertical="true"
+                                                    android:layout_weight="1"
+                                                    android:clickable="false"
+                                                    android:cursorVisible="false"
+                                                    android:ems="10"
+                                                    android:enabled="false"
+                                                    android:focusable="false"
+                                                    android:hint="Text"
+                                                    android:inputType="text"
+                                                    android:paddingLeft="5dp"
+                                                    android:paddingRight="5dp"
+                                                    android:singleLine="true"
+                                                    android:textColor="@color/black"
+                                                    android:textSize="@dimen/activity_small_textsize" >
+                                                </EditText>
 
                                                 
                                                 
-                                                
-                                               
+                                                </LinearLayout>
                                             </LinearLayout>
+                                            
                                         </LinearLayout>
                                     </FrameLayout>
                                 </LinearLayout>
@@ -1132,20 +1137,18 @@
         </LinearLayout>
     </FrameLayout>
 
-    <!-- The navigation drawer -->
+     <!-- The navigation drawer -->
 
     <ListView
         android:id="@+id/left_drawer"
         android:layout_width="260dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#1a1a1a"
+        android:background="#ffffff"
         android:choiceMode="singleChoice"
-        android:divider="#1a1a1a"
-        android:dividerHeight="10dp"
-        android:paddingBottom="@dimen/paddingBottom_twenty"
-        android:paddingLeft="@dimen/paddingLeft_twenty"
-        android:paddingRight="@dimen/paddingRight_twenty"
+        android:divider="#5b5b5b"
+        android:dividerHeight="1dp"
+        android:paddingBottom="@dimen/paddingBottom_twenty"        
         android:paddingTop="@dimen/paddingTop_twenty" />
 
 </android.support.v4.widget.DrawerLayout>

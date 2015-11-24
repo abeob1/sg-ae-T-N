@@ -199,15 +199,13 @@
     <ListView
         android:id="@+id/left_drawer"
         android:layout_width="260dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#1a1a1a"
+        android:background="#ffffff"
         android:choiceMode="singleChoice"
-        android:divider="#1a1a1a"
-        android:dividerHeight="10dp"
-        android:paddingBottom="@dimen/paddingBottom_twenty"
-        android:paddingLeft="@dimen/paddingLeft_twenty"
-        android:paddingRight="@dimen/paddingRight_twenty"
+        android:divider="#5b5b5b"
+        android:dividerHeight="1dp"
+        android:paddingBottom="@dimen/paddingBottom_twenty"        
         android:paddingTop="@dimen/paddingTop_twenty" />
 
 </android.support.v4.widget.DrawerLayout>

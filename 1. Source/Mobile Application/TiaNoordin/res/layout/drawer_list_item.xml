@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:background="@drawable/selector_navigation_drawer"
-    android:gravity="center_vertical|center_horizontal" >
+    android:gravity="left" >
 
     <ImageView
         android:id="@+id/icon"
         android:layout_width="25dp"
         android:layout_height="fill_parent"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
@@ -20,12 +20,12 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/icon"
+        android:layout_toRightOf="@id/icon"
         android:gravity="center_vertical"
-        android:paddingBottom="@dimen/paddingBottom_five"
-        android:paddingLeft="30dp"
-        android:paddingTop="@dimen/paddingTop_five"
+        android:paddingBottom="@dimen/paddingBottom_ten"
+        android:paddingLeft="10dp"
+        android:paddingTop="@dimen/paddingTop_ten"
         android:text="no text"
-        android:textColor="#fff" />
+        android:textColor="#363636" />
 
 </RelativeLayout>

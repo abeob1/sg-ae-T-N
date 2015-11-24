@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 @SuppressWarnings("deprecation")
 @SuppressLint("NewApi")
@@ -38,6 +40,12 @@ public class BaseActivity extends ActionBarActivity {
 
 	private ArrayList<NavDrawerItem> navDrawerItems;
 	private NavDrawerListAdapter adapter;
+	
+	String catg,Pswd,user_name,sUserRole,BURL;
+	
+	@Override
+	public void onBackPressed() {
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,26 @@ public class BaseActivity extends ActionBarActivity {
 		// // on first time display view for first nav item
 		// // displayView(0);
 		// }
+		
+		
+	
+		
+		
+		
+		// Find the SharedPreferences value
+					
+					SharedPreferences prefLoginReturn = getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+					System.out.println("LOGIN DATA");
+					user_name = prefLoginReturn.getString("sUserName", "");
+					System.out.println(user_name);
+					Pswd = prefLoginReturn.getString("sPassword", "");
+					System.out.println(Pswd);
+					catg = prefLoginReturn.getString("sCategory", "");
+					System.out.println(catg);
+					sUserRole = prefLoginReturn.getString("sUserRole", "");
+					System.out.println(sUserRole);
+					
+						
 	}
 
 	public void set(String[] navMenuTitles, TypedArray navMenuIcons) {
@@ -56,15 +84,48 @@ public class BaseActivity extends ActionBarActivity {
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
 		navDrawerItems = new ArrayList<NavDrawerItem>();
-
+		
 		// adding nav drawer items
 		if (navMenuIcons == null) {
 			for (int i = 0; i < navMenuTitles.length; i++) {
-				navDrawerItems.add(new NavDrawerItem(navMenuTitles[i]));
+				if( i==4 )
+				{
+					if((sUserRole.equals("IC") || sUserRole.equals("CS")))
+						navDrawerItems.add(new NavDrawerItem(navMenuTitles[i]));					
+				}				
+				else if(i==0)
+				{
+					if((!sUserRole.equals("IC")))
+						navDrawerItems.add(new NavDrawerItem(navMenuTitles[i]));
+				}
+				else
+				{
+					navDrawerItems.add(new NavDrawerItem(navMenuTitles[i]));
+				}
 			}
 		} else {
 			for (int i = 0; i < navMenuTitles.length; i++) {
-				navDrawerItems.add(new NavDrawerItem(navMenuTitles[i], navMenuIcons.getResourceId(i, -1)));
+				if( i==4 )
+				{
+					if(sUserRole.equals("IC") || sUserRole.equals("CS"))
+						navDrawerItems.add(new NavDrawerItem(navMenuTitles[i], navMenuIcons.getResourceId(i, -1)));
+				}				
+				else if(i==0)
+				{
+					if(sUserRole.equals("IC") || sUserRole.equals("CS"))
+					{
+						
+					}
+					else
+					{
+						navDrawerItems.add(new NavDrawerItem(navMenuTitles[i], navMenuIcons.getResourceId(i, -1)));
+					}
+						
+				}
+				else
+				{
+					navDrawerItems.add(new NavDrawerItem(navMenuTitles[i], navMenuIcons.getResourceId(i, -1)));
+				}
 			}
 		}
 
@@ -149,75 +210,261 @@ public class BaseActivity extends ActionBarActivity {
 	 * Diplaying fragment view for selected nav drawer list item
 	 */
 	private void displayView(int position) {
+		int myint = 0;
+		
+		if(sUserRole.equals("IC"))
+		{
+		
+				switch (position) {
+				case 10:
+					Intent intent = new Intent(BaseActivity.this, FirstActivity.class);
+					startActivity(intent);
+					// finish();// finishes the current activity
+					break;
+				case 20:
+					Intent i = new Intent(context, CaseEnq_Activity.class);
+					startActivity(i);
+					// finish();// finishes the current activity
+					break;
+				case 0:
+					Intent intentProperty = new Intent(context, PropertyActivity.class);
+					startActivity(intentProperty);
+					// finish();// finishes the current activity
+					break;
+				case 1:
+					Intent intent2 = new Intent(context, IndividualActivity.class);
+					startActivity(intent2);
+					// finish();
+					break;
+				case 2:
+					Intent intent3 = new Intent(context, CorporateActivity.class);
+					startActivity(intent3);
+					// finish();
+					break;
+				case 3:
+					Intent intent4 = new Intent(BaseActivity.this, AddCaseQuestion1.class);
+					startActivity(intent4);
+					// finish();
+					break;
+		
+				case 4:
+					Intent intent5 = new Intent(BaseActivity.this, DashBoardActivity.class);
+					startActivity(intent5);
+					// finish();
+					break;
+				case 5:
+		
+					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+		
+					// set title
+					alertDialogBuilder.setTitle("Logout");
+		
+					// set dialog message
+					alertDialogBuilder.setMessage("Click yes to exit!").setCancelable(false)
+							.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									// if this button is clicked, close
+									// current activity
+									// MainActivity.this.finish();
+									Intent intentLogout = new Intent(context, LoginActivity.class);
+									intentLogout.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+									startActivity(intentLogout);
+									finish();
+		
+								}
+							}).setNegativeButton("No", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									// if this button is clicked, just close
+									// the dialog box and do nothing
+									dialog.cancel();
+								}
+							});
+		
+					// create alert dialog
+					AlertDialog alertDialog = alertDialogBuilder.create();
+		
+					// show it
+					alertDialog.show();
+					break;
+				case 6:
+					Intent intent7 = new Intent(BaseActivity.this, ProcessCaseDetails.class);
+					startActivity(intent7);
+					// finish();
+					break;
+				default:
+					break;
+				}
+		}
+		
+		else if (sUserRole.equals("CS"))
+		{
+		
+				switch (position) {
+				case 10:
+					Intent intent = new Intent(BaseActivity.this, FirstActivity.class);
+					startActivity(intent);
+					// finish();// finishes the current activity
+					break;
+				case 11:
+					Intent i = new Intent(context, CaseEnq_Activity.class);
+					startActivity(i);
+					// finish();// finishes the current activity
+					break;
+				case 0:
+					Intent intentProperty = new Intent(context, PropertyActivity.class);
+					startActivity(intentProperty);
+					// finish();// finishes the current activity
+					break;
+				case 1:
+					Intent intent2 = new Intent(context, IndividualActivity.class);
+					startActivity(intent2);
+					// finish();
+					break;
+				case 2:
+					Intent intent3 = new Intent(context, CorporateActivity.class);
+					startActivity(intent3);
+					// finish();
+					break;
+				case 3:
+					Intent intent4 = new Intent(BaseActivity.this, AddCaseQuestion1.class);
+					startActivity(intent4);
+					// finish();
+					break;
+		
+				case 4:
+					Intent intent5 = new Intent(BaseActivity.this, DashBoardActivity.class);
+					startActivity(intent5);
+					// finish();
+					break;
+				case 5:
+		
+					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+		
+					// set title
+					alertDialogBuilder.setTitle("Logout");
+		
+					// set dialog message
+					alertDialogBuilder.setMessage("Click yes to exit!").setCancelable(false)
+							.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									// if this button is clicked, close
+									// current activity
+									// MainActivity.this.finish();
+									Intent intentLogout = new Intent(context, LoginActivity.class);
+									intentLogout.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+									startActivity(intentLogout);
+									finish();
+		
+								}
+							}).setNegativeButton("No", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									// if this button is clicked, just close
+									// the dialog box and do nothing
+									dialog.cancel();
+								}
+							});
+		
+					// create alert dialog
+					AlertDialog alertDialog = alertDialogBuilder.create();
+		
+					// show it
+					alertDialog.show();
+					break;
+				case 7:
+					Intent intent7 = new Intent(BaseActivity.this, ProcessCaseDetails.class);
+					startActivity(intent7);
+					// finish();
+					break;
+				default:
+					break;
+				}
+				
+		}
+		else 
+		{
 
-		switch (position) {
-		case 0:
-			Intent intent = new Intent(BaseActivity.this, FirstActivity.class);
-			startActivity(intent);
-			// finish();// finishes the current activity
-			break;
-		case 1:
-			Intent intentProperty = new Intent(context, PropertyActivity.class);
-			startActivity(intentProperty);
-			// finish();// finishes the current activity
-			break;
-		case 2:
-			Intent intent2 = new Intent(context, IndividualActivity.class);
-			startActivity(intent2);
-			// finish();
-			break;
-		case 3:
-			Intent intent3 = new Intent(context, CorporateActivity.class);
-			startActivity(intent3);
-			// finish();
-			break;
-		case 4:
-			Intent intent4 = new Intent(BaseActivity.this, AddCaseQuestion1.class);
-			startActivity(intent4);
-			// finish();
-			break;
-
-		case 5:
-			Intent intent5 = new Intent(BaseActivity.this, DashBoardActivity.class);
-			startActivity(intent5);
-			// finish();
-			break;
-		case 6:
-
-			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-
-			// set title
-			alertDialogBuilder.setTitle("Logout");
-
-			// set dialog message
-			alertDialogBuilder.setMessage("Click yes to exit!").setCancelable(false)
-					.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							// if this button is clicked, close
-							// current activity
-							// MainActivity.this.finish();
-							Intent intentLogout = new Intent(context, LoginActivity.class);
-							intentLogout.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-							startActivity(intentLogout);
-							finish();
-
-						}
-					}).setNegativeButton("No", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							// if this button is clicked, just close
-							// the dialog box and do nothing
-							dialog.cancel();
-						}
-					});
-
-			// create alert dialog
-			AlertDialog alertDialog = alertDialogBuilder.create();
-
-			// show it
-			alertDialog.show();
-			break;
-		default:
-			break;
+			
+			switch (position) {
+			case 10:
+				Intent intent = new Intent(BaseActivity.this, FirstActivity.class);
+				startActivity(intent);
+				// finish();// finishes the current activity
+				break;
+			case 0:
+				Intent i = new Intent(context, CaseEnq_Activity.class);
+				startActivity(i);
+				// finish();// finishes the current activity
+				break;
+			case 1:
+				Intent intentProperty = new Intent(context, PropertyActivity.class);
+				startActivity(intentProperty);
+				// finish();// finishes the current activity
+				break;
+			case 2:
+				Intent intent2 = new Intent(context, IndividualActivity.class);
+				startActivity(intent2);
+				// finish();
+				break;
+			case 3:
+				Intent intent3 = new Intent(context, CorporateActivity.class);
+				startActivity(intent3);
+				// finish();
+				break;
+			case 42:
+				Intent intent4 = new Intent(BaseActivity.this, AddCaseQuestion1.class);
+				startActivity(intent4);
+				// finish();
+				break;
+	
+			case 4:
+				Intent intent5 = new Intent(BaseActivity.this, DashBoardActivity.class);
+				startActivity(intent5);
+				// finish();
+				break;
+			case 5:
+	
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+	
+				// set title
+				alertDialogBuilder.setTitle("Logout");
+	
+				// set dialog message
+				alertDialogBuilder.setMessage("Click yes to exit!").setCancelable(false)
+						.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								// if this button is clicked, close
+								// current activity
+								// MainActivity.this.finish();
+								Intent intentLogout = new Intent(context, LoginActivity.class);
+								intentLogout.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+								startActivity(intentLogout);
+								finish();
+	
+							}
+						}).setNegativeButton("No", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								// if this button is clicked, just close
+								// the dialog box and do nothing
+								dialog.cancel();
+							}
+						});
+	
+				// create alert dialog
+				AlertDialog alertDialog = alertDialogBuilder.create();
+	
+				// show it
+				alertDialog.show();
+				break;
+			case 6:
+				Intent intent7 = new Intent(BaseActivity.this, ProcessCaseDetails.class);
+				startActivity(intent7);
+				// finish();
+				break;
+			default:
+				break;
+			}
+			
+	
 		}
 
 		// update selected item and title, then close the drawer

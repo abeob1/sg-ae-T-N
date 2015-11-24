@@ -28,6 +28,7 @@ namespace AE_TnN_Mobile_BLL
 
         public static string ConnectionString = ConfigurationManager.ConnectionStrings["dbconnection"].ConnectionString;
         public static string Category = ConfigurationManager.AppSettings["Category"].ToString();
+        public static string strSelect = ConfigurationManager.AppSettings["Select"].ToString();
 
         public DataSet SPA_DashboardInfo(string sAppType, string sUserCode)
         {
@@ -273,7 +274,7 @@ namespace AE_TnN_Mobile_BLL
                 command.CommandText = "DECLARE @DATE date " +
                                       "SET @DATE = (SELECT GETDATE()) " +
                                       "SELECT '-- Select --' [Id], '-- Select --' [Name] UNION " +
-                                      "SELECT PrjCode [Id],PrjName [Name] FROM OPRJ WHERE ISNULL(Locked,'N') != 'Y' AND Active = 'Y' " +
+                                      "SELECT PrjCode [Id],PrjName [Name] FROM OPRJ WITH (NOLOCK) WHERE ISNULL(Locked,'N') != 'Y' AND Active = 'Y' " +
                                       "AND IsNull(ValidFrom,@DATE) <= @DATE and ISNULL(ValidTo,@DATE) >= @DATE ";
                 con.Open();
                 SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
@@ -345,7 +346,7 @@ namespace AE_TnN_Mobile_BLL
                 SqlCommand command = con.CreateCommand();
                 //command.CommandText = "select Count(CODE) from [@AE_PROPERTY]";
                 command.CommandText = "SELECT REPLICATE('0', (12-LEN(ISNULL(MAX(SUBSTRING(Code,4,LEN(Code)))+1,1)))) " +
-                                        " + CONVERT(VARCHAR, ISNULL(MAX(SUBSTRING(Code,4,LEN(Code)))+1,1)) [Code] FROM [@AE_PROPERTY]";
+                                        " + CONVERT(VARCHAR, ISNULL(MAX(SUBSTRING(Code,4,LEN(Code)))+1,1)) [Code] FROM [@AE_PROPERTY] WITH (NOLOCK)";
                 con.Open();
 
                 SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
@@ -394,7 +395,16 @@ namespace AE_TnN_Mobile_BLL
                 oGeneralData.SetProperty("U_LSTCHG_BRANCH", dtDatatable.Rows[0]["LSTCHG_BRANCH"].ToString());
                 oGeneralData.SetProperty("U_LSTCHG_PANO", dtDatatable.Rows[0]["LSTCHG_PANO"].ToString());
                 oGeneralData.SetProperty("U_LSTCHG_PRSTNO", dtDatatable.Rows[0]["LSTCHG_PRSTNO"].ToString());
-
+                if (dtDatatable.Rows[0]["PROPERTYCHARGED"].ToString() == "Y")
+                {
+                    oGeneralData.SetProperty("U_PROPERTY_CHARGED", "Y");
+                    oGeneralData.SetProperty("U_PROPERTY_FREE", "N");
+                }
+                else
+                {
+                    oGeneralData.SetProperty("U_PROPERTY_CHARGED", "N");
+                    oGeneralData.SetProperty("U_PROPERTY_FREE", "Y");
+                }
                 oGeneralService.Add(oGeneralData);
 
                 sReturnResult = "SUCCESS";
@@ -421,6 +431,19 @@ namespace AE_TnN_Mobile_BLL
                 SqlCommand command = con.CreateCommand();
 
                 string[] TimeSplit = DateTime.Now.TimeOfDay.ToString().Split(':');
+                string sCharged = string.Empty;
+                string sFree = string.Empty;
+
+                if (dtDatatable.Rows[0]["PROPERTYCHARGED"].ToString() == "Y")
+                {
+                    sCharged = "Y";
+                    sFree = "N";
+                }
+                else
+                {
+                    sCharged = "N";
+                    sFree = "Y";
+                }
 
                 //Updating the Informations
                 command.CommandText = "UPDATE [@AE_PROPERTY] SET U_TITLENO = '" + dtDatatable.Rows[0]["TITLENO"] + "',"
@@ -446,7 +469,9 @@ namespace AE_TnN_Mobile_BLL
                                         + "U_LSTCHG_BANKNAME = '" + dtDatatable.Rows[0]["LSTCHG_BANKNAME"] + "',"
                                         + "U_LSTCHG_BRANCH = '" + dtDatatable.Rows[0]["LSTCHG_BRANCH"] + "',"
                                         + "U_LSTCHG_PANO = '" + dtDatatable.Rows[0]["LSTCHG_PANO"] + "',"
-                                        + "U_LSTCHG_PRSTNO = '" + dtDatatable.Rows[0]["LSTCHG_PRSTNO"] + "'"
+                                        + "U_LSTCHG_PRSTNO = '" + dtDatatable.Rows[0]["LSTCHG_PRSTNO"] + "',"
+                                        + "U_PROPERTY_CHARGED = '" + sCharged.ToString() + "',"
+                                        + "U_PROPERTY_FREE = '" + sFree.ToString() + "'"
                                         + " WHERE Code = '" + dtDatatable.Rows[0]["Code"] + "'";
                 con.Open();
 

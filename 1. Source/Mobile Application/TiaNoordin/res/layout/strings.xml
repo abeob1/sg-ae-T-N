@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hints" >Text</string>
+    <!-- Start String for Common -->
+    <string name="app_name">Tia &amp; Noordin</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="logo">EVOTIA</string>
+    <string name="logospa">SPA</string>
+    <string name="welcome">Welcome Carol Lee.</string>
+    <!-- End String for Common -->
+    <!-- Start String for Login -->
+    <string name="login">LOGIN</string>
+    <string name="user">Username</string>
+    <string name="password">Password</string>
+    <string name="submit">Submit</string>
+
+    <!-- End String for Login -->
+    <!-- Start String for Dash board -->
+    <string name="avg_turnaround">Average Turnaround(Days)</string>
+    <string name="your_turnaround">Your Turnaround(Days)</string>
+    <string name="new_cases">New Cases</string>
+    <string name="closed_cases">Closed Cases</string>
+
+    <!-- End String for Dash board -->
+
+    <string-array name="nav_drawer_items">
+        <item>CASE ENQUIRY</item>
+        <item>PROPERTY ENQUIRY</item>
+        <item>INDIVIDUAL ENQUIRY</item>
+        <item>CORPORATE ENQUIRY</item>
+        <item>ADD CASE</item>
+        <item>DASHBOARD</item>
+        <item>PROCESS CASE</item>
+        <item>LOGOUT</item>
+    </string-array>
+
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_launcher</item>
+        <item>@drawable/ic_launcher</item>
+        <item>@drawable/ic_launcher</item>
+        <item>@drawable/ic_launcher</item>
+        <item>@drawable/ic_launcher</item>
+        <item>@drawable/ic_launcher</item>
+        <item>@drawable/ic_launcher</item>
+        <item>@drawable/error</item>
+    </array>
+
+    <!-- End String for Add Questions -->
+    <!-- Start String for Add Case Questions -->
+    <string name="question1">Are you Buying or Selling?</string>
+    <string name="question2">Who are you buying from?</string>
+    <string name="question3">Which type of property are you buying?</string>
+    <string name="question4">the property is under construction?</string>
+
+    <!-- End String for Add Case Questions -->
+
+</resources>

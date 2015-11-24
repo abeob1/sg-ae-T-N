@@ -16,6 +16,10 @@ namespace AE_TnN_Mobile_V001.ReadDocument {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ReadDocument.Service1Soap")]
     public interface Service1Soap {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/HelloWorld", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        string HelloWorld();
+        
         // CODEGEN: Parameter 'docbinaryarray' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ReadDocument", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -25,10 +29,6 @@ namespace AE_TnN_Mobile_V001.ReadDocument {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/NeutralCheck", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         AE_TnN_Mobile_V001.ReadDocument.NeutralCheckResponse NeutralCheck(AE_TnN_Mobile_V001.ReadDocument.NeutralCheckRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GenDoc", ReplyAction="*")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string GenDoc(string ItemCode, string CaseNumber);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -148,6 +148,10 @@ namespace AE_TnN_Mobile_V001.ReadDocument {
                 base(binding, remoteAddress) {
         }
         
+        public string HelloWorld() {
+            return base.Channel.HelloWorld();
+        }
+        
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         AE_TnN_Mobile_V001.ReadDocument.ReadDocumentResponse AE_TnN_Mobile_V001.ReadDocument.Service1Soap.ReadDocument(AE_TnN_Mobile_V001.ReadDocument.ReadDocumentRequest request) {
             return base.Channel.ReadDocument(request);
@@ -175,10 +179,6 @@ namespace AE_TnN_Mobile_V001.ReadDocument {
             inValue.CaseID = CaseID;
             AE_TnN_Mobile_V001.ReadDocument.NeutralCheckResponse retVal = ((AE_TnN_Mobile_V001.ReadDocument.Service1Soap)(this)).NeutralCheck(inValue);
             return retVal.NeutralCheckResult;
-        }
-        
-        public string GenDoc(string ItemCode, string CaseNumber) {
-            return base.Channel.GenDoc(ItemCode, CaseNumber);
         }
     }
 }

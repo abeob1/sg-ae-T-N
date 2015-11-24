@@ -12,7 +12,9 @@ import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import abeo.tia.noordin.R;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.View;
@@ -102,6 +104,12 @@ public class PropertyRelatedCaseListActivity extends BaseActivity {
 						R.id.listCaseHeader_BankText, R.id.listCaseHeader_lotPTDPTNoText,
 						R.id.listCaseHeader_caseAmountText, R.id.listCaseHeader_userCodeText,
 						R.id.listCaseHeader_statusText, R.id.listCaseHeader_fileClosedDateText });
+		
+		// Find the SharedPreferences Firstname
+					SharedPreferences FirstName = getSharedPreferences("LoginData", Context.MODE_PRIVATE);		
+					String FirName = FirstName.getString("FIRSETNAME", "");
+					TextView welcome = (TextView)findViewById(R.id.textView_welcome);		
+					welcome.setText("Welcome "+FirName);
 
 		listView_Property.setAdapter(simpleAdapter);
 
@@ -109,8 +117,8 @@ public class PropertyRelatedCaseListActivity extends BaseActivity {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Toast.makeText(PropertyRelatedCaseListActivity.this, "You Clicked at " + myArrayCaseList.get(position),
-						Toast.LENGTH_SHORT).show();
+				//Toast.makeText(PropertyRelatedCaseListActivity.this, "You Clicked at " + myArrayCaseList.get(position),
+					//	Toast.LENGTH_SHORT).show();
 				System.out.println(position);
 
 				// Get list of Item data
@@ -119,10 +127,33 @@ public class PropertyRelatedCaseListActivity extends BaseActivity {
 				System.out.println(codeData);
 				String data = (String) parent.getItemAtPosition(position).toString();
 				System.out.println(data);
+				
+				
+				//obj = new JSONObject(data);
+				String caseno = myArrayCaseList.get(position).get("CaseFileNo_List").toString();
+					
+							
+				System.out.println("Thomsssss");
+				System.out.println(caseno);
+				
+				//store Card Code
+				SharedPreferences prefLogin = getSharedPreferences("LoginData", Context.MODE_PRIVATE);									
+				SharedPreferences.Editor edit = prefLogin.edit();
+				edit.putString("CaseNo", caseno);									
+				edit.commit();
+				
+				
+				Intent i = new Intent(PropertyRelatedCaseListActivity.this, ProcessCaseDetails.class);
+				startActivity(i);
 
 			}
 		});
 
+	}
+	
+	@Override
+	public void onBackPressed() {
+		 this.finish();
 	}
 
 }

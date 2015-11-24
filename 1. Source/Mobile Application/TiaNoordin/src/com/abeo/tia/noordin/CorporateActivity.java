@@ -13,18 +13,23 @@ import com.loopj.android.http.RequestParams;
 
 import abeo.tia.noordin.R;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
@@ -74,6 +79,8 @@ public class CorporateActivity extends BaseActivity {
 			clientName = "", bankName = "", branch = "", lOTNo = "", caseAmount = "", userCode = "", status = "",
 			fileClosedDate = "";
 
+	
+			
 	// Find JSON Array
 	JSONArray arrayResponse = null;
 	JSONObject jsonResponse = null;
@@ -98,7 +105,12 @@ public class CorporateActivity extends BaseActivity {
 		buttonCorporateRelatedCase = (Button) findViewById(R.id.button_CorporateRelateCases);
 		buttonCorporateEdit = (Button) findViewById(R.id.button_CorporateEdit);
 		buttonCorporateConfirm = (Button) findViewById(R.id.button_CorporateConfirm);
-
+		// Find the SharedPreferences Firstname
+					SharedPreferences FirstName = getSharedPreferences("LoginData", Context.MODE_PRIVATE);		
+					String FirName = FirstName.getString("FIRSETNAME", "");
+					TextView welcome = (TextView)findViewById(R.id.textView_welcome);		
+					welcome.setText("Welcome "+FirName);
+					
 		// Find Edit Text field by Id
 
 		corporateCoName = (EditText) findViewById(R.id.editText_CorporateCoName);
@@ -361,7 +373,7 @@ public class CorporateActivity extends BaseActivity {
 												// block
 						e.printStackTrace();
 					}
-					Toast.makeText(CorporateActivity.this, "Case Item Found", Toast.LENGTH_SHORT).show();
+					//Toast.makeText(CorporateActivity.this, "Case Item Found", Toast.LENGTH_SHORT).show();
 					Intent intentList = new Intent(CorporateActivity.this, PropertyRelatedCaseListActivity.class);
 					intentList.putExtra("ProjectJsonList", jsonCaselist);
 					startActivity(intentList);
@@ -401,14 +413,14 @@ public class CorporateActivity extends BaseActivity {
 			String regNum = corporateBrnNo.getText().toString();
 			String addr1 = corporateAddress1.getText().toString();
 
-			if (comName.equals("") && regNum.equals("") && addr1.equals("")) {
+			if (regNum.equals("") && (comName.equals("") || addr1.equals(""))) {
 				if (comName.equals("")) {
 					Toast.makeText(CorporateActivity.this, "Fill Company Name:XXXX", Toast.LENGTH_SHORT).show();
 				}
-				if (regNum.equals("")) {
+				else if (regNum.equals("")) {
 					Toast.makeText(CorporateActivity.this, "Fill BRN NO:XXXX-A", Toast.LENGTH_SHORT).show();
 				}
-				if (addr1.equals("")) {
+				else if (addr1.equals("")) {
 					Toast.makeText(CorporateActivity.this, "Fill Address1", Toast.LENGTH_SHORT).show();
 				}
 			} else {
@@ -605,5 +617,14 @@ public class CorporateActivity extends BaseActivity {
 		}
 
 	}
+	
+
+	public boolean dispatchTouchEvent(MotionEvent ev) {	       
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.
+                INPUT_METHOD_SERVICE);
+imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        return super.dispatchTouchEvent(ev);
+
+        } 
 
 }
