@@ -35,6 +35,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.view.View;
 
 public class ProcessCaseProperty extends BaseActivity implements OnClickListener{
@@ -72,18 +73,18 @@ public class ProcessCaseProperty extends BaseActivity implements OnClickListener
 	JSONObject jsonResponseconfirm = null;
 
 	// spinner declaration
-	Spinner spinner_case_status, spinner_kiv,Receipttype,Subtype;
+	Spinner spinner_case_status, spinner_kiv,Receipttype,Subtype,spinnerpropertySTATE;
 
 	TextView ID, TEXT;
 	String caseValue_id = "", titleValue = "", casetype = "",
-			casetype_value = "",QryGroup14="",QryGroup15="",QryGroup16="",qryval,Scase_status, Skiv,SReceipttype,SSubtype;
+			casetype_value = "",QryGroup14="",QryGroup15="",QryGroup16="",qryval,Scase_status, Skiv,SReceipttype,SSubtype,statevalue;
 	
 	// Get Project value fromapi
 		private final String GET_SPINNER_VALUES = "SPA_GetValidValues";
-		ArrayList<HashMap<String, String>> jsonArraylist = null;
+		ArrayList<HashMap<String, String>> jsonArraylist = null,jsonliststate=null;
 		String id, name;
-		SimpleAdapter sAdapPROJ;
-		String GET_TYPE_SPINNER = "SPA_ProcessCase_GetIDType";
+		SimpleAdapter sAdapPROJ, sAdaparea= null;
+		String GET_TYPE_SPINNER = "SPA_ProcessCase_GetIDType",stateval_id,stateval;
 		
 		//Confirm btn request URL
 		String CONFIRM_BTN_REQUEST = "SPA_ProcessCase_UpdateCaseTabDetails";
@@ -130,7 +131,7 @@ public class ProcessCaseProperty extends BaseActivity implements OnClickListener
 				//certified_plan_no = (EditText) findViewById(R.id.editText_ProCasePropertyCertifiedPlanNo);
 				no_lot = (EditText) findViewById(R.id.editText_PropertyNoLot);
 				previously_knowas = (EditText) findViewById(R.id.editText_PropertyPreviouslyKnownAs);
-				state = (EditText) findViewById(R.id.editText_ProCasePropertyDaerahState);
+				//state = (EditText) findViewById(R.id.editText_ProCasePropertyDaerahState);
 				area = (EditText) findViewById(R.id.editText_ProCasePropertyNageriArea);
 				bandar_mukin = (EditText) findViewById(R.id.editText_ProCasePropertyBandarPekanMukin);
 				//govn_survey_plan = (EditText) findViewById(R.id.editText_ProCasePropertyGovn);
@@ -211,6 +212,34 @@ public class ProcessCaseProperty extends BaseActivity implements OnClickListener
 				spinner_kiv = (Spinner) findViewById(R.id.spinner_ProcessCase1KIV);
 				Receipttype = (Spinner) findViewById(R.id.spinner_Receipttype);
 				Subtype = (Spinner) findViewById(R.id.spinner_SubType);
+				spinnerpropertySTATE = (Spinner)  findViewById(R.id.state);
+				
+				
+				// Spinner click listener
+				spinnerpropertySTATE.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+							@Override
+							public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+								ID = (TextView) view.findViewById(R.id.Id);
+								stateval_id = ID.getText().toString();
+								TEXT = (TextView) view.findViewById(R.id.Name);
+								stateval = TEXT.getText().toString();
+
+								// Showing selected spinner item
+								//Toast.makeText(parent.getContext(), "Selected: " + developerValue, Toast.LENGTH_LONG).show();
+
+							}
+
+							@Override
+							public void onNothingSelected(AdapterView<?> parent) {
+								// TODO Auto-generated method stub
+
+							}
+						});
+				// Spinner click listener
+				
+				
+				
 				// Spinner click listener
 				spinner_case_status
 						.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -525,6 +554,97 @@ public class ProcessCaseProperty extends BaseActivity implements OnClickListener
 				});
 	}
 	
+
+	public void dropdownState() throws JSONException {
+
+		RequestParams params = null;
+		params = new RequestParams();
+		
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("TableName", "OCRD");
+		jsonObject.put("FieldName", "STATE");
+		params.put("sJsonInput", jsonObject.toString());
+
+		RestService.post(GET_SPINNER_VALUES, params, new BaseJsonHttpResponseHandler<String>() {
+
+			@Override
+			public void onFailure(int arg0, Header[] arg1, Throwable arg2, String arg3, String arg4) {
+				// TODO Auto-generated method stub
+				System.out.println(arg3);
+
+			}
+
+			@Override
+			public void onSuccess(int arg0, Header[] arg1, String arg2, String arg3) {
+				// TODO Auto-generated method stub
+				System.out.println("State Dropdown Success Details ");
+				System.out.println(arg2);
+
+				try {
+
+					arrayResponse = new JSONArray(arg2);
+					// Create new list
+					jsonliststate = new ArrayList<HashMap<String, String>>();
+
+					for (int i = 0; i < arrayResponse.length(); i++) {
+
+						jsonResponse = arrayResponse.getJSONObject(i);
+
+						id = jsonResponse.getString("Id").toString();
+						name = jsonResponse.getString("Name").toString();
+
+						// SEND JSON DATA INTO SPINNER TITLE LIST
+						HashMap<String, String> proList = new HashMap<String, String>();
+
+						// Send JSON Data to list activity
+						System.out.println("SEND JSON  LIST");
+						proList.put("Id_T", id);
+						System.out.println(name);
+						proList.put("Name_T", name);
+						System.out.println(name);
+						System.out.println(" END SEND JSON PROPERTY LIST");
+
+						jsonliststate.add(proList);
+						System.out.println("JSON STATE LIST");
+						System.out.println(jsonliststate);
+					}
+					// Spinner set Array Data in Drop down
+
+					sAdaparea = new SimpleAdapter(ProcessCaseProperty.this, jsonliststate, R.layout.spinner_item,
+							new String[] { "Id_T", "Name_T" }, new int[] { R.id.Id, R.id.Name });
+
+					spinnerpropertySTATE.setAdapter(sAdaparea);
+
+					for (int j = 0; j < jsonliststate.size(); j++) {
+						if (jsonliststate.get(j).get("Id_T").equals(statevalue)) {
+							spinnerpropertySTATE.setSelection(j);
+							break;
+						}
+					}
+
+				} catch (JSONException e) { // TODO Auto-generated
+											// catc
+											// block
+					e.printStackTrace();
+				}
+
+			}
+
+			@Override
+			protected String parseResponse(String arg0, boolean arg1) throws Throwable {
+
+				// Get Json response
+				arrayResponse = new JSONArray(arg0);
+				jsonResponse = arrayResponse.getJSONObject(0);
+
+				System.out.println("State Dropdown Details parse Response");
+				System.out.println(arg0);
+				return null;
+			}
+		});
+
+	}
+
 	public void dropdownKIV() throws JSONException {
 		RequestParams params = null;
 		params = new RequestParams();
@@ -791,7 +911,8 @@ public class ProcessCaseProperty extends BaseActivity implements OnClickListener
 				//certified_plan_no.setText(obj1.getString("CertifiedPlanNo"));
 				no_lot.setText(obj1.getString("LotNo"));
 				previously_knowas.setText(obj1.getString("PreviouslyKnownAs"));
-				state.setText(obj1.getString("State"));
+				statevalue = obj1.getString("State");
+				//state.setText(obj1.getString("State"));
 				area.setText(obj1.getString("Area"));
 				bandar_mukin.setText(obj1.getString("BPM"));
 				//govn_survey_plan.setText(obj1.getString("GovSurvyPlan"));
@@ -846,6 +967,7 @@ public class ProcessCaseProperty extends BaseActivity implements OnClickListener
 				dropdownstatus();
 				dropdownKIV();
 				dropdownRT();
+				dropdownState();
 				Subtype();
 				
 				
@@ -860,7 +982,7 @@ public class ProcessCaseProperty extends BaseActivity implements OnClickListener
 		System.out.print(jsonResponseconfirm);
 		// TODO Auto-generated method stub 
 //			String json_element = "[{\"Case\":\"1500000001\",\"CaseType\":\"SPA-BUY-DEV-APT-C\",\"CaseStatus\":\"OPEN\",\"FileOpenDate\":\"10/10/2015 12:00:00 AM\",\"CaseFileNo\":\"JJ/1500000001/\",\"KIV\":\"\",\"TabId\":\"2\",\"Details\":{\"LA\":\"\",\"MANAGER\":\"\",\"InCharge\":\"\",\"CustomerService\":\"\",\"CaseType\":\"SPA-BUY-DEV-APT-C\",\"FileLocation\":\"\",\"FileClosedDate\":\"\",\"VendAcqDt\":\"\",\"CompanyBuisnessSearch\":\"\",\"BankWindingSearch\":\"\"},\"Purchaser\":{\"PurRepresentedByFirm\":\"N\",\"PurlawyerRepresented\":\"N\",\"PurSPADate\":\"1/1/1900 12:00:00 AM\",\"PurEntryOfPrivateCaveat\":\"Chase\",\"PurWithOfPrivateCaveat\":\"Rane\",\"PurFirstName\":\"Name1\",\"PurFirstID\":\"Id1\",\"PurFirstTaxNo\":\"Tax1\",\"PurFirstContactNo\":\"9784561233\",\"PurFirstType\":\"CORPORATE\",\"PurSecName\":\"Name2\",\"PurSecID\":\"Id2\",\"PurSecTaxNo\":\"Tax2\",\"PurSecContactNo\":\"9784561234\",\"PurSecType\":\"INDIVIDUAL\",\"PurThirdName\":\"Name3\",\"PurThirdID\":\"Id3\",\"PurThirdTaxNo\":\"Tax3\",\"PurThirdContactNo\":\"9784561234\",\"PurThirdType\":\"INDIVIDUAL\",\"PurFourthName\":\"Name4\",\"PurFourthID\":\"Id4\",\"PurFourthTaxNo\":\"Tax4\",\"PurFourthContactNo\":\"9784561235\",\"PurFourthType\":\"INDIVIDUAL\"},\"Vendor\":{\"VndrRepresentedByFirm\":\"N\",\"VndrlawyerRepresented\":\"Y\",\"VndrReqDevConsent\":\"Name\",\"VndrReceiveDevConsent\":\"Sam\",\"VndrFirstName\":\"Name1\",\"VndrFirstID\":\"Id1\",\"VndrFirstTaxNo\":\"Tax1\",\"VndrFirstContactNo\":\"9784561233\",\"VndrFirstType\":\"CORPORATE\",\"VndrSecName\":\"Name2\",\"VndrSecID\":\"Id2\",\"VndrSecTaxNo\":\"Tax2\",\"VndrSecContactNo\":\"9784561234\",\"VndrSecType\":\"INDIVIDUAL\",\"VndrThirdName\":\"Name3\",\"VndrThirdID\":\"Id3\",\"VndrThirdTaxNo\":\"Tax3\",\"VndrThirdContactNo\":\"9784561234\",\"VndrThirdType\":\"INDIVIDUAL\",\"VndrFourthName\":\"Name4\",\"VndrFourthID\":\"Id4\",\"VndrFourthTaxNo\":\"Tax4\",\"VndrFourthContactNo\":\"9784561235\",\"VndrFourthType\":\"INDIVIDUAL\"},\"Property\":{\"TitleType\":\"KEKAL\",\"CertifiedPlanNo\":\"\",\"LotNo\":\"\",\"PreviouslyKnownAs\":\"\",\"State\":\"\",\"Area\":\"\",\"BPM\":\"\",\"GovSurvyPlan\":\"\",\"LotArea\":\"12345\",\"Developer\":\"\",\"Project\":\"\",\"DevLicenseNo\":\"\",\"DevSolicitor\":\"\",\"DevSoliLoc\":\"\",\"TitleSearchDate\":\"\",\"DSCTransfer\":\"\",\"DRCTransfer\":\"\",\"FourteenADate\":\"\",\"DRTLRegistry\":\"\",\"PropertyCharged\":\"\",\"BankName\":\"\",\"Branch\":\"\",\"PAName\":\"\",\"PresentationNo\":\"\",\"ExistChargeRef\":\"\",\"ReceiptType\":\"\",\"ReceiptNo\":\"\",\"ReceiptDate\":\"\",\"PurchasePrice\":\"1452\",\"AdjValue\":\"\",\"VndrPrevSPAValue\":\"\",\"Deposit\":\"\",\"BalPurPrice\":\"\",\"LoanAmount\":\"\",\"LoanCaseNo\":\"1234\",\"DiffSum\":\"\",\"RedAmt\":\"\",\"RedDate\":\"\",\"DefRdmptSum\":\"\"},\"LoanPrinciple\":{\"ReqRedStatement\":\"\",\"RedStmtDate\":\"\",\"RedPayDate\":\"\",\"RepByFirm\":\"\",\"LoanCaseNo\":\"1234\",\"Project\":\"\",\"MasterBankName\":\"\",\"BranchName\":\"\",\"Address\":\"\",\"PAName\":\"\",\"BankRef\":\"\",\"BankInsDate\":\"2015/10/11\",\"LOFDate\":\"\",\"BankSolicitor\":\"\",\"SoliLoc\":\"\",\"SoliRef\":\"\",\"TypeofLoan\":\"\",\"TypeofFacility\":\"\",\"FacilityAmt\":\"\",\"Repaymt\":\"\",\"IntrstRate\":\"\",\"MonthlyInstmt\":\"\",\"TermLoanAmt\":\"\",\"Interest\":\"\",\"ODLoan\":\"\",\"MRTA\":\"\",\"BankGuarantee\":\"\",\"LetterofCredit\":\"\",\"TrustReceipt\":\"\",\"Others\":\"\",\"LoanDet1\":\"\",\"LoanDet2\":\"\",\"LoanDet3\":\"\",\"LoanDet4\":\"\",\"LoanDet5\":\"\"},\"LoanSubsidary\":{\"LoanDocForBankExe\":\"Exe 1\",\"FaciAgreeDate\":\"\",\"LoanDocRetFromBank\":\"\",\"DischargeofCharge\":\"\",\"FirstTypeofFacility\":\"\",\"FirstFacilityAmt\":\"\",\"FirstRepaymt\":\"\",\"FirstIntrstRate\":\"\",\"FirstMonthlyInstmt\":\"1500\",\"FirstTermLoanAmt\":\"\",\"FirstInterest\":\"\",\"FirstODLoan\":\"\",\"FirstMRTA\":\"\",\"FirstBankGuarantee\":\"\",\"FirstLetterofCredit\":\"\",\"FirstTrustReceipt\":\"\",\"FirstOthers\":\"Sample\",\"SecTypeofFacility\":\"\",\"SecFacilityAmt\":\"\",\"SecRepaymt\":\"\",\"SecIntrstRate\":\"12%\",\"SecMonthlyInstmt\":\"\",\"SecTermLoanAmt\":\"\",\"SecInterest\":\"\",\"SecODLoan\":\"\",\"SecMRTA\":\"\",\"SecBankGuarantee\":\"\",\"SecLetterofCredit\":\"\",\"SecTrustReceipt\":\"45A\",\"SecOthers\":\"\",\"ThirdTypeofFacility\":\"Sample_Data\",\"ThirdFacilityAmt\":\"\",\"ThirdRepaymt\":\"\",\"ThirdIntrstRate\":\"\",\"ThirdMonthlyInstmt\":\"\",\"ThirdTermLoanAmt\":\"587.15\",\"ThirdInterest\":\"\",\"ThirdODLoan\":\"\",\"ThirdMRTA\":\"\",\"ThirdBankGuarantee\":\"\",\"ThirdLetterofCredit\":\"\",\"ThirdTrustReceipt\":\"\",\"ThirdOthers\":\"\",\"FourthTypeofFacility\":\"Sample4\",\"FourthFacilityAmt\":\"\",\"FourthRepaymt\":\"15\",\"FourthIntrstRate\":\"\",\"FourthMonthlyInstmt\":\"\",\"FourthTermLoanAmt\":\"\",\"FourthInterest\":\"21\",\"FourthODLoan\":\"\",\"FourthMRTA\":\"\",\"FourthBankGuarantee\":\"\",\"FourthLetterofCredit\":\"\",\"FourthTrustReceipt\":\"\",\"FourthOthers\":\"\",\"FifthTypeofFacility\":\"Sample 5\",\"FifthFacilityAmt\":\"\",\"FifthRepaymt\":\"\",\"FifthIntrstRate\":\"\",\"FifthMonthlyInstmt\":\"\",\"FifthTermLoanAmt\":\"\",\"FifthInterest\":\"10\",\"FifthODLoan\":\"\",\"FifthMRTA\":\"\",\"FifthBankGuarantee\":\"\",\"FifthLetterofCredit\":\"\",\"FifthTrustReceipt\":\"Test\",\"FifthOthers\":\"\"}}]";
-		String json_element = "[{\"Case\":" + "\"" + jsonResponseconfirm.get("Case").toString() + "\",\"CaseType\":" + "\"" + jsonResponseconfirm.get("CaseType").toString() + "\",\"CaseStatus\":\"OPEN\",\"FileOpenDate\":\"10/10/2015 12:00:00 AM\",\"CaseFileNo\":" + "\"" + jsonResponseconfirm.get("CaseFileNo").toString() + "\",\"KIV\":\"\",\"TabId\":\"4\",\"Details\":{\"LA\":\"\",\"MANAGER\":\"\",\"InCharge\":\"\",\"CustomerService\":\"\",\"CaseType\":\"SPA-BUY-DEV-APT-C\",\"FileLocation\":\"\",\"FileClosedDate\":\"\",\"VendAcqDt\":\"\",\"CompanyBuisnessSearch\":\"\",\"BankWindingSearch\":\"\"},\"Purchaser\":{\"PurRepresentedByFirm\":\"N\",\"PurlawyerRepresented\":\"N\",\"PurSPADate\":\"1/1/1900 12:00:00 AM\",\"PurEntryOfPrivateCaveat\":\"Chase\",\"PurWithOfPrivateCaveat\":\"Rane\",\"PurFirstName\":\"Name1\",\"PurFirstID\":\"Id1\",\"PurFirstTaxNo\":\"Tax1\",\"PurFirstContactNo\":\"9784561233\",\"PurFirstType\":\"CORPORATE\",\"PurSecName\":\"Name2\",\"PurSecID\":\"Id2\",\"PurSecTaxNo\":\"Tax2\",\"PurSecContactNo\":\"9784561234\",\"PurSecType\":\"INDIVIDUAL\",\"PurThirdName\":\"Name3\",\"PurThirdID\":\"Id3\",\"PurThirdTaxNo\":\"Tax3\",\"PurThirdContactNo\":\"9784561234\",\"PurThirdType\":\"INDIVIDUAL\",\"PurFourthName\":\"Name4\",\"PurFourthID\":\"Id4\",\"PurFourthTaxNo\":\"Tax4\",\"PurFourthContactNo\":\"9784561235\",\"PurFourthType\":\"INDIVIDUAL\"},\"Vendor\":{\"VndrRepresentedByFirm\":\"N\",\"VndrlawyerRepresented\":\"Y\",\"VndrReqDevConsent\":\"Name\",\"VndrReceiveDevConsent\":\"Sam\",\"VndrFirstName\":\"Name1\",\"VndrFirstID\":\"Id1\",\"VndrFirstTaxNo\":\"Tax1\",\"VndrFirstContactNo\":\"9784561233\",\"VndrFirstType\":\"CORPORATE\",\"VndrSecName\":\"Name2\",\"VndrSecID\":\"Id2\",\"VndrSecTaxNo\":\"Tax2\",\"VndrSecContactNo\":\"9784561234\",\"VndrSecType\":\"INDIVIDUAL\",\"VndrThirdName\":\"Name3\",\"VndrThirdID\":\"Id3\",\"VndrThirdTaxNo\":\"Tax3\",\"VndrThirdContactNo\":\"9784561234\",\"VndrThirdType\":\"INDIVIDUAL\",\"VndrFourthName\":\"Name4\",\"VndrFourthID\":\"Id4\",\"VndrFourthTaxNo\":\"Tax4\",\"VndrFourthContactNo\":\"9784561235\",\"VndrFourthType\":\"INDIVIDUAL\"},\"Property\":{\"" + "TitleType" + "\":" + "\"" + title_no.getText().toString() + "\",\"PropertyCharged\":" + "\"" + QryGroup13.isChecked() + "\",\"QryGroup14\":" + "\"" + QryGroup14 + "\",\"QryGroup15\":" + "\"" + QryGroup15 + "\",\"QryGroup16\":" + "\"" + QryGroup16 + "\",\"" + "CertifiedPlanNo" + "\":" + "\"\",\"" + "LotNo" + "\":" + "\"" + no_lot.getText().toString() + "\",\"" + "PreviouslyKnownAs" + "\":" + "\"" + previously_knowas.getText().toString() + "\",\"" + "State" + "\":" + "\"" + state.getText().toString() + "\",\"" + "Area" + "\":" + "\"" + area.getText().toString() + "\",\"" + "ReceiptNo" + "\": " + "\"" + receipt_no.getText().toString() + "\",\"" + "BPM" + "\":" + "\"" + bandar_mukin.getText().toString() + "\",\"" + "GovSurvyPlan" + "\":" + "\"\",\"" + "LotArea" + "\":" + "\"" + lot_area.getText().toString() + "\",\"" + "Developer" + "\":" + "\"" + developer.getText().toString() + "\",\"" + "Project" + "\":" + "\"" + project.getText().toString() + "\",\"" + "DevLicenseNo" + "\":" + "\"" + dev_license_no.getText().toString() + "\",\"" + "DevSolicitor" + "\":" + "\"" + dev_solicitor.getText().toString() + "\",\"" + "DevSoliLoc" + "\":" + "\"" + soli_loc.getText().toString() + "\",\"" + "TitleSearchDate" + "\":" + "\"" + title_search.getText().toString() + "\",\"" + "DSCTransfer" + "\":" + "\"" + date_submit_consent.getText().toString() + "\",\"" + "DRCTransfer" + "\":" + "\"" + date_receive_consent.getText().toString() + "\",\"" + "FourteenADate" + "\":" + "\"" + date14_a.getText().toString() + "\",\"" + "DRTLRegistry" + "\":" + "\"" + date_of_return.getText().toString() + "\",\"" + "BankName" + "\":" + "\"" + bank_name.getText().toString() + "\",\"" + "Branch" + "\":" + "\"" + branch.getText().toString() + "\",\"" + "PAName" + "\":" + "\"" + pa_name.getText().toString() + "\",\"" + "PresentationNo" + "\":" + "\"" + presentation_no.getText().toString() + "\",\"" + "ExistChargeRef" + "\":" + "\"" + existing_charge_refs.getText().toString() + "\",\"ReceiptType\":"+"\""+Receipttype_val+"\",\"ReceiptDate" + "\":" + "\"" + receipt_date.getText().toString() + "\",\"" + "PurchasePrice" + "\":" + "\"" + purchase_price.getText().toString() + "\",\"" + "AdjValue" + "\":" + "\"" + adjudicated_value.getText().toString() + "\",\"" + "VndrPrevSPAValue" + "\":" + "\"" + vendor_prev.getText().toString() + "\",\"" + "Deposit" + "\":" + "\"" + deposit.getText().toString() + "\",\"" + "BalPurPrice" + "\":" + "\"" + balance_pur_price.getText().toString() + "\",\"" + "LoanAmount" + "\":" + "\"" + loan_amt.getText().toString() + "\",\"" + "LoanCaseNo" + "\":" + "\"" + loan_case_no.getText().toString() + "\",\"" + "DiffSum" + "\":" + "\"" + differential_sum.getText().toString() + "\",\"" + "RedAmt" + "\":" + "\"" + redemption_amt.getText().toString() + "\",\"" + "RedDate" + "\":" + "\"" + redemption_date.getText().toString() + "\",\"" + "DefRdmptSum" + "\":" + "\"" + defict_rdmt_sum.getText().toString() + "\"},\"LoanPrinciple\":{\"ReqRedStatement\":\"\",\"RedStmtDate\":\"\",\"RedPayDate\":\"\",\"RepByFirm\":\"\",\"LoanCaseNo\":\"1234\",\"Project\":\"\",\"MasterBankName\":\"\",\"BranchName\":\"\",\"Address\":\"\",\"PAName\":\"\",\"BankRef\":\"\",\"BankInsDate\":\"2015/10/11\",\"LOFDate\":\"\",\"BankSolicitor\":\"\",\"SoliLoc\":\"\",\"SoliRef\":\"\",\"TypeofLoan\":\"\",\"TypeofFacility\":\"\",\"FacilityAmt\":\"\",\"Repaymt\":\"\",\"IntrstRate\":\"\",\"MonthlyInstmt\":\"\",\"TermLoanAmt\":\"\",\"Interest\":\"\",\"ODLoan\":\"\",\"MRTA\":\"\",\"BankGuarantee\":\"\",\"LetterofCredit\":\"\",\"TrustReceipt\":\"\",\"Others\":\"\",\"LoanDet1\":\"\",\"LoanDet2\":\"\",\"LoanDet3\":\"\",\"LoanDet4\":\"\",\"LoanDet5\":\"\"},\"LoanSubsidary\":{\"LoanDocForBankExe\":\"Exe 1\",\"FaciAgreeDate\":\"\",\"LoanDocRetFromBank\":\"\",\"DischargeofCharge\":\"\",\"FirstTypeofFacility\":\"\",\"FirstFacilityAmt\":\"\",\"FirstRepaymt\":\"\",\"FirstIntrstRate\":\"\",\"FirstMonthlyInstmt\":\"1500\",\"FirstTermLoanAmt\":\"\",\"FirstInterest\":\"\",\"FirstODLoan\":\"\",\"FirstMRTA\":\"\",\"FirstBankGuarantee\":\"\",\"FirstLetterofCredit\":\"\",\"FirstTrustReceipt\":\"\",\"FirstOthers\":\"Sample\",\"SecTypeofFacility\":\"\",\"SecFacilityAmt\":\"\",\"SecRepaymt\":\"\",\"SecIntrstRate\":\"12%\",\"SecMonthlyInstmt\":\"\",\"SecTermLoanAmt\":\"\",\"SecInterest\":\"\",\"SecODLoan\":\"\",\"SecMRTA\":\"\",\"SecBankGuarantee\":\"\",\"SecLetterofCredit\":\"\",\"SecTrustReceipt\":\"45A\",\"SecOthers\":\"\",\"ThirdTypeofFacility\":\"Sample_Data\",\"ThirdFacilityAmt\":\"\",\"ThirdRepaymt\":\"\",\"ThirdIntrstRate\":\"\",\"ThirdMonthlyInstmt\":\"\",\"ThirdTermLoanAmt\":\"587.15\",\"ThirdInterest\":\"\",\"ThirdODLoan\":\"\",\"ThirdMRTA\":\"\",\"ThirdBankGuarantee\":\"\",\"ThirdLetterofCredit\":\"\",\"ThirdTrustReceipt\":\"\",\"ThirdOthers\":\"\",\"FourthTypeofFacility\":\"Sample4\",\"FourthFacilityAmt\":\"\",\"FourthRepaymt\":\"15\",\"FourthIntrstRate\":\"\",\"FourthMonthlyInstmt\":\"\",\"FourthTermLoanAmt\":\"\",\"FourthInterest\":\"21\",\"FourthODLoan\":\"\",\"FourthMRTA\":\"\",\"FourthBankGuarantee\":\"\",\"FourthLetterofCredit\":\"\",\"FourthTrustReceipt\":\"\",\"FourthOthers\":\"\",\"FifthTypeofFacility\":\"Sample 5\",\"FifthFacilityAmt\":\"\",\"FifthRepaymt\":\"\",\"FifthIntrstRate\":\"\",\"FifthMonthlyInstmt\":\"\",\"FifthTermLoanAmt\":\"\",\"FifthInterest\":\"10\",\"FifthODLoan\":\"\",\"FifthMRTA\":\"\",\"FifthBankGuarantee\":\"\",\"FifthLetterofCredit\":\"\",\"FifthTrustReceipt\":\"Test\",\"FifthOthers\":\"\"}}]";
+		String json_element = "[{\"Case\":" + "\"" + jsonResponseconfirm.get("Case").toString() + "\",\"CaseType\":" + "\"" + jsonResponseconfirm.get("CaseType").toString() + "\",\"CaseStatus\":\"OPEN\",\"FileOpenDate\":\"10/10/2015 12:00:00 AM\",\"CaseFileNo\":" + "\"" + jsonResponseconfirm.get("CaseFileNo").toString() + "\",\"KIV\":\"\",\"TabId\":\"4\",\"Details\":{\"LA\":\"\",\"MANAGER\":\"\",\"InCharge\":\"\",\"CustomerService\":\"\",\"CaseType\":\"SPA-BUY-DEV-APT-C\",\"FileLocation\":\"\",\"FileClosedDate\":\"\",\"VendAcqDt\":\"\",\"CompanyBuisnessSearch\":\"\",\"BankWindingSearch\":\"\"},\"Purchaser\":{\"PurRepresentedByFirm\":\"N\",\"PurlawyerRepresented\":\"N\",\"PurSPADate\":\"1/1/1900 12:00:00 AM\",\"PurEntryOfPrivateCaveat\":\"Chase\",\"PurWithOfPrivateCaveat\":\"Rane\",\"PurFirstName\":\"Name1\",\"PurFirstID\":\"Id1\",\"PurFirstTaxNo\":\"Tax1\",\"PurFirstContactNo\":\"9784561233\",\"PurFirstType\":\"CORPORATE\",\"PurSecName\":\"Name2\",\"PurSecID\":\"Id2\",\"PurSecTaxNo\":\"Tax2\",\"PurSecContactNo\":\"9784561234\",\"PurSecType\":\"INDIVIDUAL\",\"PurThirdName\":\"Name3\",\"PurThirdID\":\"Id3\",\"PurThirdTaxNo\":\"Tax3\",\"PurThirdContactNo\":\"9784561234\",\"PurThirdType\":\"INDIVIDUAL\",\"PurFourthName\":\"Name4\",\"PurFourthID\":\"Id4\",\"PurFourthTaxNo\":\"Tax4\",\"PurFourthContactNo\":\"9784561235\",\"PurFourthType\":\"INDIVIDUAL\"},\"Vendor\":{\"VndrRepresentedByFirm\":\"N\",\"VndrlawyerRepresented\":\"Y\",\"VndrReqDevConsent\":\"Name\",\"VndrReceiveDevConsent\":\"Sam\",\"VndrFirstName\":\"Name1\",\"VndrFirstID\":\"Id1\",\"VndrFirstTaxNo\":\"Tax1\",\"VndrFirstContactNo\":\"9784561233\",\"VndrFirstType\":\"CORPORATE\",\"VndrSecName\":\"Name2\",\"VndrSecID\":\"Id2\",\"VndrSecTaxNo\":\"Tax2\",\"VndrSecContactNo\":\"9784561234\",\"VndrSecType\":\"INDIVIDUAL\",\"VndrThirdName\":\"Name3\",\"VndrThirdID\":\"Id3\",\"VndrThirdTaxNo\":\"Tax3\",\"VndrThirdContactNo\":\"9784561234\",\"VndrThirdType\":\"INDIVIDUAL\",\"VndrFourthName\":\"Name4\",\"VndrFourthID\":\"Id4\",\"VndrFourthTaxNo\":\"Tax4\",\"VndrFourthContactNo\":\"9784561235\",\"VndrFourthType\":\"INDIVIDUAL\"},\"Property\":{\"" + "TitleType" + "\":" + "\"" + title_no.getText().toString() + "\",\"PropertyCharged\":" + "\"" + QryGroup13.isChecked() + "\",\"QryGroup14\":" + "\"" + QryGroup14 + "\",\"QryGroup15\":" + "\"" + QryGroup15 + "\",\"QryGroup16\":" + "\"" + QryGroup16 + "\",\"" + "CertifiedPlanNo" + "\":" + "\"\",\"" + "LotNo" + "\":" + "\"" + no_lot.getText().toString() + "\",\"" + "PreviouslyKnownAs" + "\":" + "\"" + previously_knowas.getText().toString() + "\",\"" + "State" + "\":" + "\"" + stateval + "\",\"" + "Area" + "\":" + "\"" + area.getText().toString() + "\",\"" + "ReceiptNo" + "\": " + "\"" + receipt_no.getText().toString() + "\",\"" + "BPM" + "\":" + "\"" + bandar_mukin.getText().toString() + "\",\"" + "GovSurvyPlan" + "\":" + "\"\",\"" + "LotArea" + "\":" + "\"" + lot_area.getText().toString() + "\",\"" + "Developer" + "\":" + "\"" + developer.getText().toString() + "\",\"" + "Project" + "\":" + "\"" + project.getText().toString() + "\",\"" + "DevLicenseNo" + "\":" + "\"" + dev_license_no.getText().toString() + "\",\"" + "DevSolicitor" + "\":" + "\"" + dev_solicitor.getText().toString() + "\",\"" + "DevSoliLoc" + "\":" + "\"" + soli_loc.getText().toString() + "\",\"" + "TitleSearchDate" + "\":" + "\"" + title_search.getText().toString() + "\",\"" + "DSCTransfer" + "\":" + "\"" + date_submit_consent.getText().toString() + "\",\"" + "DRCTransfer" + "\":" + "\"" + date_receive_consent.getText().toString() + "\",\"" + "FourteenADate" + "\":" + "\"" + date14_a.getText().toString() + "\",\"" + "DRTLRegistry" + "\":" + "\"" + date_of_return.getText().toString() + "\",\"" + "BankName" + "\":" + "\"" + bank_name.getText().toString() + "\",\"" + "Branch" + "\":" + "\"" + branch.getText().toString() + "\",\"" + "PAName" + "\":" + "\"" + pa_name.getText().toString() + "\",\"" + "PresentationNo" + "\":" + "\"" + presentation_no.getText().toString() + "\",\"" + "ExistChargeRef" + "\":" + "\"" + existing_charge_refs.getText().toString() + "\",\"ReceiptType\":"+"\""+Receipttype_val+"\",\"ReceiptDate" + "\":" + "\"" + receipt_date.getText().toString() + "\",\"" + "PurchasePrice" + "\":" + "\"" + purchase_price.getText().toString() + "\",\"" + "AdjValue" + "\":" + "\"" + adjudicated_value.getText().toString() + "\",\"" + "VndrPrevSPAValue" + "\":" + "\"" + vendor_prev.getText().toString() + "\",\"" + "Deposit" + "\":" + "\"" + deposit.getText().toString() + "\",\"" + "BalPurPrice" + "\":" + "\"" + balance_pur_price.getText().toString() + "\",\"" + "LoanAmount" + "\":" + "\"" + loan_amt.getText().toString() + "\",\"" + "LoanCaseNo" + "\":" + "\"" + loan_case_no.getText().toString() + "\",\"" + "DiffSum" + "\":" + "\"" + differential_sum.getText().toString() + "\",\"" + "RedAmt" + "\":" + "\"" + redemption_amt.getText().toString() + "\",\"" + "RedDate" + "\":" + "\"" + redemption_date.getText().toString() + "\",\"" + "DefRdmptSum" + "\":" + "\"" + defict_rdmt_sum.getText().toString() + "\"},\"LoanPrinciple\":{\"ReqRedStatement\":\"\",\"RedStmtDate\":\"\",\"RedPayDate\":\"\",\"RepByFirm\":\"\",\"LoanCaseNo\":\"1234\",\"Project\":\"\",\"MasterBankName\":\"\",\"BranchName\":\"\",\"Address\":\"\",\"PAName\":\"\",\"BankRef\":\"\",\"BankInsDate\":\"2015/10/11\",\"LOFDate\":\"\",\"BankSolicitor\":\"\",\"SoliLoc\":\"\",\"SoliRef\":\"\",\"TypeofLoan\":\"\",\"TypeofFacility\":\"\",\"FacilityAmt\":\"\",\"Repaymt\":\"\",\"IntrstRate\":\"\",\"MonthlyInstmt\":\"\",\"TermLoanAmt\":\"\",\"Interest\":\"\",\"ODLoan\":\"\",\"MRTA\":\"\",\"BankGuarantee\":\"\",\"LetterofCredit\":\"\",\"TrustReceipt\":\"\",\"Others\":\"\",\"LoanDet1\":\"\",\"LoanDet2\":\"\",\"LoanDet3\":\"\",\"LoanDet4\":\"\",\"LoanDet5\":\"\"},\"LoanSubsidary\":{\"LoanDocForBankExe\":\"Exe 1\",\"FaciAgreeDate\":\"\",\"LoanDocRetFromBank\":\"\",\"DischargeofCharge\":\"\",\"FirstTypeofFacility\":\"\",\"FirstFacilityAmt\":\"\",\"FirstRepaymt\":\"\",\"FirstIntrstRate\":\"\",\"FirstMonthlyInstmt\":\"1500\",\"FirstTermLoanAmt\":\"\",\"FirstInterest\":\"\",\"FirstODLoan\":\"\",\"FirstMRTA\":\"\",\"FirstBankGuarantee\":\"\",\"FirstLetterofCredit\":\"\",\"FirstTrustReceipt\":\"\",\"FirstOthers\":\"Sample\",\"SecTypeofFacility\":\"\",\"SecFacilityAmt\":\"\",\"SecRepaymt\":\"\",\"SecIntrstRate\":\"12%\",\"SecMonthlyInstmt\":\"\",\"SecTermLoanAmt\":\"\",\"SecInterest\":\"\",\"SecODLoan\":\"\",\"SecMRTA\":\"\",\"SecBankGuarantee\":\"\",\"SecLetterofCredit\":\"\",\"SecTrustReceipt\":\"45A\",\"SecOthers\":\"\",\"ThirdTypeofFacility\":\"Sample_Data\",\"ThirdFacilityAmt\":\"\",\"ThirdRepaymt\":\"\",\"ThirdIntrstRate\":\"\",\"ThirdMonthlyInstmt\":\"\",\"ThirdTermLoanAmt\":\"587.15\",\"ThirdInterest\":\"\",\"ThirdODLoan\":\"\",\"ThirdMRTA\":\"\",\"ThirdBankGuarantee\":\"\",\"ThirdLetterofCredit\":\"\",\"ThirdTrustReceipt\":\"\",\"ThirdOthers\":\"\",\"FourthTypeofFacility\":\"Sample4\",\"FourthFacilityAmt\":\"\",\"FourthRepaymt\":\"15\",\"FourthIntrstRate\":\"\",\"FourthMonthlyInstmt\":\"\",\"FourthTermLoanAmt\":\"\",\"FourthInterest\":\"21\",\"FourthODLoan\":\"\",\"FourthMRTA\":\"\",\"FourthBankGuarantee\":\"\",\"FourthLetterofCredit\":\"\",\"FourthTrustReceipt\":\"\",\"FourthOthers\":\"\",\"FifthTypeofFacility\":\"Sample 5\",\"FifthFacilityAmt\":\"\",\"FifthRepaymt\":\"\",\"FifthIntrstRate\":\"\",\"FifthMonthlyInstmt\":\"\",\"FifthTermLoanAmt\":\"\",\"FifthInterest\":\"10\",\"FifthODLoan\":\"\",\"FifthMRTA\":\"\",\"FifthBankGuarantee\":\"\",\"FifthLetterofCredit\":\"\",\"FifthTrustReceipt\":\"Test\",\"FifthOthers\":\"\"}}]";
 			Log.e("pur_string", json_element);
 			
 			JSONObject valuesObject = null;

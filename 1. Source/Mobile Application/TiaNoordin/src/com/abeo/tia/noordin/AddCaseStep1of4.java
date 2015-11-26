@@ -63,8 +63,9 @@ public class AddCaseStep1of4 extends BaseActivity implements OnClickListener {
 	// Find list of Add Case Item list web method
 	private final String METHOD_ADDCASE_ITEMLIST = "SPA_AddCase_ListOfItems";
 	private final String SPA_AddCase_DocumentToRead = "SPA_AddCase_DocumentToRead";
+	String BASE_URL = RestService.getBurl();
 	
-	private final String METHOD_ADDFILE = "http://54.251.51.69:3878/SPAMobile.asmx/Attachments";
+	private final String METHOD_ADDFILE = BASE_URL+"Attachments";
 	
 	
 

@@ -89,7 +89,7 @@ android:padding="10sp" >
                                                         <ListView
                                                             android:id="@+id/listview_corp"
                                                             android:layout_width="match_parent"
-                                                            android:layout_height="wrap_content"
+                                                            android:layout_height="493dp"
                                                             android:paddingTop="2dp" >
                                                         </ListView>
                                                     </LinearLayout>

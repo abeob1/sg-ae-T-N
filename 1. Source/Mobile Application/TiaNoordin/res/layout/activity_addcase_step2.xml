@@ -223,15 +223,20 @@
                                                 android:text="Title Type:"
                                                 android:textColor="#fff"
                                                 android:textSize="@dimen/activity_small_textsize" />
+											<TextView
+                                             android:id="@+id/textView_Full_Names"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
 
                                             <Spinner
                                                 android:id="@+id/TitleType"
-                                                android:layout_width="fill_parent"
+                                                android:layout_width="240dp"
                                                 android:layout_height="wrap_content"
-                                                android:textColor="@color/black"
-                                                android:layout_weight="1"
-                                                android:background="@color/white" />
-
+                                                android:background="@color/white"
+                                                android:textColor="@color/black" />
                                             
                                         </LinearLayout>
 
@@ -425,24 +430,21 @@
                                                 android:text="Negari/State:"
                                                 android:textColor="#fff"
                                                 android:textSize="@dimen/activity_small_textsize" />
+<TextView
+                                             android:id="@+id/textView_Full_Namestate"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
 
-                                            <EditText
-                                                android:id="@+id/editText_PropertyDaerahState"
-                                                android:layout_width="fill_parent"
-                                                android:layout_height="20dp"
-                                                android:background="@drawable/rounded_big"
-                                                android:layout_centerHorizontal="true"
-                                                android:layout_centerVertical="true"
-                                                android:layout_weight="1"
-                                                android:ems="10"
-                                                android:hint="@string/hints"
-                                                android:inputType="text"
-                                                android:paddingLeft="5dp"
-                                                android:paddingRight="5dp"
-                                                android:singleLine="true"
-                                                android:textColor="@color/black"
-                                                android:textSize="@dimen/activity_small_textsize" >
-                                            </EditText>
+                                            <Spinner
+                                                android:id="@+id/state"
+                                                android:layout_width="240dp"
+                                                android:layout_height="wrap_content"
+                                                android:background="@color/white"
+                                                android:textColor="@color/black" />
+
                                         </LinearLayout>
 
                                         <LinearLayout
@@ -575,28 +577,35 @@
                                                 android:text="Purchase Price:"
                                                 android:textColor="#fff"
                                                 android:textSize="@dimen/activity_small_textsize" />
+<TextView
+                                             android:id="@+id/textView_Full_Namespc"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
 
                                             <EditText
                                                 android:id="@+id/editText_PurchasePrice"
-                                                android:layout_width="fill_parent"
+                                                android:layout_width="240dp"
                                                 android:layout_height="20dp"
-                                                android:background="@drawable/rounded_big"
                                                 android:layout_centerHorizontal="true"
                                                 android:layout_centerVertical="true"
-                                                android:inputType="phone"
-                                                android:layout_weight="1"
+                                                android:background="@drawable/rounded_big"
                                                 android:clickable="true"
                                                 android:cursorVisible="true"
                                                 android:ems="10"
                                                 android:enabled="true"
                                                 android:focusable="true"
                                                 android:focusableInTouchMode="true"
-                                                android:hint="Number"                                                
+                                                android:hint="Number"
+                                                android:inputType="phone"
                                                 android:paddingLeft="5dp"
                                                 android:paddingRight="5dp"
                                                 android:singleLine="true"
                                                 android:textColor="@color/black"
-                                                android:textSize="@dimen/activity_small_textsize"  >
+                                                android:textSize="@dimen/activity_small_textsize" >
+
                                             </EditText>
                                         </LinearLayout>
                                     </LinearLayout>
@@ -660,14 +669,21 @@
                                                 android:text="Developer:"
                                                 android:textColor="#fff"
                                                 android:textSize="@dimen/activity_small_textsize" />
+<TextView
+                                             android:id="@+id/textView_as"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
 
                                            <Spinner
-                                                android:id="@+id/developersp"
-                                                android:layout_width="fill_parent"
-                                                android:layout_height="wrap_content"
-                                                android:textColor="@color/black"
-                                                android:layout_weight="1"
-                                                android:background="@color/white" />
+                                               android:id="@+id/developersp"
+                                               android:layout_width="238dp"
+                                               android:layout_height="wrap_content"
+                                               android:background="@color/white"
+                                               android:textColor="@color/black" />
+
                                         </LinearLayout>
 
                                         <LinearLayout
@@ -686,13 +702,21 @@
                                                 android:text="Project:"
                                                 android:textColor="#fff"
                                                 android:textSize="@dimen/activity_small_textsize" />
+                                            
+                                            <TextView
+                                             android:id="@+id/textView_project"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
+
 <Spinner
-                                                android:id="@+id/projectsp"
-                                                android:layout_width="fill_parent"
-                                                android:layout_height="wrap_content"
-                                                android:textColor="@color/black"
-                                                android:layout_weight="1"
-                                                android:background="@color/white" />
+    android:id="@+id/projectsp"
+    android:layout_width="239dp"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:textColor="@color/black" />
                                          
                                         </LinearLayout>
 
@@ -753,14 +777,21 @@
                                                 android:text="Dev. Solicitor:"
                                                 android:textColor="#fff"
                                                 android:textSize="@dimen/activity_small_textsize" />
+<TextView
+                                             android:id="@+id/textView_solider"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
 
                                             <Spinner
                                                 android:id="@+id/DevSolisp"
-                                                android:layout_width="fill_parent"
+                                                android:layout_width="239dp"
                                                 android:layout_height="wrap_content"
-                                                android:textColor="@color/black"
-                                                android:layout_weight="1"
-                                                android:background="@color/white" />
+                                                android:background="@color/white"
+                                                android:textColor="@color/black" />
+
                                         </LinearLayout>
 
                                         <LinearLayout
@@ -858,13 +889,21 @@
                                                         android:textColor="#fff"
                                                         android:textSize="@dimen/activity_small_textsize" />
 
+                                                    <TextView
+                                             android:id="@+id/textView_bank"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
+                                                    
                                                   <Spinner
-                                                android:id="@+id/banksp"
-                                                android:layout_width="fill_parent"
-                                                android:layout_height="wrap_content"
-                                                android:textColor="@color/black"
-                                                android:layout_weight="1"
-                                                android:background="@color/white" />
+                                                      android:id="@+id/banksp"
+                                                      android:layout_width="239dp"
+                                                      android:layout_height="wrap_content"
+                                                      android:background="@color/white"
+                                                      android:textColor="@color/black" />
+
                                                 </LinearLayout>
 
                                                 <LinearLayout

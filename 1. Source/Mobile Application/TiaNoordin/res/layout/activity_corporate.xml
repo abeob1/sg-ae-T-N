@@ -249,14 +249,19 @@
                                                     android:text="Co.Name:"
                                                     android:textColor="@color/white"
                                                     android:textSize="@dimen/activity_small_textsize" />
+                                                <TextView
+                                             android:id="@+id/textView_Full_Names"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
 
                                                 <EditText
                                                     android:id="@+id/editText_CorporateCoName"
-                                                    android:layout_width="fill_parent"
+                                                    android:layout_width="381dp"
                                                     android:layout_height="20dp"
-                                                		android:background="@drawable/rounded_big"
-                                                		android:textColor="@color/black"
-                                                    android:layout_weight="1"
+                                                    android:background="@drawable/rounded_big"
                                                     android:clickable="false"
                                                     android:cursorVisible="true"
                                                     android:ems="10"
@@ -267,7 +272,7 @@
                                                     android:paddingLeft="5dp"
                                                     android:paddingRight="5dp"
                                                     android:singleLine="true"
-                                                    
+                                                    android:textColor="@color/black"
                                                     android:textSize="@dimen/activity_small_textsize" >
 
                                                     <requestFocus />
@@ -296,16 +301,21 @@
                                                         android:text="BRN No:"
                                                        android:textColor="@color/white"
                                                         android:textSize="@dimen/activity_small_textsize" />
+<TextView
+                                             android:id="@+id/textView_Full_Namess"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
 
                                                     <EditText
                                                         android:id="@+id/editText_CorporateBrnNo"
-                                                        android:layout_width="fill_parent"
+                                                        android:layout_width="380dp"
                                                         android:layout_height="20dp"
-                                                		android:background="@drawable/rounded_big"
-                                                		android:textColor="@color/black"
                                                         android:layout_centerHorizontal="true"
                                                         android:layout_centerVertical="true"
-                                                        android:layout_weight="1"
+                                                        android:background="@drawable/rounded_big"
                                                         android:clickable="false"
                                                         android:cursorVisible="true"
                                                         android:ems="10"
@@ -316,8 +326,9 @@
                                                         android:paddingLeft="5dp"
                                                         android:paddingRight="5dp"
                                                         android:singleLine="true"
-                                                        
+                                                        android:textColor="@color/black"
                                                         android:textSize="@dimen/activity_small_textsize" >
+
                                                     </EditText>
                                                 </LinearLayout>
                                             </LinearLayout>

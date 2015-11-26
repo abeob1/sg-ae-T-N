@@ -239,15 +239,21 @@
                                                         android:text="Full Name:"
                                                         android:textColor="@color/white"
                                                         android:textSize="@dimen/activity_small_textsize" />
+<TextView
+                                             android:id="@+id/textView_Full_Namespc"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
 
                                                     <EditText
                                                         android:id="@+id/FullName"
-                                                        android:layout_width="fill_parent"
+                                                        android:layout_width="430dp"
                                                         android:layout_height="25dp"
-                                                		android:background="@drawable/rounded_big"
                                                         android:layout_centerHorizontal="true"
                                                         android:layout_centerVertical="true"
-                                                        android:layout_weight="1"
+                                                        android:background="@drawable/rounded_big"
                                                         android:clickable="true"
                                                         android:cursorVisible="true"
                                                         android:ems="10"
@@ -260,6 +266,7 @@
                                                         android:singleLine="true"
                                                         android:textColor="@color/black"
                                                         android:textSize="@dimen/activity_small_textsize" >
+
                                                     </EditText>
                                                 </LinearLayout>
 
@@ -277,26 +284,32 @@
 
                                                         <TextView
                                                             android:id="@+id/textView_title"
-                                                            android:layout_width="fill_parent"
+                                                            android:layout_width="131dp"
                                                             android:layout_height="wrap_content"
-                                                            android:layout_weight="1"
                                                             android:gravity="left"
                                                             android:text="Title:"
                                                             android:textColor="@color/white"
                                                             android:textSize="@dimen/activity_small_textsize" />
+<TextView
+                                             android:id="@+id/textView_Full_Namespcs"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
 
                                                         <Spinner
                                                             android:id="@+id/TitleType"
-                                                            android:layout_width="fill_parent"
+                                                            android:layout_width="140dp"
                                                             android:layout_height="wrap_content"
                                                             android:background="@color/white"
-                                                            android:layout_weight="1"
                                                             android:clickable="true"
                                                             android:cursorVisible="true"
                                                             android:ems="10"
                                                             android:enabled="true"
                                                             android:focusable="true"
                                                             android:textColor="@color/gray" />
+
                                                     </LinearLayout>
 
                                                     <LinearLayout
@@ -315,7 +328,13 @@
                                                             android:text="Gender:"
                                                             android:textColor="@color/white"
                                                             android:textSize="@dimen/activity_small_textsize" />
-
+<TextView
+                                             android:id="@+id/textView_Full_Namespcd"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
                                                         <Spinner
                                                             android:id="@+id/gendersp"
                                                             android:layout_width="fill_parent"
@@ -1040,37 +1059,40 @@
                                                 android:layout_weight="1"
                                                 android:orientation="horizontal" 
                                                 android:layout_marginBottom="5dp">
+
    													<TextView
-                                                        android:id="@+id/textView_adressToUse"
-                                                        android:layout_width="fill_parent"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_weight="2"
-                                                        android:gravity="left"
-                                                        android:text="ADDRESS TO USE:"
-                                                        android:textColor="@color/white"
-                                                        android:textSize="@dimen/activity_small_textsize" />
+   													    android:id="@+id/textView_adressToUse"
+   													    android:layout_width="178dp"
+   													    android:layout_height="wrap_content"
+   													    android:gravity="left"
+   													    android:text="ADDRESS TO USE:"
+   													    android:textColor="@color/white"
+   													    android:textSize="@dimen/activity_small_textsize" />
+
+   													<TextView
+                                             android:id="@+id/textView_Full_Namespcf"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
                                                 <LinearLayout
                                                     android:layout_width="fill_parent"
                                                         android:layout_height="wrap_content"
                                                         android:layout_weight="1"
                                                         android:orientation="vertical" >
                                                
-  
-
                                                     <Spinner
                                                         android:id="@+id/addresstoUsersp"
-                                                        android:layout_width="fill_parent"
-                                                        android:layout_height="wrap_content"                                                        
-                                                		android:background="@drawable/rounded_big"
-                                                        android:layout_weight="1"
+                                                        android:layout_width="385dp"
+                                                        android:layout_height="wrap_content"
+                                                        android:background="@drawable/rounded_big"
                                                         android:clickable="true"
                                                         android:cursorVisible="true"
                                                         android:ems="10"
                                                         android:enabled="true"
                                                         android:focusable="true"
-                                                        android:textColor="@color/white"
-                                                         />
-                                            
+                                                        android:textColor="@color/white" />
                                                 
                                                 </LinearLayout>
                                             </LinearLayout>

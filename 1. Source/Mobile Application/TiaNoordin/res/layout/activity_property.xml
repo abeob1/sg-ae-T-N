@@ -462,24 +462,13 @@
                                                     android:textColor="@color/white"
                                                     android:textSize="@dimen/activity_small_textsize" />
 
-                                                <EditText
-                                                    android:id="@+id/editText_PropertyDaerahState"
-                                                    android:layout_width="fill_parent"
-                                                    android:layout_height="20dp"
-                                                	android:background="@drawable/rounded_big"
-                                                	android:textColor="@color/black"
-                                                    android:layout_centerHorizontal="true"
-                                                    android:layout_centerVertical="true"
-                                                    android:layout_weight="1"
-                                                    android:ems="10"
-                                                    android:hint="@string/hints"
-                                                    android:inputType="text"
-                                                    android:paddingLeft="5dp"
-                                                    android:paddingRight="5dp"
-                                                    android:singleLine="true"
-                                                    
-                                                    android:textSize="@dimen/activity_small_textsize" >
-                                                </EditText>
+                                                <Spinner
+                                                android:id="@+id/state"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:textColor="@color/black"
+                                                android:layout_weight="1"
+                                                android:background="@color/white" />
                                             </LinearLayout>
 
                                             <LinearLayout

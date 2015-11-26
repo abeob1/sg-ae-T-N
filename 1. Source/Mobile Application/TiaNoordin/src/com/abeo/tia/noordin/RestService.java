@@ -53,4 +53,8 @@ public class RestService
 	public static void setBurl(String relativeUrl) {
 		 BASE_URL = relativeUrl;
 	}
+	
+	public static String getBurl() {
+		return BASE_URL;
+	}
 }

@@ -278,16 +278,7 @@
 		                             android:textColor="#fff"
 		                             android:textSize="20sp" />
 				                
-				                 <RadioButton
-		                            android:id="@+id/btnntapplicable"
-		                            android:layout_width="wrap_content"
-		                            android:layout_height="wrap_content"
-		                            android:layout_weight="1"
-		                            android:paddingLeft="5dp"
-		                            android:button="@drawable/myredio"
-		                             android:textColor="#fff"
-		                             android:textSize="20sp"
-		                            android:text="NOT APPLICABLE" />
+				               
 				                </RadioGroup>
                         
                     </LinearLayout>

@@ -474,7 +474,17 @@
                                         android:gravity="left"
                                         android:text="Full Name:"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/activity_small_textsize" />
+                                        android:textSize="@dimen/activity_small_textsize"                                       
+                                        
+                                        /> 
+
+                                         <TextView
+                                             android:id="@+id/textView_Full_Names"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
 
                                     <EditText
                                         android:id="@+id/editText_WalkInIndividualFullName"
@@ -510,6 +520,14 @@
                                         android:text="Mobile No:"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/activity_small_textsize" />
+                                    
+                                    <TextView
+                                             android:id="@+id/startmobile"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
 
                                     <EditText
                                         android:id="@+id/editText_WalkInIndividualMobileNo"
@@ -647,7 +665,14 @@
                                         android:text="Co. Name:"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/activity_small_textsize" />
-
+ <TextView
+                                             android:id="@+id/star2"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
+ 
                                     <EditText
                                         android:id="@+id/editText_WalkinCorporateCoName"
                                         android:layout_width="fill_parent"
@@ -681,6 +706,16 @@
                                         android:text="Reg No:"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/activity_small_textsize" />
+                                    
+                                     <TextView
+                                             android:id="@+id/star3"
+                                             android:layout_width="13dp"
+                                             android:layout_height="13dp"
+                                             android:background="@drawable/star"
+                                             android:gravity="left"
+                                             android:text=" " />
+                                     
+                                     
 
                                     <EditText
                                         android:id="@+id/editText_WalkinCorporateRegNo"

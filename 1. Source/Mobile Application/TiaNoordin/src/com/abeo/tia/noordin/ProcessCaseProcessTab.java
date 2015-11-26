@@ -59,15 +59,16 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 	ListView process_case;
 	private String m_chosenDir = "";
     private boolean m_newFolderEnabled = true;
-    public int clickedposition =0;
+    public int clickedposition =-1;
     
     private File selectedFile;
 	public String fileName, rtext ;
 	
 	ProgressDialog dialog = null;
+	String BASE_URL = RestService.getBurl();
 
 	private final String METHOD_PROCESS_CASE_DETAILS = "SPA_ProcessCase_GetDataFromOCRD";
-	private final String METHOD_ADDFILE = "http://54.251.51.69:3878/SPAMobile.asmx/Attachments";
+	private final String METHOD_ADDFILE = BASE_URL+"Attachments";
 	private static final int BUFFER_SIZE = 4096;
 	private static final int REQUEST_PICK_FILE = 1;
 	private static final int PICK_FILEUPLOAD =2;
@@ -88,7 +89,7 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 	String caseValue_id = "", titleValue = "", casetype = "",
 			casetype_value = "",TrnspNamepop = "",FILESAVELOCATION="",FILEUPLOADRESULT,resultofdownload,statusval="",statusid="",stxt2="",Scase_status,Skiv;
 	
-	String Details,	ActionBy,Status,	LastUpdate ,	StatusDate ,	TrnspName,	ForwardParty ,ItemCode,CASEFILENUMBER,clickedcase,ItemCoderes,
+	String Genpath,uploadpath,Details,	ActionBy,Status,	LastUpdate ,	StatusDate ,	TrnspName,	ForwardParty ,ItemCode,CASEFILENUMBER,clickedcase,ItemCoderes,
 	DocEntryres,DocNumres,LineNumres,details0;
 
 	// Get Project value fromapi
@@ -96,6 +97,8 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 	ArrayList<HashMap<String, String>> jsonArraylist = null;
 	ArrayList<HashMap<String, String>> jsonArraylist_st=null;
 	ArrayList<HashMap<String, String>> jsonArraylist_cs=null;
+	ArrayList<HashMap<String, String>> jsonArraylistkvi=null;
+	
 	
 	String id, name;
 	SimpleAdapter sAdapPROJ;
@@ -133,12 +136,16 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 		System.out.println(sUserRole);
 		String CardCode = prefLoginReturn.getString("CardCode", "");
 		System.out.println(CardCode);
-		String CaseNo = prefLoginReturn.getString("CaseNo", "");
+		String CaseNo = prefLoginReturn.getString("CaseNo", "");		
+		Genpath = prefLoginReturn.getString("GenPath", "");
+		uploadpath = prefLoginReturn.getString("UploadPath", "");
 		System.out.println(CaseNo);
 		if(CaseNo=="" || CaseNo.isEmpty())
 			CASEFILENUMBER = "0";
 		else
 			CASEFILENUMBER = CaseNo;
+		
+		
 		
 		System.out.println("CaseNumberrr");
 		System.out.println(CASEFILENUMBER);
@@ -262,7 +269,7 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 				clickedcase = jsonArraylist.get(position).toString();
 				System.out.println(clickedcase);
 				view.setActivated(true);
-				System.out.println("clicked dara");
+				System.out.println("clicked data");
 				TrnspNamepop=jsonArraylist.get(position).get("TrnspName");
 				ItemCoderes=jsonArraylist.get(position).get("ItemCode");
 				DocEntryres=jsonArraylist.get(position).get("DocEntry");
@@ -352,7 +359,7 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 	public void viewfile()
 	{
 		System.out.println(clickedposition);
-		if(clickedposition==0)
+		if(clickedposition==-1)
 		{
 			slog("No Files Avilable to Display.");
 		}
@@ -423,7 +430,7 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 
 							arrayResponse = new JSONArray(arg2);
 							// Create new list
-							jsonArraylist = new ArrayList<HashMap<String, String>>();
+							jsonArraylistkvi = new ArrayList<HashMap<String, String>>();
 
 							for (int i = 0; i < arrayResponse.length(); i++) {
 
@@ -445,14 +452,14 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 								System.out
 										.println(" END SEND JSON PROPERTY LIST");
 
-								jsonArraylist.add(proList);
+								jsonArraylistkvi.add(proList);
 								System.out.println("JSON PROPERTY LIST");
-								System.out.println(jsonArraylist);
+								System.out.println(jsonArraylistkvi);
 							}
 							// Spinner set Array Data in Drop down
 
 							sAdapPROJ = new SimpleAdapter(
-									ProcessCaseProcessTab.this, jsonArraylist,
+									ProcessCaseProcessTab.this, jsonArraylistkvi,
 									R.layout.spinner_item, new String[] {
 											"Id_T", "Name_T" }, new int[] {
 											R.id.Id, R.id.Name });
@@ -461,8 +468,8 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 
 							System.out.println("Skiv");
 							System.out.println(Skiv);
-							for (int j = 0; j < jsonArraylist.size(); j++)
-							  { if (jsonArraylist.get(j).get("Id_T").equals(Skiv)) {
+							for (int j = 0; j < jsonArraylistkvi.size(); j++)
+							  { if (jsonArraylistkvi.get(j).get("Id_T").equals(Skiv)) {
 								  spinner_kiv.setSelection(j); break; } }
 
 						} catch (JSONException e) {
@@ -473,7 +480,6 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 				});
 	}
 			
-
     public void dropdownstatus() throws JSONException {
         RequestParams params = null;
         params = new RequestParams();
@@ -564,7 +570,7 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 	public void opensection() throws JSONException {
 		
 		PastSectionclicked = false;
-		clickedposition = 0;
+		clickedposition = -1;
 		
 		view_file.setEnabled(true);
 		view_file.setClickable(true);
@@ -696,7 +702,7 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 	public void PastSection() throws JSONException {
 		
 		PastSectionclicked = true;
-		clickedposition = 0;
+		clickedposition = -1;
 		
 		TextView lab = (TextView)findViewById(R.id.textview_processname);		
 		lab.setText("Past process and Remarks");
@@ -823,7 +829,7 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 	public void GetNextSection() throws JSONException {
 		
 		PastSectionclicked = false;
-		clickedposition = 0;
+		clickedposition = -1;
 		
 		TextView lab = (TextView)findViewById(R.id.textview_processname);		
 		lab.setText("Next process and Remarks");
@@ -1631,6 +1637,10 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 				 TextView t2=(TextView) layout.findViewById(R.id.txt2);
 				 t1.setText(details0);
 				 t2.setText(stxt2);
+				 
+				BROWSER2text2.setText(Genpath);
+				BROWSER2text1.setText(uploadpath);
+				
 				
 				download = (Button) layout.findViewById(R.id.genareate);
 				View btnClosePopup2 = (Button) layout.findViewById(R.id.btn_close_popup);
@@ -2045,7 +2055,7 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 	    }
 	    
 	    if (v == uploadpop) {
-	    	if(BROWSER2text1.getText().toString().isEmpty() || BROWSER2text1.getText().toString()=="")
+	    	if(BROWSER2text1.getText().toString().isEmpty() || BROWSER2text1.getText().toString()=="" || !isFilecheck(BROWSER2text1.getText().toString()))
 	    	{
 	    		slog("Select File to Upload");
 	    	}
@@ -2572,7 +2582,7 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
                 Log.e("Upload file to server Exception", "Exception : "
                         + e.getMessage(), e);  
             }
-            dialog.dismiss();       
+            //dialog.dismiss();       
             return serverResponseCode; 
 
         } // End else block 
@@ -2702,13 +2712,7 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 			//return true;
 		
 		slog(resultofdownload);
-		pwindo2.dismiss();
-		try {
-			opensection();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		pwindo2.dismiss();		
 		
 		
 	}
@@ -2880,16 +2884,21 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 					try {
 						//StatusResult = jsonResponse.getString("Result").toString();
 						messageDisplay = jsonResponse_up.getString("DisplayMessage").toString();
+						Toast.makeText(ProcessCaseProcessTab.this, messageDisplay, Toast.LENGTH_LONG).show();
+						dialog.dismiss();
+						finish();
+						startActivity(getIntent());
+						
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						dialog.dismiss();
+						finish();
+						startActivity(getIntent());
 					}
 					
 						 
-							Toast.makeText(ProcessCaseProcessTab.this, messageDisplay, Toast.LENGTH_LONG).show();
-							dialog.dismiss();
-							finish();
-							startActivity(getIntent());
+							
 							
 						
 							
@@ -2919,7 +2928,10 @@ public class ProcessCaseProcessTab extends BaseActivity implements OnClickListen
 
 	}
 
-
+	public boolean  isFilecheck(String path) {
+		File file = new File(path);
+		return file.isFile();
+	}
 	
 	private OnClickListener cancel_button_click_listener = new OnClickListener() {
 		public void onClick(View v) {

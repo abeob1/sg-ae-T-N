@@ -82,7 +82,7 @@
 
                 <TextView
                     android:id="@+id/textView1"
-                    android:layout_width="117dp"
+                    android:layout_width="142dp"
                     android:layout_height="wrap_content"
                     android:text="Web Server Url: "
                     android:textColor="#fff" />
@@ -131,9 +131,9 @@
 
                 <TextView
                     android:id="@+id/textView2"
-                    android:layout_width="117dp"
+                    android:layout_width="142dp"
                     android:layout_height="wrap_content"
-                    android:text="Local Path Url: "
+                    android:text="Generate directory: "
                     android:textColor="#fff" />
 
                 <RelativeLayout
@@ -189,9 +189,9 @@
 
                 <TextView
                     android:id="@+id/textView3"
-                    android:layout_width="117dp"
+                    android:layout_width="142dp"
                     android:layout_height="wrap_content"
-                    android:text="Server Path Url: "
+                    android:text="Upload directory:"
                     android:textColor="#fff" />
 
                 <RelativeLayout
@@ -203,7 +203,7 @@
                         android:id="@+id/Server_url"
                         android:layout_width="fill_parent"
                         android:layout_height="35dp"
-                        android:layout_toLeftOf="@+id/serverpathbtn"
+                        android:layout_toLeftOf="@+id/uploadpathbtn"
                         android:background="@drawable/rounded"
                         android:clickable="true"
                         android:ems="10"
@@ -233,7 +233,7 @@
      android:layout_alignBottom="@+id/Server_url"
      android:layout_alignParentRight="true"
      android:layout_alignParentTop="true"
-     android:text="Button" />
+     android:text="BROWSE" />
                     
                 </RelativeLayout>
             </LinearLayout>

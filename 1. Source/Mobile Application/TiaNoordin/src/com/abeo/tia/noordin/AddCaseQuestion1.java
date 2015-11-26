@@ -76,9 +76,7 @@ public class AddCaseQuestion1 extends BaseActivity {
 		sell.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
-				Button r1=(Button)findViewById(R.id.btnntapplicable);
-			    r1.setEnabled(true);
+			public void onClick(View v) {				
 			    Button r2=(Button)findViewById(R.id.btnactapp);
 			    r2.setEnabled(true);
 			}
@@ -88,9 +86,7 @@ public class AddCaseQuestion1 extends BaseActivity {
 		buy.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
-				Button r1=(Button)findViewById(R.id.btnntapplicable);
-			    r1.setEnabled(false);
+			public void onClick(View v) {				
 			    Button r2=(Button)findViewById(R.id.btnactapp);
 			    r2.setEnabled(false);
 			}
@@ -258,12 +254,24 @@ public class AddCaseQuestion1 extends BaseActivity {
 									edit.putString("CardCode", messageDisplay);									
 									edit.commit();
 
-									if (StatusResult.equals("SUCCESS")) {
+									if (StatusResult.equals("SUCCESS") && !qryGroup5.equals("Y")) {
 										Intent qIntent = new Intent(AddCaseQuestion1.this, AddCaseStep1of4.class);
 										Toast.makeText(AddCaseQuestion1.this, messageDisplay, Toast.LENGTH_SHORT).show();
 										startActivity(qIntent);
 
-									} else {
+									}
+									else if (StatusResult.equals("SUCCESS") && qryGroup5.equals("Y")) {
+										
+										Intent qIntent = new Intent(AddCaseQuestion1.this, AddCaseStep2of4.class);
+										qIntent.putExtra("jsonArray", "[]");
+										
+										
+										
+										Toast.makeText(AddCaseQuestion1.this, messageDisplay, Toast.LENGTH_SHORT).show();
+										startActivity(qIntent);
+
+									}
+									else {
 										Toast.makeText(AddCaseQuestion1.this, messageDisplay, Toast.LENGTH_SHORT).show();
 
 									}

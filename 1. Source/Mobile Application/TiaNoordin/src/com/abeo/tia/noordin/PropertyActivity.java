@@ -81,20 +81,21 @@ public class PropertyActivity extends BaseActivity {
 	EditText propertyDVLPR_SOL_CODE, propertyDVLPR_LOC, propertyLSTCHG_BANKCODE, propertyLSTCHG_BRANCH,
 			propertyLSTCHG_PANO, propertyLSTCHG_PRSTNO;
 	// Find spinner fields
-	Spinner spinnerpropertyTitleType, spinnerpropertyPROJECT, spinnerpropertyLSTCHG_BANKNAME, spinnerpropertyDEVELOPER,
+	Spinner spinnerpropertySTATE,spinnerpropertyTitleType, spinnerpropertyPROJECT, spinnerpropertyLSTCHG_BANKNAME, spinnerpropertyDEVELOPER,
 			spinnerpropertyDEVSOLICTOR;
 	
 	CheckBox QryGroup13;
 	
 	// Find String code value from
-	String codeResonse_listview,TITLELINK;
+	String codeResonse_listview,TITLELINK,statevalue;
 	Button buttonWalkIn, buttonFind, buttonAdd, buttonEdit, buttonConfirm, buttonPropertyList, buttonRelatedCaes;
 	ZoomButton ZoomButton_propertyPdf1;
 	ListView listView_property;
 	JSONArray arrayResponse = null;
 	JSONObject jsonResponse = null;
-	ArrayList<HashMap<String, String>> jsonlist;
+	ArrayList<HashMap<String, String>> jsonlist,jsonliststate=null;
 	private long mLastClickTime = 0;
+	TextView ID, TEXT;
 
 	Boolean isADD = false, isEdit = false, isPropertyList = false, isPropertycaseList = false;
 	String messageDisplay = "", StatusResult = "";
@@ -118,12 +119,12 @@ public class PropertyActivity extends BaseActivity {
 	ArrayList<HashMap<String, String>> jsonlistProject = null, jsonlistProjectTitle = null, jsonlistBank = null,
 			jsonlistDeveloper = null, jsonlistSolicitor = null;
 	String id, name, id_b, name_b, id_d, name_d, id_s, name_s;
-	SimpleAdapter sAdap = null, sAdapTYPE = null, sAdapPROJ = null, sAdapBANK = null, sAdapDEV = null,
+	SimpleAdapter sAdaparea= null,sAdap = null, sAdapTYPE = null, sAdapPROJ = null, sAdapBANK = null, sAdapDEV = null,
 			sAdapSOLIC = null;
 	TextView textTitle_id, textProject_id, textBank_id, textDeveloper_id, textSolicitor_id, textTitle, textProject,
 			textBank, textDeveloper, textSolicitor;
 	String titleValue_id = "", projectValue_id = "", bankValue_id = "", developerValue_id = "", solicitorValue_id = "",
-			titleValue = "", projectValue = "", bankValue = "", developerValue = "", solicitorValue = "";
+			titleValue = "", projectValue = "", bankValue = "", developerValue = "", solicitorValue = "",stateval_id="",stateval="";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +153,7 @@ public class PropertyActivity extends BaseActivity {
 		propertyLotPTDNo = (EditText) findViewById(R.id.editText_PropertyLotPTDNo);
 		propertyFormerlyKnownAs = (EditText) findViewById(R.id.editText_PropertyFormerlyKnownAs);
 		propertyBandarPekanMukin = (EditText) findViewById(R.id.editText_PropertyBandarPekanMukin);
-		propertyDaerahState = (EditText) findViewById(R.id.editText_PropertyDaerahState);
+		//propertyDaerahState = (EditText) findViewById(R.id.editText_PropertyDaerahState);
 		propertyNageriArea = (EditText) findViewById(R.id.editText_PropertyNageriArea);
 
 		propertyLOTAREA_SQM = (EditText) findViewById(R.id.editText_PropertyLotArea);
@@ -171,6 +172,7 @@ public class PropertyActivity extends BaseActivity {
 		spinnerpropertyLSTCHG_BANKNAME = (Spinner) findViewById(R.id.spinner_PropertyProjectBank);
 		spinnerpropertyDEVELOPER = (Spinner) findViewById(R.id.spinner_PropertyDevelopoer);
 		spinnerpropertyDEVSOLICTOR = (Spinner) findViewById(R.id.spinner_PropertySolicitor);
+		spinnerpropertySTATE =  (Spinner) findViewById(R.id.state);
 		
 		QryGroup13 = (CheckBox) findViewById(R.id.PropetyCharged);
 		
@@ -180,6 +182,32 @@ public class PropertyActivity extends BaseActivity {
 					TextView welcome = (TextView)findViewById(R.id.textView_welcome);		
 					welcome.setText("Welcome "+FirName);
 
+					
+
+					// Spinner click listener
+					spinnerpropertySTATE.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+								@Override
+								public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+									ID = (TextView) view.findViewById(R.id.Id);
+									stateval_id = ID.getText().toString();
+									TEXT = (TextView) view.findViewById(R.id.Name);
+									stateval = TEXT.getText().toString();
+
+									// Showing selected spinner item
+									//Toast.makeText(parent.getContext(), "Selected: " + developerValue, Toast.LENGTH_LONG).show();
+
+								}
+
+								@Override
+								public void onNothingSelected(AdapterView<?> parent) {
+									// TODO Auto-generated method stub
+
+								}
+							});
+					// Spinner click listener
+					
+					
 		// Spinner click listener
 		spinnerpropertyTitleType.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -386,6 +414,14 @@ public class PropertyActivity extends BaseActivity {
 				spinnerpropertyTitleType.setFocusableInTouchMode(true);
 				spinnerpropertyTitleType.setSelection(0);
 				
+				spinnerpropertySTATE.setEnabled(true);
+				spinnerpropertySTATE.setClickable(true);
+				spinnerpropertySTATE.setFocusable(true);
+				spinnerpropertySTATE.setFocusableInTouchMode(true);
+				spinnerpropertySTATE.setSelection(0);
+				
+				
+				
 
 				propertytitleNo.setEnabled(true);
 				propertytitleNo.setClickable(true);
@@ -412,10 +448,10 @@ public class PropertyActivity extends BaseActivity {
 				propertyBandarPekanMukin.setFocusableInTouchMode(true);
 				propertyBandarPekanMukin.setText("");
 
-				propertyDaerahState.setEnabled(true);
-				propertyDaerahState.setClickable(true);
-				propertyDaerahState.setFocusableInTouchMode(true);
-				propertyDaerahState.setText("");
+				//propertyDaerahState.setEnabled(true);
+				//propertyDaerahState.setClickable(true);
+				//propertyDaerahState.setFocusableInTouchMode(true);
+				//propertyDaerahState.setText("");
 
 				propertyNageriArea.setEnabled(true);
 				propertyNageriArea.setClickable(true);
@@ -555,6 +591,12 @@ public class PropertyActivity extends BaseActivity {
 				spinnerpropertyTitleType.setClickable(true);
 				spinnerpropertyTitleType.setEnabled(true);
 				spinnerpropertyTitleType.setFocusableInTouchMode(true);
+				
+				spinnerpropertySTATE.setClickable(true);
+				spinnerpropertySTATE.setEnabled(true);
+				spinnerpropertySTATE.setFocusableInTouchMode(true);
+				
+				
 
 				propertytitleNo.setClickable(true);
 				propertytitleNo.setEnabled(true);
@@ -576,9 +618,9 @@ public class PropertyActivity extends BaseActivity {
 				propertyBandarPekanMukin.setEnabled(true);
 				propertyBandarPekanMukin.setFocusableInTouchMode(true);
 
-				propertyDaerahState.setClickable(true);
-				propertyDaerahState.setEnabled(true);
-				propertyDaerahState.setFocusableInTouchMode(true);
+				//propertyDaerahState.setClickable(true);
+				//propertyDaerahState.setEnabled(true);
+				//propertyDaerahState.setFocusableInTouchMode(true);
 
 				propertyNageriArea.setClickable(true);
 				propertyNageriArea.setEnabled(true);
@@ -694,6 +736,13 @@ public class PropertyActivity extends BaseActivity {
 				spinnerpropertyTitleType.requestFocus();
 				spinnerpropertyTitleType.setClickable(true);
 				spinnerpropertyTitleType.setFocusable(true);
+				
+				spinnerpropertySTATE.setEnabled(true);
+				spinnerpropertySTATE.requestFocus();
+				spinnerpropertySTATE.setClickable(true);
+				spinnerpropertySTATE.setFocusable(true);
+				
+				
 
 				//Toast.makeText(PropertyActivity.this, "Search button clicked!", Toast.LENGTH_SHORT).show();
 				// Call web service
@@ -750,6 +799,10 @@ public class PropertyActivity extends BaseActivity {
 			System.out.println(titleTypeDetailResponse);
 			spinnerpropertyTitleType.setEnabled(false);
 			spinnerpropertyTitleType.setClickable(false);
+			
+			spinnerpropertySTATE.setEnabled(false);
+			spinnerpropertySTATE.setClickable(false);
+			
 
 			titleNoDetailResponse = b.getString("TITLENO_T");
 			System.out.println(titleNoDetailResponse);
@@ -783,9 +836,10 @@ public class PropertyActivity extends BaseActivity {
 
 			stateDetailResponse = b.getString("STATE_T");
 			System.out.println(stateDetailResponse);
-			propertyDaerahState.setEnabled(false);
-			propertyDaerahState.setClickable(false);
-			propertyDaerahState.setText(stateDetailResponse);
+			statevalue = stateDetailResponse;
+			//propertyDaerahState.setEnabled(false);
+			//propertyDaerahState.setClickable(false);
+			//propertyDaerahState.setText(stateDetailResponse);
 
 			areaDetailResponse = b.getString("AREA_T");
 			System.out.println(areaDetailResponse);
@@ -884,10 +938,17 @@ public class PropertyActivity extends BaseActivity {
 				QryGroup13.setChecked(false);
 
 		}
+		try {
 		// Dropdown function title type
 		dropdownPorjectTitleType();
 		// Dropdown function project
 		dropdownPorject();
+		
+			dropdownState();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// Dropdown BankDeveloperSolicitor function
 		dropdownBankDeveloperSolicitor();
 	}
@@ -1147,6 +1208,99 @@ public class PropertyActivity extends BaseActivity {
 
 	}
 
+
+	public void dropdownState() throws JSONException {
+
+		RequestParams params = null;
+		params = new RequestParams();
+		
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("TableName", "OCRD");
+		jsonObject.put("FieldName", "STATE");
+		params.put("sJsonInput", jsonObject.toString());
+
+		RestService.post(METHOD_PROPERTY_TITLETYPE_LIST_DROPDOWN, params, new BaseJsonHttpResponseHandler<String>() {
+
+			@Override
+			public void onFailure(int arg0, Header[] arg1, Throwable arg2, String arg3, String arg4) {
+				// TODO Auto-generated method stub
+				System.out.println(arg3);
+
+			}
+
+			@Override
+			public void onSuccess(int arg0, Header[] arg1, String arg2, String arg3) {
+				// TODO Auto-generated method stub
+				System.out.println("State Dropdown Success Details ");
+				System.out.println(arg2);
+
+				try {
+
+					arrayResponse = new JSONArray(arg2);
+					// Create new list
+					jsonliststate = new ArrayList<HashMap<String, String>>();
+
+					for (int i = 0; i < arrayResponse.length(); i++) {
+
+						jsonResponse = arrayResponse.getJSONObject(i);
+
+						id = jsonResponse.getString("Id").toString();
+						name = jsonResponse.getString("Name").toString();
+
+						// SEND JSON DATA INTO SPINNER TITLE LIST
+						HashMap<String, String> proList = new HashMap<String, String>();
+
+						// Send JSON Data to list activity
+						System.out.println("SEND JSON  LIST");
+						proList.put("Id_T", id);
+						System.out.println(name);
+						proList.put("Name_T", name);
+						System.out.println(name);
+						System.out.println(" END SEND JSON PROPERTY LIST");
+
+						jsonliststate.add(proList);
+						System.out.println("JSON STATE LIST");
+						System.out.println(jsonliststate);
+					}
+					// Spinner set Array Data in Drop down
+
+					sAdaparea = new SimpleAdapter(PropertyActivity.this, jsonliststate, R.layout.spinner_item,
+							new String[] { "Id_T", "Name_T" }, new int[] { R.id.Id, R.id.Name });
+
+					spinnerpropertySTATE.setAdapter(sAdaparea);
+
+					for (int j = 0; j < jsonliststate.size(); j++) {
+						if (jsonliststate.get(j).get("Id_T").equals(statevalue)) {
+							spinnerpropertySTATE.setSelection(j);
+							break;
+						}
+					}
+
+				} catch (JSONException e) { // TODO Auto-generated
+											// catc
+											// block
+					e.printStackTrace();
+				}
+
+			}
+
+			@Override
+			protected String parseResponse(String arg0, boolean arg1) throws Throwable {
+
+				// Get Json response
+				arrayResponse = new JSONArray(arg0);
+				jsonResponse = arrayResponse.getJSONObject(0);
+
+				System.out.println("State Dropdown Details parse Response");
+				System.out.println(arg0);
+				return null;
+			}
+		});
+
+	}
+
+	
+	
 	public void dropdownPorject() {
 
 		RequestParams params = null;
@@ -1408,7 +1562,7 @@ public class PropertyActivity extends BaseActivity {
 			jsonObject.put("LOTNO", propertyLotPTDNo.getText().toString());
 			jsonObject.put("FORMERLY_KNOWN_AS", propertyFormerlyKnownAs.getText().toString());
 			jsonObject.put("BPM", propertyBandarPekanMukin.getText().toString());
-			jsonObject.put("STATE", propertyDaerahState.getText().toString());
+			jsonObject.put("STATE", stateval);
 			jsonObject.put("AREA", propertyNageriArea.getText().toString());
 
 			jsonObject.put("LOTAREA", propertyLOTAREA_SQM.getText().toString());
@@ -1521,7 +1675,7 @@ public class PropertyActivity extends BaseActivity {
 			jsonObject.put("LOTNO", propertyLotPTDNo.getText().toString());
 			jsonObject.put("FORMERLY_KNOWN_AS", propertyFormerlyKnownAs.getText().toString());
 			jsonObject.put("BPM", propertyBandarPekanMukin.getText().toString());
-			jsonObject.put("STATE", propertyDaerahState.getText().toString());
+			jsonObject.put("STATE", stateval);
 			jsonObject.put("AREA", propertyNageriArea.getText().toString());
 
 			jsonObject.put("LOTAREA", propertyLOTAREA_SQM.getText().toString());
@@ -1624,7 +1778,7 @@ public class PropertyActivity extends BaseActivity {
 			jsonObject.put("LOT_NO", propertyLotPTDNo.getText().toString());
 			jsonObject.put("FORMERLY_KNOWN_AS", propertyFormerlyKnownAs.getText().toString());
 			jsonObject.put("BPM", propertyBandarPekanMukin.getText().toString());
-			jsonObject.put("STATE", propertyDaerahState.getText().toString());
+			jsonObject.put("STATE", stateval);
 			jsonObject.put("AREA", propertyNageriArea.getText().toString());
 			
 			

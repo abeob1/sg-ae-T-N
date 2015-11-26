@@ -70,6 +70,7 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 	private final String METHOD_PROPERTY_LIST_DROPDOWN = "SPA_GetProject";
 	private final String METHOD_PROPERTY_BDS_DROPDOWN = "SPA_Property_GetDropdownValues";
 	private final String METHOD_ADD_CASE2 = "SPA_AddCase_AddPropery";
+	private final String METHOD_PROPERTY_STATE = "SPA_GetValidValues";
 	
 	ArrayList<HashMap<String, String>> jsonCaselist;
 	// Find Case list items
@@ -108,17 +109,17 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 		//strings
 		String titleValue_id = "", ProjectValue_id = "", bankValue_id = "", developerValue_id = "", solicitorValue_id = "",
 				titleValue = "", ProjectValue = "", bankValue = "", developerValue = "", solicitorValue = "";
-		String messageDisplay = "", StatusResult = "";
+		String messageDisplay = "", StatusResult = "",stateval="",stateval_id="",statevalue="";
 		
 		
 	//spenner adaptor
-		ArrayList<HashMap<String, String>> jsonlistProject = null, jsonlistProjectTitle = null, jsonlistBank = null,
+		ArrayList<HashMap<String, String>> jsonliststate= null,jsonlistProject = null, jsonlistProjectTitle = null, jsonlistBank = null,
 				jsonlistDeveloper = null, jsonlistSolicitor = null;
 		String id, name, id_b, name_b, id_d, name_d, id_s, name_s;
-		SimpleAdapter sAdap = null, sAdapTYPE = null, sAdapPROJ = null, sAdapBANK = null, sAdapDEV = null,
+		SimpleAdapter sAdaparea= null,sAdap = null, sAdapTYPE = null, sAdapPROJ = null, sAdapBANK = null, sAdapDEV = null,
 				sAdapSOLIC = null;
 	// Find spinner fields
-		Spinner spinnerpropertyTitleType, spinnerpropertyPROJECT, spinnerpropertyLSTCHG_BANKNAME, spinnerpropertyDEVELOPER,
+		Spinner spinnerpropertySTATE,spinnerpropertyTitleType, spinnerpropertyPROJECT, spinnerpropertyLSTCHG_BANKNAME, spinnerpropertyDEVELOPER,
 				spinnerpropertyDEVSOLICTOR;
 		
 		EditText Title , LotType , LotNo , Knownas , Pekan ,Daerah ,Nageri,LotArea ,LastUpdate ,DevLicense ,DevSolictor ,SolicitorLoc ,
@@ -176,8 +177,34 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 				spinnerpropertyLSTCHG_BANKNAME = (Spinner) findViewById(R.id.banksp);
 				spinnerpropertyDEVELOPER = (Spinner) findViewById(R.id.developersp);
 				spinnerpropertyDEVSOLICTOR = (Spinner) findViewById(R.id.DevSolisp);
+				spinnerpropertySTATE = (Spinner)  findViewById(R.id.state);
 				
 				QryGroup13 = (CheckBox) findViewById(R.id.PropetyCharged);
+				
+				
+				
+				// Spinner click listener
+				spinnerpropertySTATE.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+							@Override
+							public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+								ID = (TextView) view.findViewById(R.id.Id);
+								stateval_id = ID.getText().toString();
+								TEXT = (TextView) view.findViewById(R.id.Name);
+								stateval = TEXT.getText().toString();
+
+								// Showing selected spinner item
+								//Toast.makeText(parent.getContext(), "Selected: " + developerValue, Toast.LENGTH_LONG).show();
+
+							}
+
+							@Override
+							public void onNothingSelected(AdapterView<?> parent) {
+								// TODO Auto-generated method stub
+
+							}
+						});
+				// Spinner click listener
 				
 				
 
@@ -360,6 +387,7 @@ public class AddCaseStep2of4 extends BaseActivity   implements OnClickListener {
 			dropdownTitle();
 			dropdownBankDeveloperSolicitor();
 			dropdownPorject();
+			dropdownState();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -430,7 +458,7 @@ imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 			jsonObject.put("LOTNO", LotNo.getText().toString());
 			jsonObject.put("FORMERLY_KNOWN_AS", Knownas.getText().toString() );
 			jsonObject.put("BPM", Pekan.getText().toString());
-			jsonObject.put("STATE", Daerah.getText().toString());
+			jsonObject.put("STATE", stateval);
 			jsonObject.put("AREA", Nageri.getText().toString());
 			jsonObject.put("LOTAREA", LotArea.getText().toString());
 
@@ -827,6 +855,11 @@ imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 			slog("Kindly Select Solicitor Value");
 			return false;
 		}
+		if(stateval.toString().equals("-- Select --"))
+		{
+			slog("Kindly Select State Value");
+			return false;
+		}
 		if(bankValue.toString().equals("-- Select --"))
 		{
 			slog("Kindly Select Bank Value");
@@ -1093,7 +1126,99 @@ imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 		});
 
 	}
+	
+	
+	public void dropdownState() throws JSONException {
 
+		RequestParams params = null;
+		params = new RequestParams();
+		
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("TableName", "OCRD");
+		jsonObject.put("FieldName", "STATE");
+		params.put("sJsonInput", jsonObject.toString());
+
+		RestService.post(METHOD_PROPERTY_STATE, params, new BaseJsonHttpResponseHandler<String>() {
+
+			@Override
+			public void onFailure(int arg0, Header[] arg1, Throwable arg2, String arg3, String arg4) {
+				// TODO Auto-generated method stub
+				System.out.println(arg3);
+
+			}
+
+			@Override
+			public void onSuccess(int arg0, Header[] arg1, String arg2, String arg3) {
+				// TODO Auto-generated method stub
+				System.out.println("State Dropdown Success Details ");
+				System.out.println(arg2);
+
+				try {
+
+					arrayResponse = new JSONArray(arg2);
+					// Create new list
+					jsonliststate = new ArrayList<HashMap<String, String>>();
+
+					for (int i = 0; i < arrayResponse.length(); i++) {
+
+						jsonResponse = arrayResponse.getJSONObject(i);
+
+						id = jsonResponse.getString("Id").toString();
+						name = jsonResponse.getString("Name").toString();
+
+						// SEND JSON DATA INTO SPINNER TITLE LIST
+						HashMap<String, String> proList = new HashMap<String, String>();
+
+						// Send JSON Data to list activity
+						System.out.println("SEND JSON  LIST");
+						proList.put("Id_T", id);
+						System.out.println(name);
+						proList.put("Name_T", name);
+						System.out.println(name);
+						System.out.println(" END SEND JSON PROPERTY LIST");
+
+						jsonliststate.add(proList);
+						System.out.println("JSON STATE LIST");
+						System.out.println(jsonliststate);
+					}
+					// Spinner set Array Data in Drop down
+
+					sAdaparea = new SimpleAdapter(AddCaseStep2of4.this, jsonliststate, R.layout.spinner_item,
+							new String[] { "Id_T", "Name_T" }, new int[] { R.id.Id, R.id.Name });
+
+					spinnerpropertySTATE.setAdapter(sAdaparea);
+
+					for (int j = 0; j < jsonliststate.size(); j++) {
+						if (jsonliststate.get(j).get("Id_T").equals(statevalue)) {
+							spinnerpropertySTATE.setSelection(j);
+							break;
+						}
+					}
+
+				} catch (JSONException e) { // TODO Auto-generated
+											// catc
+											// block
+					e.printStackTrace();
+				}
+
+			}
+
+			@Override
+			protected String parseResponse(String arg0, boolean arg1) throws Throwable {
+
+				// Get Json response
+				arrayResponse = new JSONArray(arg0);
+				jsonResponse = arrayResponse.getJSONObject(0);
+
+				System.out.println("State Dropdown Details parse Response");
+				System.out.println(arg0);
+				return null;
+			}
+		});
+
+	}
+
+	
 	public void dropdownPorject() {
 
 		RequestParams params = null;
@@ -1206,9 +1331,10 @@ imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 		projectDetailResponse = "I";
 		
 		Pekan.setText(jObj.getString("BPM"));
-		Daerah.setText(jObj.getString("STATE"));
+		//Daerah.setText(jObj.getString("STATE"));
 		Nageri.setText(jObj.getString("AREA"));
 		LotArea.setText(jObj.getString("LOTAREA"));
+		statevalue = jObj.getString("STATE");
 		LastUpdate.setText(jObj.getString("LASTUPDATEDON"));
 		//developerValue.setText(jObj.getString("DEVELOPER"));
 		//developerValue_id.setText(jObj.getString("DVLPR_CODE"));

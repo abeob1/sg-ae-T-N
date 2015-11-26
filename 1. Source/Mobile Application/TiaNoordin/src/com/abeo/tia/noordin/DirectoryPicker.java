@@ -47,6 +47,8 @@ public class DirectoryPicker extends ListActivity {
 	public static final String SHOW_HIDDEN = "showHidden";
 	public static final String CHOSEN_DIRECTORY = "chosenDir";
 	public static final int PICK_DIRECTORY = 85;
+	protected static final int PICK_DIRECTORY1 = 1;
+	protected static final int PICK_DIRECTORY2 = 2;
 	private File dir;
 	private boolean showHidden = false;
 	private boolean onlyDirs = true ;

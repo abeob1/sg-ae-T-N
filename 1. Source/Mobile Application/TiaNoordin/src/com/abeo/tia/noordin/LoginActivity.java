@@ -36,7 +36,7 @@ public class LoginActivity extends Activity {
 	private String ys_tm_turnaround = "", ys_tm_totaloutput = "", ys_lm_turnaround = "", ys_lm_totaloutput = "";
 	private String priority = "", action = "", open = "",URol;
 	String status = "";
-	String message = "",BURL;
+	String message = "",BURL,genurl,serverurl;
 	ProgressDialog dialog = null;
 	JSONArray arrayResponse;
 	JSONObject jsonResponse;
@@ -51,6 +51,8 @@ public class LoginActivity extends Activity {
 		
 		SharedPreferences prefLoginReturn = getSharedPreferences("LoginData", Context.MODE_PRIVATE);
 		BURL = prefLoginReturn.getString("apiurl", "");
+		genurl = prefLoginReturn.getString("GenPath", "");
+		serverurl = prefLoginReturn.getString("UploadPath", "");
 		
 		if(BURL.isEmpty() || BURL.equals(null))
 		{
@@ -64,6 +66,14 @@ public class LoginActivity extends Activity {
 		{
 			RestService.setBurl(BURL);
 		}
+		
+		if(genurl.isEmpty() || genurl.equals(null) || serverurl.isEmpty() || serverurl.equals(null))
+		{
+			Toast.makeText(LoginActivity.this, "Kindly Config your Path Settings!", Toast.LENGTH_LONG).show();
+			Intent i = new Intent(LoginActivity.this, Settings.class);
+			startActivity(i);
+		}
+			
 		
 		
 		

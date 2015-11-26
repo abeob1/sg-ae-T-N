@@ -11,6 +11,7 @@ import abeo.tia.noordin.R;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +22,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class FilePicker extends ListActivity {
+	
+	
 
 	public final static String EXTRA_FILE_PATH = "file_path";
 	public final static String EXTRA_SHOW_HIDDEN_FILES = "show_hidden_files";
 	public final static String EXTRA_ACCEPTED_FILE_EXTENSIONS = "accepted_file_extensions";
-	private final static String DEFAULT_INITIAL_DIRECTORY = "/";
+	private static String DEFAULT_INITIAL_DIRECTORY = "/";
 
 	protected File Directory;
 	protected ArrayList<File> Files;
@@ -36,6 +39,11 @@ public class FilePicker extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		SharedPreferences prefLoginReturn = getSharedPreferences("LoginData", Context.MODE_PRIVATE);	
+		DEFAULT_INITIAL_DIRECTORY = prefLoginReturn.getString("UploadPath", "");
+		
+		
 
 		LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
