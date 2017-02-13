@@ -427,7 +427,10 @@ namespace AE_TnN_Mobile_BLL
 
                     oBP.UserFields.Fields.Item("U_LOTNO").Value = dr["LotNo"];
                     oBP.UserFields.Fields.Item("U_FORMERLY_KNOWN_AS").Value = dr["PreviouslyKnownAs"];
-                    oBP.UserFields.Fields.Item("U_STATE").Value = dr["State"];
+                    if (dr["State"].ToString() != strSelect.ToString())
+                    {
+                        oBP.UserFields.Fields.Item("U_STATE").Value = dr["State"];
+                    }
                     oBP.UserFields.Fields.Item("U_AREA").Value = dr["Area"];
                     oBP.UserFields.Fields.Item("U_BPM").Value = dr["BPM"];
 
@@ -479,6 +482,20 @@ namespace AE_TnN_Mobile_BLL
                     oBP.UserFields.Fields.Item("U_PROPERTY_ADJ_VALUE").Value = dr["AdjValue"];
                     oBP.UserFields.Fields.Item("U_VNDR_PRV_SPA_VALUE").Value = dr["VndrPrevSPAValue"];
                     oBP.UserFields.Fields.Item("U_PROPERTY_DEPOSIT").Value = dr["Deposit"];
+                    string sErnstDeposit = "0";
+                    if (dr["ErnstDeposit"].ToString() != "")
+                    {
+                        sErnstDeposit = dr["ErnstDeposit"].ToString();
+                    }
+
+                    string sDeposit = "0";
+                    if (dr["Deposit"].ToString() != "")
+                    {
+                        sDeposit = dr["Deposit"].ToString();
+                    }
+
+                    oBP.UserFields.Fields.Item("U_PROPERTY_BALPURPRC").Value = Convert.ToInt32((Convert.ToDouble(dr["PurchasePrice"].ToString()) - Convert.ToDouble(sDeposit) - Convert.ToDouble(sErnstDeposit)));
+                   
                     oBP.UserFields.Fields.Item("U_PROPERTY_BALPURPRC").Value = dr["BalPurPrice"];
                     oBP.UserFields.Fields.Item("U_PROPERTY_LOAN_AMT").Value = dr["LoanAmount"];
                     oBP.UserFields.Fields.Item("U_PROPERTY_LOAN_CASE").Value = dr["LoanCaseNo"];
@@ -513,6 +530,18 @@ namespace AE_TnN_Mobile_BLL
                     {
                         oBP.set_Properties(16, SAPbobsCOM.BoYesNoEnum.tNO);
                     }
+
+                    oBP.UserFields.Fields.Item("U_SPADATE").Value = dr["SPADate"];
+
+                    oBP.UserFields.Fields.Item("U_NoofKeys").Value = dr["NoofKeys"];
+                    oBP.UserFields.Fields.Item("U_NoofAccessCard").Value = dr["NoofAccessCard"];
+                    oBP.UserFields.Fields.Item("U_ERNST_DEPOSIT").Value = dr["ErnstDeposit"];
+                    oBP.UserFields.Fields.Item("U_PropertyDesc").Value = dr["PropertyDesc"];
+                    oBP.UserFields.Fields.Item("U_LOUDate").Value = dr["LOUDate"];
+                    oBP.UserFields.Fields.Item("U_SKWNo").Value = dr["SKWNo"];
+                    oBP.UserFields.Fields.Item("U_SKWDate").Value = dr["SKWDate"];
+                    oBP.UserFields.Fields.Item("U_TitleRegDate").Value = dr["TitleRegDate"];
+                    oBP.UserFields.Fields.Item("U_TitlePresentationN").Value = dr["TitlePresentationNo"];
 
                     lRetCode = oBP.Update();
                     if (lRetCode == 0)
@@ -892,19 +921,26 @@ namespace AE_TnN_Mobile_BLL
                     if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
                     if (oDataset.Tables.Count > 0 && oDataset != null)
                     {
-                        if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is a set of data from the SP :" + sProcName, sFuncName);
-                        if (CreateSalesQuote(oDataset.Tables[0], oDICompany) == "SUCCESS")
+                        if (oDataset.Tables[0].Rows.Count > 0)
                         {
-                            if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Calling Run_StoredProcedure() " + sProcName2, sFuncName);
-                            oDataset2 = SqlHelper.ExecuteDataSet(ConnectionString, CommandType.StoredProcedure, sProcName2,
-                                Data.CreateParameter("@caseNo", sCaseNo));
+                            if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is a set of data from the SP :" + sProcName, sFuncName);
+                            if (CreateSalesQuote(oDataset.Tables[0], oDICompany) == "SUCCESS")
+                            {
+                                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Calling Run_StoredProcedure() " + sProcName2, sFuncName);
+                                oDataset2 = SqlHelper.ExecuteDataSet(ConnectionString, CommandType.StoredProcedure, sProcName2,
+                                    Data.CreateParameter("@caseNo", sCaseNo));
+                            }
+                        }
+                        else
+                        {
+                            if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is a NO set of data from the SP :" + sProcName, sFuncName);
                         }
                         oDataset = oDataset2;
                     }
                 }
                 else
                 {
-                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is no data from the SP :" + sProcName, sFuncName);
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("The Current section cannot be closed from the SP :" + sProcName1, sFuncName);
                 }
                 return oDataset;
             }
@@ -1834,7 +1870,8 @@ namespace AE_TnN_Mobile_BLL
                             //sFileName = "CS_UPLOAD_FILE_20151016";
 
                             //CALL GOPI'S PROGRAM TO GET THE STATUS 
-                            sStatus = "0";
+                            //sStatus = "0";
+                            if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("SDOC Status : " + sStatus, sFuncName);
                             if (sStatus == "0")
                             {
                                 sStatus = "ACCEPT";
@@ -1870,10 +1907,20 @@ namespace AE_TnN_Mobile_BLL
                                         {
                                             sActionBy = Convert.ToString(results1.Rows[0][0]);
                                         }
-
+                                        oSalesQuote.Lines.UserFields.Fields.Item("U_NEXT_ACTION_BY").Value = sActionBy;
                                     }
-                                    oSalesQuote.Lines.UserFields.Fields.Item("U_NEXT_ACTION_BY").Value = sActionBy;
-                                    oSalesQuote.Lines.UserFields.Fields.Item("U_ScanCount").ValidValue = Convert.ToString(sScanCount + 1);
+                                    else
+                                    {
+                                        sSql = "SELECT U_FAIL_CLOSE FROM OITM WITH (NOLOCK) WHERE ItemCode = '" + sItemCode + "'";
+                                        oRecSet = oDICompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                                        oRecSet.DoQuery(sSql);
+                                        if (oRecSet.RecordCount > 0)
+                                        {
+                                            oSalesQuote.Lines.UserFields.Fields.Item("U_NEXT_ACTION_BY").Value = oRecSet.Fields.Item("U_FAIL_CLOSE").Value;
+                                        }
+                                    }
+                                    
+                                    oSalesQuote.Lines.UserFields.Fields.Item("U_ScanCount").Value = Convert.ToString(sScanCount + 1);
                                 }
                                 if (oSalesQuote.Update() != 0)
                                 {
@@ -1908,7 +1955,7 @@ namespace AE_TnN_Mobile_BLL
                             //sFileName = "CS_UPLOAD_FILE_20151016";
 
                             //CALL GOPI'S PROGRAM TO VERIFY THE DOCUMENT AND SAVE THE RESULT TO THE VARIABLE
-                            sStatus = "0";
+                            //sStatus = "0";
                             if (sStatus == "0")
                             {
                                 sStatus = "ACCEPT";
@@ -2485,7 +2532,7 @@ namespace AE_TnN_Mobile_BLL
             return "SUCCESS";
         }
 
-        public string CloseCase(string sCaseNo, string sUserRole, string sStatus, string sKIV)
+        public string CloseCase(string sCaseNo, string sUserRole, string sStatus, string sKIV, DataTable dtDetails)
         {
             string sFuncName = "CloseCase";
             string sSql = string.Empty;
@@ -2512,13 +2559,34 @@ namespace AE_TnN_Mobile_BLL
                 else
                 {
                     SAPbobsCOM.BusinessPartners oBP = (SAPbobsCOM.BusinessPartners)(oDICompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oBusinessPartners));
-
+                    DataRow dr = dtDetails.Rows[0];
                     oBP.GetByKey(sCaseNo);
                     if (sStatus.ToString() != strSelect.ToString())
                     {
                         oBP.UserFields.Fields.Item("U_CASESTATUS").Value = sStatus.ToString();
                     }
-                    oBP.UserFields.Fields.Item("U_KIVSTATUS").Value = sKIV.ToString();
+                    if (sKIV.ToString() != strSelect.ToString())
+                    {
+                        oBP.UserFields.Fields.Item("U_KIVSTATUS").Value = sKIV.ToString();
+                    }
+
+                    oBP.UserFields.Fields.Item("U_DEV_REF").Value = dr["DEVREF"].ToString();
+                    oBP.UserFields.Fields.Item("U_DEV_LWYRREF").Value = dr["DEVLWYRREF"].ToString();
+                    oBP.UserFields.Fields.Item("U_PUR_REF").Value = dr["PURREF"].ToString();
+                    oBP.UserFields.Fields.Item("U_VNDR_REF").Value = dr["VNDRREF"].ToString();
+                    oBP.UserFields.Fields.Item("U_PUR_BANKREF").Value = dr["PURBANKREF"].ToString();
+                    oBP.UserFields.Fields.Item("U_VNDR_BANKREF").Value = dr["VNDRBANKREF"].ToString();
+                    oBP.UserFields.Fields.Item("U_PUR_LWYRREF").Value = dr["PURLWYRREF"].ToString();
+                    oBP.UserFields.Fields.Item("U_VNDR_LWYRREF").Value = dr["VNDRLWYRREF"].ToString();
+                    oBP.UserFields.Fields.Item("U_PUR_LOAN_LWYRREF").Value = dr["PURLOANLWYRREF"].ToString();
+                    oBP.UserFields.Fields.Item("U_VNDR_LOAN_LWYRREF").Value = dr["VNDRLOANLWYRREF"].ToString();
+                    oBP.UserFields.Fields.Item("U_PUR_BANK_LWYRREF").Value = dr["PURBANKLWYRREF"].ToString();
+                    oBP.UserFields.Fields.Item("U_VNDR_BANK_LWYRREF").Value = dr["VNDRBANKLWYRREF"].ToString();
+                    oBP.UserFields.Fields.Item("U_BOR_REF").Value = dr["BORREF"].ToString();
+                    oBP.UserFields.Fields.Item("U_BOR_BANKREF").Value = dr["BORBANKREF"].ToString();
+                    oBP.UserFields.Fields.Item("U_BOR_BANK_LWYRREF").Value = dr["BORBANKLWYRREF"].ToString();
+
+
                     lRetCode = oBP.Update();
                     if (lRetCode == 0)
                     {

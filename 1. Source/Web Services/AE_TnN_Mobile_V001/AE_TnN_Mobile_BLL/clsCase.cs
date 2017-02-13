@@ -159,6 +159,46 @@ namespace AE_TnN_Mobile_BLL
             }
         }
 
+        public DataSet SPA_AddCase_GetMarketers()
+        {
+            DataSet oDataset = new DataSet();
+            string sFuncName = string.Empty;
+            string sProcName = string.Empty;
+            DataView oDTView = new DataView();
+
+            try
+            {
+                sFuncName = "SPA_AddCase_GetMarketers()";
+                sProcName = "AE_SPA031_Mobile_GetMarketers";
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Calling Run_StoredProcedure() " + sProcName, sFuncName);
+
+
+                oDataset = SqlHelper.ExecuteDataSet(ConnectionString, CommandType.StoredProcedure, sProcName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
+                if (oDataset.Tables.Count > 0 && oDataset != null)
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is a set of data from the SP :" + sProcName, sFuncName);
+                    return oDataset;
+                }
+                else
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is no data from the SP :" + sProcName, sFuncName);
+                    return oDataset;
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                sErrDesc = Ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                throw Ex;
+            }
+        }
+
         public DataSet SPA_AddCase_SaveAttachment(string sDocName, string sItemCode, string sItemName, string sCardCode)
         {
             DataSet oDataset = new DataSet();
@@ -403,7 +443,7 @@ namespace AE_TnN_Mobile_BLL
         //    return oDatatable;
         //}
 
-        public DataTable SPA_AddCase_GetProject()
+        public DataTable SPA_AddCase_GetProject(string sDeveloperCode)
         {
             string sFuncName = string.Empty;
             string sReturnResult = string.Empty;
@@ -413,9 +453,12 @@ namespace AE_TnN_Mobile_BLL
                 sFuncName = "SPA_AddCase_GetProject";
                 SqlConnection con = new SqlConnection(ConnectionString);
                 SqlCommand command = con.CreateCommand();
+                //command.CommandText = "SELECT '-- Select --' [Id], '-- Select --' [Name] UNION " +
+                //                      "SELECT Prjcode [Id], PrjName [Name] FROM oprj p WITH (NOLOCK) INNER JOIN [@AE_RELATEDPARTY] c WITH (NOLOCK) ON p. [U_DEVELOPER] = c.code " +
+                //                      "WHERE p.active='Y' OR p.prjcode in ('I', 'NP') ORDER BY Name";
                 command.CommandText = "SELECT '-- Select --' [Id], '-- Select --' [Name] UNION " +
-                                      "SELECT Prjcode [Id], PrjName [Name] FROM oprj p WITH (NOLOCK) INNER JOIN [@AE_RELATEDPARTY] c WITH (NOLOCK) ON p. [U_DEVELOPER] = c.code " +
-                                      "WHERE p.active='Y' OR p.prjcode in ('I', 'NP') ORDER BY Name";
+                                      "SELECT p.Code [Id],p.Name [Name] FROM [@AE_PROJECT_DETAILS] p WITH (NOLOCK)  INNER JOIN [@AE_RELATEDPARTY] c WITH (NOLOCK) ON p. [U_DEVELOPER] = c.code " +
+                                      "WHERE p.U_active='Y'and p.U_DEVELOPER = '" + sDeveloperCode + "' ORDER BY Name";
                 con.Open();
                 SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
                 dataAdapter.Fill(results);
@@ -734,6 +777,19 @@ namespace AE_TnN_Mobile_BLL
                     oBP.UserFields.Fields.Item("U_BPM").Value = dr["U_BPM"].ToString();
                     oBP.UserFields.Fields.Item("U_LOTAREA").Value = dr["U_LOTAREA"].ToString();
                     oBP.UserFields.Fields.Item("U_PROPERTY_PURPRC").Value = dr["PurchasePrice"].ToString();
+                    // Balance Purchase Price = (Purchase price - Deposit - Ernst Deposit)
+                    string sErnstDeposit = "0";
+                    if (dr["ErnstDeposit"].ToString() != "")
+                    {
+                        sErnstDeposit = dr["ErnstDeposit"].ToString();
+                    }
+
+                    oBP.UserFields.Fields.Item("U_PROPERTY_BALPURPRC").Value = Convert.ToInt32((Convert.ToDouble(dr["PurchasePrice"].ToString()) - 0 - Convert.ToDouble(sErnstDeposit)));
+                   
+                    oBP.UserFields.Fields.Item("U_ERNST_DEPOSIT").Value = dr["ErnstDeposit"].ToString();
+                    oBP.UserFields.Fields.Item("U_MARKETERCODE").Value = dr["MarketerCode"].ToString();
+                    oBP.UserFields.Fields.Item("U_MARKETERNAME").Value = dr["MarketerName"].ToString();
+                    oBP.UserFields.Fields.Item("U_SPADATE").Value = dr["SPADate"].ToString();
 
                     //oBP.UserFields.Fields.Item("U_PARTNER_FST_NAME").Value = dr["U_PARTNER_FST_NAME"].ToString();
                     //oBP.UserFields.Fields.Item("U_LA_FST_NAME").Value = dr["U_LA_FST_NAME"].ToString();
@@ -933,7 +989,8 @@ namespace AE_TnN_Mobile_BLL
 
                 double iCount = 0;
                 int sumOfQty = 0;
-
+                string sSql = string.Empty;
+                SAPbobsCOM.Recordset oRecSet;
                 foreach (DataRow iRow in oDTSQData.Rows)
                 {
                     //if (iCount != 0)
@@ -944,6 +1001,16 @@ namespace AE_TnN_Mobile_BLL
                         oSalesQuotation.Lines.ItemCode = Convert.ToString(iRow["ItemCode"]);
                         oSalesQuotation.Lines.Quantity = Convert.ToInt32(iRow["Qty"]);
                         oSalesQuotation.Lines.Price = Convert.ToDouble(iRow["Price"]);
+
+                        sSql = "SELECT U_CASE_BRANCH,U_LOAN_MSTR_BANKCODE,ProjectCod FROM OCRD WITH (NOLOCK) WHERE CardCode = '" + sCardCode + "'";
+                        oRecSet = oDICompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                        oRecSet.DoQuery(sSql);
+                        if (oRecSet.RecordCount > 0)
+                        {
+                            oSalesQuotation.Lines.COGSCostingCode = oRecSet.Fields.Item("U_CASE_BRANCH").Value;
+                            oSalesQuotation.Lines.COGSCostingCode2 = oRecSet.Fields.Item("U_LOAN_MSTR_BANKCODE").Value;
+                            oSalesQuotation.Lines.ProjectCode = oRecSet.Fields.Item("ProjectCod").Value;
+                        }
 
                         oSalesQuotation.Lines.UserFields.Fields.Item("U_STEP_CREATION_DT").Value = DateTime.Now.Date;
                         oSalesQuotation.Lines.UserFields.Fields.Item("U_STATUS").Value = "PENDING";
@@ -1174,7 +1241,10 @@ namespace AE_TnN_Mobile_BLL
                 oGeneralData.SetProperty("U_DVLPR_CODE", dtDatatable.Rows[0]["DVLPR_CODE"].ToString());
                 oGeneralData.SetProperty("U_PROJECT_CODE", dtDatatable.Rows[0]["PROJECT_CODE"].ToString());
                 oGeneralData.SetProperty("U_PROJECTNAME", dtDatatable.Rows[0]["PROJECTNAME"].ToString());
-                oGeneralData.SetProperty("U_DEVLICNO", dtDatatable.Rows[0]["DEVLICNO"].ToString());
+                if (dtDatatable.Rows[0]["DEVLICNO"].ToString() != strSelect.ToString())
+                {
+                    oGeneralData.SetProperty("U_DEVLICNO", dtDatatable.Rows[0]["DEVLICNO"].ToString());
+                }
                 oGeneralData.SetProperty("U_DEVSOLICTOR", dtDatatable.Rows[0]["DEVSOLICTOR"].ToString());
                 oGeneralData.SetProperty("U_DVLPR_SOL_CODE", dtDatatable.Rows[0]["DVLPR_SOL_CODE"].ToString());
                 oGeneralData.SetProperty("U_DVLPR_LOC", dtDatatable.Rows[0]["DVLPR_LOC"].ToString());
@@ -1197,12 +1267,15 @@ namespace AE_TnN_Mobile_BLL
                     oGeneralData.SetProperty("U_PROPERTY_FREE", "Y");
                 }
 
+                oGeneralData.SetProperty("U_ERNST_DEPOSIT", dtDatatable.Rows[0]["ErnstDeposit"].ToString());
+                oGeneralData.SetProperty("U_MARKETERCODE", dtDatatable.Rows[0]["MarketerCode"].ToString());
+                oGeneralData.SetProperty("U_MARKETERNAME", dtDatatable.Rows[0]["MarketerName"].ToString());
 
                 oGeneralService.Add(oGeneralData);
 
                 //SqlConnection con = new SqlConnection(ConnectionString);
                 //SqlCommand command = con.CreateCommand();
-                command.CommandText = "Update [AE_OCRD] set U_PROPERTY_CODE ='" + sCode + "', U_PURCHPRICE = '" + dtDatatable.Rows[0]["PurchasePrice"].ToString() + "' where Code ='" + dtDatatable.Rows[0]["CARDCODE"].ToString() + "'";
+                command.CommandText = "Update [AE_OCRD] set U_PROPERTY_CODE ='" + sCode + "', U_SPADATE = '" + dtDatatable.Rows[0]["SPADate"].ToString() + "' , U_PURCHPRICE = '" + dtDatatable.Rows[0]["PurchasePrice"].ToString() + "' where Code ='" + dtDatatable.Rows[0]["CARDCODE"].ToString() + "'";
                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Executing the Query : " + command.CommandText, sFuncName);
 
                 con.Open();
@@ -1257,7 +1330,42 @@ namespace AE_TnN_Mobile_BLL
                 }
 
                 //Updating the Informations
-                command.CommandText = "UPDATE [@AE_PROPERTY] SET U_TITLENO = '" + dtDatatable.Rows[0]["TITLENO"] + "',"
+                if (dtDatatable.Rows[0]["DEVLICNO"].ToString() != strSelect.ToString())
+                {
+                    command.CommandText = "UPDATE [@AE_PROPERTY] SET U_TITLENO = '" + dtDatatable.Rows[0]["TITLENO"] + "',"
+                                            + "U_TITLETYPE = '" + dtDatatable.Rows[0]["TITLETYPE"] + "',"
+                                            + "U_LOTTYPE = '" + dtDatatable.Rows[0]["LOTTYPE"] + "',"
+                                            + "U_LOTNO = '" + dtDatatable.Rows[0]["LOTNO"] + "',"
+                                            + "U_FORMERLY_KNOWN_AS = '" + dtDatatable.Rows[0]["FORMERLY_KNOWN_AS"] + "',"
+                                            + "U_BPM = '" + dtDatatable.Rows[0]["BPM"] + "',"
+                                            + "U_STATE = '" + dtDatatable.Rows[0]["STATE"] + "',"
+                                            + "U_AREA = '" + dtDatatable.Rows[0]["AREA"] + "',"
+                                            + "U_LOTAREA = '" + dtDatatable.Rows[0]["LOTAREA"] + "',"
+                                            + "UpdateDate = '" + DateTime.Now.Date + "',"
+                                            + "Updatetime = '" + TimeSplit[0] + TimeSplit[1] + "',"
+                                            + "U_DEVELOPER = '" + dtDatatable.Rows[0]["DEVELOPER"] + "',"
+                                            + "U_DVLPR_CODE = '" + dtDatatable.Rows[0]["DVLPR_CODE"] + "',"
+                                            + "U_PROJECT_CODE = '" + dtDatatable.Rows[0]["PROJECT_CODE"] + "',"
+                                            + "U_PROJECTNAME = '" + dtDatatable.Rows[0]["PROJECTNAME"] + "',"
+                                            + "U_DEVLICNO = '" + dtDatatable.Rows[0]["DEVLICNO"] + "',"
+                                            + "U_DEVSOLICTOR = '" + dtDatatable.Rows[0]["DEVSOLICTOR"] + "',"
+                                            + "U_DVLPR_SOL_CODE = '" + dtDatatable.Rows[0]["DVLPR_SOL_CODE"] + "',"
+                                            + "U_DVLPR_LOC = '" + dtDatatable.Rows[0]["DVLPR_LOC"] + "',"
+                                            + "U_LSTCHG_BANKCODE = '" + dtDatatable.Rows[0]["LSTCHG_BANKCODE"] + "',"
+                                            + "U_LSTCHG_BANKNAME = '" + dtDatatable.Rows[0]["LSTCHG_BANKNAME"] + "',"
+                                            + "U_LSTCHG_BRANCH = '" + dtDatatable.Rows[0]["LSTCHG_BRANCH"] + "',"
+                                            + "U_LSTCHG_PANO = '" + dtDatatable.Rows[0]["LSTCHG_PANO"] + "',"
+                                            + "U_LSTCHG_PRSTNO = '" + dtDatatable.Rows[0]["LSTCHG_PRSTNO"] + "',"
+                                            + "U_PROPERTY_CHARGED = '" + sCharged.ToString() + "',"
+                                            + "U_PROPERTY_FREE = '" + sFree.ToString() + "',"
+                                            + "U_ERNST_DEPOSIT = '" + dtDatatable.Rows[0]["ErnstDeposit"] + "',"
+                                            + "U_MARKETERCODE = '" + dtDatatable.Rows[0]["MarketerCode"] + "',"
+                                            + "U_MARKETERNAME = '" + dtDatatable.Rows[0]["MarketerName"] + "'"
+                                            + " WHERE Code = '" + sCardCode + "'";
+                }
+                else
+                {
+                    command.CommandText = "UPDATE [@AE_PROPERTY] SET U_TITLENO = '" + dtDatatable.Rows[0]["TITLENO"] + "',"
                                         + "U_TITLETYPE = '" + dtDatatable.Rows[0]["TITLETYPE"] + "',"
                                         + "U_LOTTYPE = '" + dtDatatable.Rows[0]["LOTTYPE"] + "',"
                                         + "U_LOTNO = '" + dtDatatable.Rows[0]["LOTNO"] + "',"
@@ -1272,7 +1380,6 @@ namespace AE_TnN_Mobile_BLL
                                         + "U_DVLPR_CODE = '" + dtDatatable.Rows[0]["DVLPR_CODE"] + "',"
                                         + "U_PROJECT_CODE = '" + dtDatatable.Rows[0]["PROJECT_CODE"] + "',"
                                         + "U_PROJECTNAME = '" + dtDatatable.Rows[0]["PROJECTNAME"] + "',"
-                                        + "U_DEVLICNO = '" + dtDatatable.Rows[0]["DEVLICNO"] + "',"
                                         + "U_DEVSOLICTOR = '" + dtDatatable.Rows[0]["DEVSOLICTOR"] + "',"
                                         + "U_DVLPR_SOL_CODE = '" + dtDatatable.Rows[0]["DVLPR_SOL_CODE"] + "',"
                                         + "U_DVLPR_LOC = '" + dtDatatable.Rows[0]["DVLPR_LOC"] + "',"
@@ -1282,15 +1389,19 @@ namespace AE_TnN_Mobile_BLL
                                         + "U_LSTCHG_PANO = '" + dtDatatable.Rows[0]["LSTCHG_PANO"] + "',"
                                         + "U_LSTCHG_PRSTNO = '" + dtDatatable.Rows[0]["LSTCHG_PRSTNO"] + "',"
                                         + "U_PROPERTY_CHARGED = '" + sCharged.ToString() + "',"
-                                        + "U_PROPERTY_FREE = '" + sFree.ToString() + "'"
+                                        + "U_PROPERTY_FREE = '" + sFree.ToString() + "',"
+                                        + "U_ERNST_DEPOSIT = '" + dtDatatable.Rows[0]["ErnstDeposit"] + "',"
+                                        + "U_MARKETERCODE = '" + dtDatatable.Rows[0]["MarketerCode"] + "',"
+                                        + "U_MARKETERNAME = '" + dtDatatable.Rows[0]["MarketerName"] + "'"
                                         + " WHERE Code = '" + sCardCode + "'";
+                }
                 con.Open();
                 command.ExecuteNonQuery();
                 con.Close();
 
                 //SqlConnection con = new SqlConnection(ConnectionString);
                 //SqlCommand command = con.CreateCommand();
-                command.CommandText = "Update [AE_OCRD] set U_PROPERTY_CODE ='" + sCardCode + "', U_PURCHPRICE = '" + dtDatatable.Rows[0]["PurchasePrice"].ToString() + "' where Code ='" + dtDatatable.Rows[0]["CARDCODE"].ToString() + "'";
+                command.CommandText = "Update [AE_OCRD] set U_PROPERTY_CODE ='" + sCardCode + "', U_SPADATE = '" + dtDatatable.Rows[0]["SPADate"].ToString() + "', U_PURCHPRICE = '" + dtDatatable.Rows[0]["PurchasePrice"].ToString() + "' where Code ='" + dtDatatable.Rows[0]["CARDCODE"].ToString() + "'";
                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Executing the Query : " + command.CommandText, sFuncName);
 
                 con.Open();
@@ -1826,6 +1937,34 @@ namespace AE_TnN_Mobile_BLL
                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
                 throw Ex;
             }
+        }
+
+        public string SPA_AddCase_BlackListCheck(string sIDNo1)
+        {
+            string sFuncName = "SPA_AddCase_BlackListCheck";
+
+            DataTable results = new DataTable();
+            string sResult = string.Empty;
+            SqlConnection con = new SqlConnection(ConnectionString);
+            SqlCommand command = con.CreateCommand();
+            command.CommandText = "select TOP 1 IsNull(U_ISBLACKLISTED,'N') [BLACKLISTED] from [@AE_RELATEDPARTY] where U_IDNO_F1 = '" + sIDNo1 + "'";
+            if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Executing the Query : " + command.CommandText, sFuncName);
+
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+            dataAdapter.Fill(results);
+
+            if (results.Rows.Count > 0)
+            {
+                if (results.Rows[0][0].ToString().Length > 0)
+                {
+                    //sCode = Convert.ToInt32(results.Rows[0][0].ToString()) + 1;
+                    sResult = results.Rows[0][0].ToString();
+                }
+            }
+
+            con.Close();
+
+            return sResult;
         }
     }
 }

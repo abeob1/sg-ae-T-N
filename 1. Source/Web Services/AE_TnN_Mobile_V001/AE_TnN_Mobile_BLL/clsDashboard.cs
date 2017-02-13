@@ -216,6 +216,90 @@ namespace AE_TnN_Mobile_BLL
             }
         }
 
+        public DataSet SPA_GetLicenseNo(string sProjectCode, string sSPADate)
+        {
+            DataSet oDataset = new DataSet();
+            string sFuncName = string.Empty;
+            string sProcName = string.Empty;
+            DataView oDTView = new DataView();
+
+            try
+            {
+                sFuncName = "SPA_GetLicenseNo()";
+                sProcName = "AE_SPA032_Mobile_GetLicenseNo";
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Calling Run_StoredProcedure() " + sProcName, sFuncName);
+
+
+                oDataset = SqlHelper.ExecuteDataSet(ConnectionString, CommandType.StoredProcedure, sProcName,
+                            Data.CreateParameter("@ProjectCode", sProjectCode), Data.CreateParameter("@SPADate", sSPADate));
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
+                if (oDataset.Tables.Count > 0 && oDataset != null)
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is a set of data from the SP :" + sProcName, sFuncName);
+                    return oDataset;
+                }
+                else
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is no data from the SP :" + sProcName, sFuncName);
+                    return oDataset;
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                sErrDesc = Ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                throw Ex;
+            }
+        }
+
+        public DataSet SPA_GetPropertyLicenseNo(string sProjectCode)
+        {
+            DataSet oDataset = new DataSet();
+            string sFuncName = string.Empty;
+            string sProcName = string.Empty;
+            DataView oDTView = new DataView();
+
+            try
+            {
+                sFuncName = "SPA_GetPropertyLicenseNo()";
+                sProcName = "AE_SPA033_Mobile_GetPropertyLicenseNo";
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Calling Run_StoredProcedure() " + sProcName, sFuncName);
+
+
+                oDataset = SqlHelper.ExecuteDataSet(ConnectionString, CommandType.StoredProcedure, sProcName,
+                            Data.CreateParameter("@ProjectCode", sProjectCode));
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
+                if (oDataset.Tables.Count > 0 && oDataset != null)
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is a set of data from the SP :" + sProcName, sFuncName);
+                    return oDataset;
+                }
+                else
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is no data from the SP :" + sProcName, sFuncName);
+                    return oDataset;
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                sErrDesc = Ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                throw Ex;
+            }
+        }
+
         public DataSet SPA_RelatedCases(string sPropertyCode, string sRelatedPartyCode, string sCallFrom, string sCategory)
         {
             DataSet oDataset = new DataSet();
@@ -261,7 +345,7 @@ namespace AE_TnN_Mobile_BLL
             }
         }
 
-        public DataTable SPA_GetProject()
+        public DataTable SPA_GetProject(string sDeveloperCode)
         {
             string sFuncName = string.Empty;
             string sReturnResult = string.Empty;
@@ -271,11 +355,16 @@ namespace AE_TnN_Mobile_BLL
                 sFuncName = "SPA_GetProject";
                 SqlConnection con = new SqlConnection(ConnectionString);
                 SqlCommand command = con.CreateCommand();
+                //command.CommandText = "DECLARE @DATE date " +
+                //                      "SET @DATE = (SELECT GETDATE()) " +
+                //                      "SELECT '-- Select --' [Id], '-- Select --' [Name] UNION " +
+                //                      "SELECT PrjCode [Id],PrjName [Name] FROM OPRJ WITH (NOLOCK) WHERE ISNULL(Locked,'N') != 'Y' AND Active = 'Y' " +
+                //                      "AND IsNull(ValidFrom,@DATE) <= @DATE and ISNULL(ValidTo,@DATE) >= @DATE ";
                 command.CommandText = "DECLARE @DATE date " +
                                       "SET @DATE = (SELECT GETDATE()) " +
                                       "SELECT '-- Select --' [Id], '-- Select --' [Name] UNION " +
-                                      "SELECT PrjCode [Id],PrjName [Name] FROM OPRJ WITH (NOLOCK) WHERE ISNULL(Locked,'N') != 'Y' AND Active = 'Y' " +
-                                      "AND IsNull(ValidFrom,@DATE) <= @DATE and ISNULL(ValidTo,@DATE) >= @DATE ";
+                                      "SELECT Code [Id],Name [Name] FROM [@AE_PROJECT_DETAILS] WITH (NOLOCK) WHERE U_ACTIVE = 'Y' " +
+                                      "AND IsNull(U_VALID_FROM,@DATE) <= @DATE and ISNULL(U_VALID_TO,@DATE) >= @DATE and U_DEVELOPER = '"+ sDeveloperCode +"' ";
                 con.Open();
                 SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
                 dataAdapter.Fill(results);
@@ -386,7 +475,10 @@ namespace AE_TnN_Mobile_BLL
                 oGeneralData.SetProperty("U_DVLPR_CODE", dtDatatable.Rows[0]["DVLPR_CODE"].ToString());
                 oGeneralData.SetProperty("U_PROJECT_CODE", dtDatatable.Rows[0]["PROJECT_CODE"].ToString());
                 oGeneralData.SetProperty("U_PROJECTNAME", dtDatatable.Rows[0]["PROJECTNAME"].ToString());
-                oGeneralData.SetProperty("U_DEVLICNO", dtDatatable.Rows[0]["DEVLICNO"].ToString());
+                if (dtDatatable.Rows[0]["DEVLICNO"].ToString() != strSelect.ToString())
+                {
+                    oGeneralData.SetProperty("U_DEVLICNO", dtDatatable.Rows[0]["DEVLICNO"].ToString());
+                }
                 oGeneralData.SetProperty("U_DEVSOLICTOR", dtDatatable.Rows[0]["DEVSOLICTOR"].ToString());
                 oGeneralData.SetProperty("U_DVLPR_SOL_CODE", dtDatatable.Rows[0]["DVLPR_SOL_CODE"].ToString());
                 oGeneralData.SetProperty("U_DVLPR_LOC", dtDatatable.Rows[0]["DVLPR_LOC"].ToString());
@@ -446,33 +538,65 @@ namespace AE_TnN_Mobile_BLL
                 }
 
                 //Updating the Informations
-                command.CommandText = "UPDATE [@AE_PROPERTY] SET U_TITLENO = '" + dtDatatable.Rows[0]["TITLENO"] + "',"
-                                        + "U_TITLETYPE = '" + dtDatatable.Rows[0]["TITLETYPE"] + "',"
-                                        + "U_LOTTYPE = '" + dtDatatable.Rows[0]["LOTTYPE"] + "',"
-                                        + "U_LOTNO = '" + dtDatatable.Rows[0]["LOTNO"] + "',"
-                                        + "U_FORMERLY_KNOWN_AS = '" + dtDatatable.Rows[0]["FORMERLY_KNOWN_AS"] + "',"
-                                        + "U_BPM = '" + dtDatatable.Rows[0]["BPM"] + "',"
-                                        + "U_STATE = '" + dtDatatable.Rows[0]["STATE"] + "',"
-                                        + "U_AREA = '" + dtDatatable.Rows[0]["AREA"] + "',"
-                                        + "U_LOTAREA = '" + dtDatatable.Rows[0]["LOTAREA"] + "',"
-                                        + "UpdateDate = '" + DateTime.Now.Date + "',"
-                                        + "Updatetime = '" + TimeSplit[0] + TimeSplit[1] + "',"
-                                        + "U_DEVELOPER = '" + dtDatatable.Rows[0]["DEVELOPER"] + "',"
-                                        + "U_DVLPR_CODE = '" + dtDatatable.Rows[0]["DVLPR_CODE"] + "',"
-                                        + "U_PROJECT_CODE = '" + dtDatatable.Rows[0]["PROJECT_CODE"] + "',"
-                                        + "U_PROJECTNAME = '" + dtDatatable.Rows[0]["PROJECTNAME"] + "',"
-                                        + "U_DEVLICNO = '" + dtDatatable.Rows[0]["DEVLICNO"] + "',"
-                                        + "U_DEVSOLICTOR = '" + dtDatatable.Rows[0]["DEVSOLICTOR"] + "',"
-                                        + "U_DVLPR_SOL_CODE = '" + dtDatatable.Rows[0]["DVLPR_SOL_CODE"] + "',"
-                                        + "U_DVLPR_LOC = '" + dtDatatable.Rows[0]["DVLPR_LOC"] + "',"
-                                        + "U_LSTCHG_BANKCODE = '" + dtDatatable.Rows[0]["LSTCHG_BANKCODE"] + "',"
-                                        + "U_LSTCHG_BANKNAME = '" + dtDatatable.Rows[0]["LSTCHG_BANKNAME"] + "',"
-                                        + "U_LSTCHG_BRANCH = '" + dtDatatable.Rows[0]["LSTCHG_BRANCH"] + "',"
-                                        + "U_LSTCHG_PANO = '" + dtDatatable.Rows[0]["LSTCHG_PANO"] + "',"
-                                        + "U_LSTCHG_PRSTNO = '" + dtDatatable.Rows[0]["LSTCHG_PRSTNO"] + "',"
-                                        + "U_PROPERTY_CHARGED = '" + sCharged.ToString() + "',"
-                                        + "U_PROPERTY_FREE = '" + sFree.ToString() + "'"
-                                        + " WHERE Code = '" + dtDatatable.Rows[0]["Code"] + "'";
+                if (dtDatatable.Rows[0]["DEVLICNO"].ToString() != strSelect.ToString())
+                {
+                    command.CommandText = "UPDATE [@AE_PROPERTY] SET U_TITLENO = '" + dtDatatable.Rows[0]["TITLENO"] + "',"
+                                            + "U_TITLETYPE = '" + dtDatatable.Rows[0]["TITLETYPE"] + "',"
+                                            + "U_LOTTYPE = '" + dtDatatable.Rows[0]["LOTTYPE"] + "',"
+                                            + "U_LOTNO = '" + dtDatatable.Rows[0]["LOTNO"] + "',"
+                                            + "U_FORMERLY_KNOWN_AS = '" + dtDatatable.Rows[0]["FORMERLY_KNOWN_AS"] + "',"
+                                            + "U_BPM = '" + dtDatatable.Rows[0]["BPM"] + "',"
+                                            + "U_STATE = '" + dtDatatable.Rows[0]["STATE"] + "',"
+                                            + "U_AREA = '" + dtDatatable.Rows[0]["AREA"] + "',"
+                                            + "U_LOTAREA = '" + dtDatatable.Rows[0]["LOTAREA"] + "',"
+                                            + "UpdateDate = '" + DateTime.Now.Date + "',"
+                                            + "Updatetime = '" + TimeSplit[0] + TimeSplit[1] + "',"
+                                            + "U_DEVELOPER = '" + dtDatatable.Rows[0]["DEVELOPER"] + "',"
+                                            + "U_DVLPR_CODE = '" + dtDatatable.Rows[0]["DVLPR_CODE"] + "',"
+                                            + "U_PROJECT_CODE = '" + dtDatatable.Rows[0]["PROJECT_CODE"] + "',"
+                                            + "U_PROJECTNAME = '" + dtDatatable.Rows[0]["PROJECTNAME"] + "',"
+                                            + "U_DEVLICNO = '" + dtDatatable.Rows[0]["DEVLICNO"] + "',"
+                                            + "U_DEVSOLICTOR = '" + dtDatatable.Rows[0]["DEVSOLICTOR"] + "',"
+                                            + "U_DVLPR_SOL_CODE = '" + dtDatatable.Rows[0]["DVLPR_SOL_CODE"] + "',"
+                                            + "U_DVLPR_LOC = '" + dtDatatable.Rows[0]["DVLPR_LOC"] + "',"
+                                            + "U_LSTCHG_BANKCODE = '" + dtDatatable.Rows[0]["LSTCHG_BANKCODE"] + "',"
+                                            + "U_LSTCHG_BANKNAME = '" + dtDatatable.Rows[0]["LSTCHG_BANKNAME"] + "',"
+                                            + "U_LSTCHG_BRANCH = '" + dtDatatable.Rows[0]["LSTCHG_BRANCH"] + "',"
+                                            + "U_LSTCHG_PANO = '" + dtDatatable.Rows[0]["LSTCHG_PANO"] + "',"
+                                            + "U_LSTCHG_PRSTNO = '" + dtDatatable.Rows[0]["LSTCHG_PRSTNO"] + "',"
+                                            + "U_PROPERTY_CHARGED = '" + sCharged.ToString() + "',"
+                                            + "U_PROPERTY_FREE = '" + sFree.ToString() + "'"
+                                            + " WHERE Code = '" + dtDatatable.Rows[0]["Code"] + "'";
+                }
+                else
+                {
+                    command.CommandText = "UPDATE [@AE_PROPERTY] SET U_TITLENO = '" + dtDatatable.Rows[0]["TITLENO"] + "',"
+                                            + "U_TITLETYPE = '" + dtDatatable.Rows[0]["TITLETYPE"] + "',"
+                                            + "U_LOTTYPE = '" + dtDatatable.Rows[0]["LOTTYPE"] + "',"
+                                            + "U_LOTNO = '" + dtDatatable.Rows[0]["LOTNO"] + "',"
+                                            + "U_FORMERLY_KNOWN_AS = '" + dtDatatable.Rows[0]["FORMERLY_KNOWN_AS"] + "',"
+                                            + "U_BPM = '" + dtDatatable.Rows[0]["BPM"] + "',"
+                                            + "U_STATE = '" + dtDatatable.Rows[0]["STATE"] + "',"
+                                            + "U_AREA = '" + dtDatatable.Rows[0]["AREA"] + "',"
+                                            + "U_LOTAREA = '" + dtDatatable.Rows[0]["LOTAREA"] + "',"
+                                            + "UpdateDate = '" + DateTime.Now.Date + "',"
+                                            + "Updatetime = '" + TimeSplit[0] + TimeSplit[1] + "',"
+                                            + "U_DEVELOPER = '" + dtDatatable.Rows[0]["DEVELOPER"] + "',"
+                                            + "U_DVLPR_CODE = '" + dtDatatable.Rows[0]["DVLPR_CODE"] + "',"
+                                            + "U_PROJECT_CODE = '" + dtDatatable.Rows[0]["PROJECT_CODE"] + "',"
+                                            + "U_PROJECTNAME = '" + dtDatatable.Rows[0]["PROJECTNAME"] + "',"
+                                            + "U_DEVSOLICTOR = '" + dtDatatable.Rows[0]["DEVSOLICTOR"] + "',"
+                                            + "U_DVLPR_SOL_CODE = '" + dtDatatable.Rows[0]["DVLPR_SOL_CODE"] + "',"
+                                            + "U_DVLPR_LOC = '" + dtDatatable.Rows[0]["DVLPR_LOC"] + "',"
+                                            + "U_LSTCHG_BANKCODE = '" + dtDatatable.Rows[0]["LSTCHG_BANKCODE"] + "',"
+                                            + "U_LSTCHG_BANKNAME = '" + dtDatatable.Rows[0]["LSTCHG_BANKNAME"] + "',"
+                                            + "U_LSTCHG_BRANCH = '" + dtDatatable.Rows[0]["LSTCHG_BRANCH"] + "',"
+                                            + "U_LSTCHG_PANO = '" + dtDatatable.Rows[0]["LSTCHG_PANO"] + "',"
+                                            + "U_LSTCHG_PRSTNO = '" + dtDatatable.Rows[0]["LSTCHG_PRSTNO"] + "',"
+                                            + "U_PROPERTY_CHARGED = '" + sCharged.ToString() + "',"
+                                            + "U_PROPERTY_FREE = '" + sFree.ToString() + "'"
+                                            + " WHERE Code = '" + dtDatatable.Rows[0]["Code"] + "'";
+                }
                 con.Open();
 
                 command.ExecuteNonQuery();

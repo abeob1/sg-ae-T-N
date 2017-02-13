@@ -300,6 +300,9 @@ namespace AE_TnN_Mobile_BLL
                     //oGeneralData.SetProperty("LastUpdatedOn", dtDatatable.Rows[0]["LastUpdatedOn"].ToString());
                     oGeneralData.SetProperty("U_IDSCAN1", dtDatatable.Rows[0]["ScanFrontICLocation"].ToString());
                     oGeneralData.SetProperty("U_IDSCAN2", dtDatatable.Rows[0]["ScanBackICLocation"].ToString());
+                    oGeneralData.SetProperty("U_MaritalStatus", dtDatatable.Rows[0]["MaritalStatus"].ToString());
+                    oGeneralData.SetProperty("U_OCCUPATION", dtDatatable.Rows[0]["Occupation"].ToString());
+                    oGeneralData.SetProperty("U_IdentityType", dtDatatable.Rows[0]["IdentityType"].ToString());
 
                     oGeneralService.Add(oGeneralData);
                     //}
@@ -418,7 +421,10 @@ namespace AE_TnN_Mobile_BLL
                 + "UpdateDate= '" + DateTime.Now.Date + "',"
                 + "Updatetime = '" + TimeSplit[0] + TimeSplit[1] + "',"
                 + "U_IDSCAN1= '" + dtDatatable.Rows[0]["ScanFrontICLocation"] + "',"
-                + "U_IDSCAN2= '" + dtDatatable.Rows[0]["ScanBackICLocation"] + "'"
+                + "U_IDSCAN2= '" + dtDatatable.Rows[0]["ScanBackICLocation"] + "',"
+                + "U_MaritalStatus= '" + dtDatatable.Rows[0]["MaritalStatus"] + "',"
+                + "U_OCCUPATION= '" + dtDatatable.Rows[0]["Occupation"] + "',"
+                + "U_IdentityType= '" + dtDatatable.Rows[0]["IdentityType"] + "'"
                 + " WHERE Code = '" + s1 + "' AND DocEntry = '" + s2 + "'";
 
                 con.Open();
@@ -475,6 +481,46 @@ namespace AE_TnN_Mobile_BLL
             }
 
             return sReturnResult;
+        }
+
+        public DataSet SPA_GetOccupation()
+        {
+            DataSet oDataset = new DataSet();
+            string sFuncName = string.Empty;
+            string sProcName = string.Empty;
+            DataView oDTView = new DataView();
+
+            try
+            {
+                sFuncName = "SPA_GetOccupation()";
+                sProcName = "AE_SPA030_Mobile_GetOccupation";
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Calling Run_StoredProcedure() " + sProcName, sFuncName);
+
+
+                oDataset = SqlHelper.ExecuteDataSet(ConnectionString, CommandType.StoredProcedure, sProcName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With SUCCESS  ", sFuncName);
+                if (oDataset.Tables.Count > 0 && oDataset != null)
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is a set of data from the SP :" + sProcName, sFuncName);
+                    return oDataset;
+                }
+                else
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("There is no data from the SP :" + sProcName, sFuncName);
+                    return oDataset;
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                sErrDesc = Ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                throw Ex;
+            }
         }
     }
 }

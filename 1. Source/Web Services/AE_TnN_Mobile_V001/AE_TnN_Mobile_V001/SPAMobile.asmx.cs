@@ -451,6 +451,7 @@ namespace AE_TnN_Mobile_V001
                             _RelatedInfo.UserCode = r["UserCode"].ToString();
                             _RelatedInfo.Status = r["CaseStatus"].ToString();
                             _RelatedInfo.FileClosedDate = r["FileClosedDate"].ToString();
+                            _RelatedInfo.MARKETERNAME = r["MARKETERNAME"].ToString();
 
                             lstCaseInfo.Add(_RelatedInfo);
                         }
@@ -473,6 +474,7 @@ namespace AE_TnN_Mobile_V001
                         _RelatedInfo.UserCode = string.Empty;
                         _RelatedInfo.Status = string.Empty;
                         _RelatedInfo.FileClosedDate = string.Empty;
+                        _RelatedInfo.MARKETERNAME = string.Empty;
 
                         lstCaseInfo.Add(_RelatedInfo);
                     }
@@ -499,6 +501,7 @@ namespace AE_TnN_Mobile_V001
                     _RelatedInfo.UserCode = string.Empty;
                     _RelatedInfo.Status = string.Empty;
                     _RelatedInfo.FileClosedDate = string.Empty;
+                    _RelatedInfo.MARKETERNAME = string.Empty;
 
                     lstCaseInfo.Add(_RelatedInfo);
                     Context.Response.Output.Write(js.Serialize(lstCaseInfo));
@@ -743,6 +746,7 @@ namespace AE_TnN_Mobile_V001
                             _RelatedInfo.UserCode = r["UserCode"].ToString();
                             _RelatedInfo.Status = r["CaseStatus"].ToString();
                             _RelatedInfo.FileClosedDate = r["FileClosedDate"].ToString();
+                            _RelatedInfo.MARKETERNAME = r["MARKETERNAME"].ToString();
 
                             lstCaseInfo.Add(_RelatedInfo);
                         }
@@ -765,6 +769,7 @@ namespace AE_TnN_Mobile_V001
                         _RelatedInfo.UserCode = string.Empty;
                         _RelatedInfo.Status = string.Empty;
                         _RelatedInfo.FileClosedDate = string.Empty;
+                        _RelatedInfo.MARKETERNAME = string.Empty;
 
                         lstCaseInfo.Add(_RelatedInfo);
                     }
@@ -791,6 +796,7 @@ namespace AE_TnN_Mobile_V001
                     _RelatedInfo.UserCode = string.Empty;
                     _RelatedInfo.Status = string.Empty;
                     _RelatedInfo.FileClosedDate = string.Empty;
+                    _RelatedInfo.MARKETERNAME = string.Empty;
 
                     lstCaseInfo.Add(_RelatedInfo);
                     Context.Response.Output.Write(js.Serialize(lstCaseInfo));
@@ -865,6 +871,7 @@ namespace AE_TnN_Mobile_V001
                             _RelatedInfo.UserCode = r["UserCode"].ToString();
                             _RelatedInfo.Status = r["CaseStatus"].ToString();
                             _RelatedInfo.FileClosedDate = r["FileClosedDate"].ToString();
+                            _RelatedInfo.MARKETERNAME = r["MARKETERNAME"].ToString();
 
                             lstCaseInfo.Add(_RelatedInfo);
                         }
@@ -887,6 +894,7 @@ namespace AE_TnN_Mobile_V001
                         _RelatedInfo.UserCode = string.Empty;
                         _RelatedInfo.Status = string.Empty;
                         _RelatedInfo.FileClosedDate = string.Empty;
+                        _RelatedInfo.MARKETERNAME = string.Empty;
 
                         lstCaseInfo.Add(_RelatedInfo);
                     }
@@ -913,6 +921,7 @@ namespace AE_TnN_Mobile_V001
                     _RelatedInfo.UserCode = string.Empty;
                     _RelatedInfo.Status = string.Empty;
                     _RelatedInfo.FileClosedDate = string.Empty;
+                    _RelatedInfo.MARKETERNAME = string.Empty;
 
                     lstCaseInfo.Add(_RelatedInfo);
                     Context.Response.Output.Write(js.Serialize(lstCaseInfo));
@@ -987,6 +996,7 @@ namespace AE_TnN_Mobile_V001
                             _RelatedInfo.UserCode = r["UserCode"].ToString();
                             _RelatedInfo.Status = r["CaseStatus"].ToString();
                             _RelatedInfo.FileClosedDate = r["FileClosedDate"].ToString();
+                            _RelatedInfo.MARKETERNAME = r["MARKETERNAME"].ToString();
 
                             lstCaseInfo.Add(_RelatedInfo);
                         }
@@ -1009,6 +1019,7 @@ namespace AE_TnN_Mobile_V001
                         _RelatedInfo.UserCode = string.Empty;
                         _RelatedInfo.Status = string.Empty;
                         _RelatedInfo.FileClosedDate = string.Empty;
+                        _RelatedInfo.MARKETERNAME = string.Empty;
 
                         lstCaseInfo.Add(_RelatedInfo);
                     }
@@ -1035,6 +1046,7 @@ namespace AE_TnN_Mobile_V001
                     _RelatedInfo.UserCode = string.Empty;
                     _RelatedInfo.Status = string.Empty;
                     _RelatedInfo.FileClosedDate = string.Empty;
+                    _RelatedInfo.MARKETERNAME = string.Empty;
 
                     lstCaseInfo.Add(_RelatedInfo);
                     Context.Response.Output.Write(js.Serialize(lstCaseInfo));
@@ -1405,7 +1417,7 @@ namespace AE_TnN_Mobile_V001
 
         [WebMethod(EnableSession = true)]
         [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
-        public void SPA_GetProject()
+        public void SPA_GetProject(string sJsonInput)
         {
             string sFuncName = string.Empty;
             try
@@ -1413,8 +1425,16 @@ namespace AE_TnN_Mobile_V001
                 sFuncName = "SPA_GetProject()";
                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
 
+                sJsonInput = "[" + sJsonInput + "]";
+                //Split JSON to Individual String
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_BindDeveloper> lstDeserialize = js.Deserialize<List<JSON_BindDeveloper>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+
+
                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_GetProject() ", sFuncName);
-                DataTable dtProject = oDashboard.SPA_GetProject();
+                DataTable dtProject = oDashboard.SPA_GetProject(lstDeserialize[0].DeveloperCode);
                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_GetProject() ", sFuncName);
                 List<ValidValues> lstValidInfo = new List<ValidValues>();
                 if (dtProject != null && dtProject.Rows.Count > 0)
@@ -1520,6 +1540,149 @@ namespace AE_TnN_Mobile_V001
             }
         }
 
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_GetLicenseNo(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            try
+            {
+                sFuncName = "SPA_GetLicenseNo()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+                List<ValidValues> lstValidInfo = new List<ValidValues>();
+
+                sJsonInput = "[" + sJsonInput + "]";
+                //Split JSON to Individual String
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_LicenseNo> lstDeserialize = js.Deserialize<List<JSON_LicenseNo>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    JSON_LicenseNo objLstInfo = lstDeserialize[0];
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_GetLicenseNo() ", sFuncName);
+                    DataSet dsProject = oDashboard.SPA_GetLicenseNo(objLstInfo.ProjectCode, objLstInfo.SPADate);
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_GetLicenseNo() ", sFuncName);
+
+                    if (dsProject != null && dsProject.Tables.Count > 0)
+                    {
+                        foreach (DataRow r in dsProject.Tables[0].Rows)
+                        {
+                            ValidValues _ValidInfo = new ValidValues();
+
+                            _ValidInfo.Id = r["Id"].ToString();
+                            _ValidInfo.Name = r["Name"].ToString();
+                            lstValidInfo.Add(_ValidInfo);
+                        }
+                    }
+                    else
+                    {
+                        ValidValues _ValidInfo = new ValidValues();
+
+                        _ValidInfo.Id = string.Empty;
+                        _ValidInfo.Name = string.Empty;
+                        lstValidInfo.Add(_ValidInfo);
+                    }
+                }
+                else
+                {
+                    ValidValues _ValidInfo = new ValidValues();
+
+                    _ValidInfo.Id = string.Empty;
+                    _ValidInfo.Name = string.Empty;
+                    lstValidInfo.Add(_ValidInfo);
+                }
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Project Information ", sFuncName);
+                Context.Response.Output.Write(js.Serialize(lstValidInfo));
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Project Information , the Serialized data is ' " + js.Serialize(lstValidInfo) + " '", sFuncName);
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_GetPropertyLicenseNo(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            try
+            {
+                sFuncName = "SPA_GetPropertyLicenseNo()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+                List<ValidValues> lstValidInfo = new List<ValidValues>();
+
+                sJsonInput = "[" + sJsonInput + "]";
+                //Split JSON to Individual String
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_PropertyLicenseNo> lstDeserialize = js.Deserialize<List<JSON_PropertyLicenseNo>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    JSON_PropertyLicenseNo objLstInfo = lstDeserialize[0];
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_GetLicenseNo() ", sFuncName);
+                    DataSet dsProject = oDashboard.SPA_GetPropertyLicenseNo(objLstInfo.ProjectCode);
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_GetLicenseNo() ", sFuncName);
+
+                    if (dsProject != null && dsProject.Tables.Count > 0)
+                    {
+                        foreach (DataRow r in dsProject.Tables[0].Rows)
+                        {
+                            ValidValues _ValidInfo = new ValidValues();
+
+                            if (r["Id"].ToString() != string.Empty || r["Id"].ToString() != "")
+                            {
+                                _ValidInfo.Id = r["Id"].ToString();
+                                _ValidInfo.Name = r["Name"].ToString();
+                                lstValidInfo.Add(_ValidInfo);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ValidValues _ValidInfo = new ValidValues();
+
+                        _ValidInfo.Id = string.Empty;
+                        _ValidInfo.Name = string.Empty;
+                        lstValidInfo.Add(_ValidInfo);
+                    }
+                }
+                else
+                {
+                    ValidValues _ValidInfo = new ValidValues();
+
+                    _ValidInfo.Id = string.Empty;
+                    _ValidInfo.Name = string.Empty;
+                    lstValidInfo.Add(_ValidInfo);
+                }
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Project Information ", sFuncName);
+                Context.Response.Output.Write(js.Serialize(lstValidInfo));
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Project Information , the Serialized data is ' " + js.Serialize(lstValidInfo) + " '", sFuncName);
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
         #endregion
 
         #region Individual
@@ -1596,6 +1759,63 @@ namespace AE_TnN_Mobile_V001
 
         [WebMethod(EnableSession = true)]
         [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_GetOccupation()
+        {
+            string sFuncName = string.Empty;
+            try
+            {
+                sFuncName = "SPA_GetOccupation()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                string sTableName = string.Empty;
+                string sFieldName = string.Empty;
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_GetOccupation() ", sFuncName);
+                DataSet ds = oWalkin.SPA_GetOccupation();
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_GetOccupation() ", sFuncName);
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    List<ValidValues> lstValidInfo = new List<ValidValues>();
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow r in ds.Tables[0].Rows)
+                        {
+                            ValidValues _ValidInfo = new ValidValues();
+
+                            _ValidInfo.Id = r["Id"].ToString();
+                            _ValidInfo.Name = r["Name"].ToString();
+                            lstValidInfo.Add(_ValidInfo);
+                        }
+                    }
+                    else
+                    {
+                        ValidValues _ValidInfo = new ValidValues();
+
+                        _ValidInfo.Id = string.Empty;
+                        _ValidInfo.Name = string.Empty;
+                        lstValidInfo.Add(_ValidInfo);
+                    }
+
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Occupation Information ", sFuncName);
+                    Context.Response.Output.Write(js.Serialize(lstValidInfo));
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Occupation Information , the Serialized data is ' " + js.Serialize(lstValidInfo) + " '", sFuncName);
+                }
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
         public void SPA_IndividualSearch(string sJsonInput)
         {
             string sFuncName = string.Empty;
@@ -1662,6 +1882,10 @@ namespace AE_TnN_Mobile_V001
                             _SearchInfo.LastUpdatedOn = r["LastUpdatedOn"].ToString();
                             _SearchInfo.FrontIC = r["FrontIC"].ToString();
                             _SearchInfo.BackIC = r["BackIC"].ToString();
+                            _SearchInfo.MaritalStatus = r["MaritalStatus"].ToString();
+                            _SearchInfo.Occupation = r["Occupation"].ToString();
+                            _SearchInfo.IdentityType = r["IdentityType"].ToString();
+                            _SearchInfo.OccupationOthers = r["OccupationOthers"].ToString();
 
                             lstSearchInfo.Add(_SearchInfo);
                         }
@@ -1695,6 +1919,10 @@ namespace AE_TnN_Mobile_V001
                         _SearchInfo.LastUpdatedOn = string.Empty;
                         _SearchInfo.FrontIC = string.Empty;
                         _SearchInfo.BackIC = string.Empty;
+                        _SearchInfo.MaritalStatus = string.Empty;
+                        _SearchInfo.Occupation = string.Empty;
+                        _SearchInfo.IdentityType = string.Empty;
+                        _SearchInfo.OccupationOthers = string.Empty;
 
                         lstSearchInfo.Add(_SearchInfo);
                     }
@@ -1911,7 +2139,7 @@ namespace AE_TnN_Mobile_V001
                     DataTable distinctValues = view.ToTable(true, "Code", "DocEntry", "CompName", "BRNNo", "TaxNo", "OfficeNo",
                                                             "IDAddress1", "IDAddress2", "IDAddress3", "IDAddress4", "IDAddress5"
                                                             , "CorresAddr1", "CorresAddr2", "CorresAddr3", "CorresAddr4", "CorresAddr5",
-                                                            "AddressToUse", "LastUpdatedOn");
+                                                            "AddressToUse", "LastUpdatedOn", "FirstSign", "FirstSignTitle", "SecondSign", "SecondSignTitle");
                     if (distinctValues.Rows.Count > 0)
                     {
                         foreach (DataRow r in distinctValues.Rows)
@@ -1936,6 +2164,10 @@ namespace AE_TnN_Mobile_V001
                             _SearchInfo.CorresAddr5 = r["CorresAddr5"].ToString();
                             _SearchInfo.AddressToUse = r["AddressToUse"].ToString();
                             _SearchInfo.LastUpdatedOn = r["LastUpdatedOn"].ToString();
+                            _SearchInfo.FirstSign = r["FirstSign"].ToString();
+                            _SearchInfo.FirstSignTitle = r["FirstSignTitle"].ToString();
+                            _SearchInfo.SecondSign = r["SecondSign"].ToString();
+                            _SearchInfo.SecondSignTitle = r["SecondSignTitle"].ToString();
                             _SearchInfo.Director = lstDirector;
 
                             lstSearchInfo.Add(_SearchInfo);
@@ -1964,6 +2196,10 @@ namespace AE_TnN_Mobile_V001
                         _SearchInfo.CorresAddr5 = string.Empty;
                         _SearchInfo.AddressToUse = string.Empty;
                         _SearchInfo.LastUpdatedOn = string.Empty;
+                        _SearchInfo.FirstSign = string.Empty;
+                        _SearchInfo.FirstSignTitle = string.Empty;
+                        _SearchInfo.SecondSign = string.Empty;
+                        _SearchInfo.SecondSignTitle = string.Empty;
                         _SearchInfo.Director = lstDirector1;
 
                         lstSearchInfo.Add(_SearchInfo);
@@ -1992,6 +2228,10 @@ namespace AE_TnN_Mobile_V001
                     _SearchInfo.CorresAddr5 = string.Empty;
                     _SearchInfo.AddressToUse = string.Empty;
                     _SearchInfo.LastUpdatedOn = string.Empty;
+                    _SearchInfo.FirstSign = string.Empty;
+                    _SearchInfo.FirstSignTitle = string.Empty;
+                    _SearchInfo.SecondSign = string.Empty;
+                    _SearchInfo.SecondSignTitle = string.Empty;
                     _SearchInfo.Director = lstDirector2;
 
                     lstSearchInfo.Add(_SearchInfo);
@@ -2067,6 +2307,50 @@ namespace AE_TnN_Mobile_V001
                 Context.Response.Output.Write(js.Serialize(lstResult));
             }
             return sResult;
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_AddCase_GetMarketers()
+        {
+            string sFuncName = string.Empty;
+            string sResult = string.Empty;
+            DataSet ds = new DataSet();
+            try
+            {
+                sFuncName = "SPA_AddCase_GetMarketers()";
+                ds = oCase.SPA_AddCase_GetMarketers();
+
+                List<ValidValues> lstCaseInfo = new List<ValidValues>();
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            ValidValues objItems = new ValidValues();
+                            objItems.Id = dr["Id"].ToString();
+                            objItems.Name = dr["Name"].ToString();
+                            lstCaseInfo.Add(objItems);
+                        }
+                    }
+                }
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the List of Marketers", sFuncName);
+                Context.Response.Output.Write(js.Serialize(lstCaseInfo));
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the List of Marketers , the Serialized data is ' " + js.Serialize(lstCaseInfo) + " '", sFuncName);
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
         }
 
         [WebMethod(EnableSession = true)]
@@ -2509,7 +2793,7 @@ namespace AE_TnN_Mobile_V001
 
         [WebMethod(EnableSession = true)]
         [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
-        public void SPA_AddCase_GetProject()
+        public void SPA_AddCase_GetProject(string sJsonInput)
         {
             string sFuncName = string.Empty;
             try
@@ -2517,8 +2801,15 @@ namespace AE_TnN_Mobile_V001
                 sFuncName = "SPA_AddCase_GetProject()";
                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
 
+                sJsonInput = "[" + sJsonInput + "]";
+                //Split JSON to Individual String
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_BindDeveloper> lstDeserialize = js.Deserialize<List<JSON_BindDeveloper>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+
                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_GetProject() ", sFuncName);
-                DataTable dtProject = oCase.SPA_AddCase_GetProject();
+                DataTable dtProject = oCase.SPA_AddCase_GetProject(lstDeserialize[0].DeveloperCode);
                 if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_GetProject() ", sFuncName);
                 List<ValidValues> lstValidInfo = new List<ValidValues>();
                 if (dtProject != null && dtProject.Rows.Count > 0)
@@ -3030,6 +3321,115 @@ namespace AE_TnN_Mobile_V001
 
         [WebMethod(EnableSession = true)]
         [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_AddCase_BindCorporate(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            string sCardCode = string.Empty;
+            string sCategory = string.Empty;
+            string sUserName = string.Empty;
+            try
+            {
+                sFuncName = "SPA_AddCase_BindCorporate()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_AddCase_GetCorporate() ", sFuncName);
+                DataTable dt = oCase.SPA_AddCase_GetCorporate();
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_AddCase_GetCorporate() ", sFuncName);
+                List<ScanIC> lstdoc = new List<ScanIC>();
+                if (dt != null && dt.Rows.Count > 0)
+                {
+
+                    sJsonInput = "[" + sJsonInput + "]";
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                    List<JSON_BindDeveloper> lstDeserialize = js.Deserialize<List<JSON_BindDeveloper>>(sJsonInput);
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                    if (lstDeserialize.Count > 0)
+                    {
+                        string searchExpression = "Code = '" + lstDeserialize[0].DeveloperCode + "'";
+                        DataRow[] foundRows = dt.Select(searchExpression);
+
+                        foreach (DataRow r in foundRows)
+                        {
+                            ScanIC _SearchInfo = new ScanIC();
+
+                            _SearchInfo.Code = r["Code"].ToString();
+                            _SearchInfo.DocEntry = r["DocEntry"].ToString();
+                            _SearchInfo.EmployeeName = r["EmployeeName"].ToString();
+                            _SearchInfo.Title = string.Empty;
+                            _SearchInfo.Gender = "CORPORATE";
+                            _SearchInfo.IDNo1 = r["IDNo1"].ToString();
+                            _SearchInfo.IDNo3 = r["IDNo3"].ToString();
+                            _SearchInfo.TaxNo = r["TaxNo"].ToString();
+                            _SearchInfo.MobileNo = r["MobileNo"].ToString();
+                            _SearchInfo.Telephone = r["Telephone"].ToString();
+                            _SearchInfo.OfficeNo = string.Empty;
+                            _SearchInfo.IDAddress1 = r["IDAddress1"].ToString();
+                            _SearchInfo.IDAddress2 = r["IDAddress2"].ToString();
+                            _SearchInfo.IDAddress3 = r["IDAddress3"].ToString();
+                            _SearchInfo.IDAddress4 = r["IDAddress4"].ToString();
+                            _SearchInfo.IDAddress5 = r["IDAddress5"].ToString();
+                            _SearchInfo.CorresAddr1 = r["CorresAddr1"].ToString();
+                            _SearchInfo.CorresAddr2 = r["CorresAddr2"].ToString();
+                            _SearchInfo.CorresAddr3 = r["CorresAddr3"].ToString();
+                            _SearchInfo.CorresAddr4 = r["CorresAddr4"].ToString();
+                            _SearchInfo.CorresAddr5 = r["CorresAddr5"].ToString();
+                            _SearchInfo.AddressToUse = string.Empty;
+                            _SearchInfo.LastUpdatedOn = string.Empty;
+
+                            lstdoc.Add(_SearchInfo);
+                        }
+                    }
+                    else
+                    {
+                        ScanIC _SearchInfo = new ScanIC();
+
+                        _SearchInfo.Message = string.Empty;
+                        _SearchInfo.Code = string.Empty;
+                        _SearchInfo.DocEntry = string.Empty;
+                        _SearchInfo.EmployeeName = string.Empty;
+                        _SearchInfo.Title = string.Empty;
+                        _SearchInfo.Gender = string.Empty;
+                        _SearchInfo.IDNo1 = string.Empty;
+                        _SearchInfo.IDNo3 = string.Empty;
+                        _SearchInfo.TaxNo = string.Empty;
+                        _SearchInfo.MobileNo = string.Empty;
+                        _SearchInfo.Telephone = string.Empty;
+                        _SearchInfo.OfficeNo = string.Empty;
+                        _SearchInfo.IDAddress1 = string.Empty;
+                        _SearchInfo.IDAddress2 = string.Empty;
+                        _SearchInfo.IDAddress3 = string.Empty;
+                        _SearchInfo.IDAddress4 = string.Empty;
+                        _SearchInfo.IDAddress5 = string.Empty;
+                        _SearchInfo.CorresAddr1 = string.Empty;
+                        _SearchInfo.CorresAddr2 = string.Empty;
+                        _SearchInfo.CorresAddr3 = string.Empty;
+                        _SearchInfo.CorresAddr4 = string.Empty;
+                        _SearchInfo.CorresAddr5 = string.Empty;
+                        _SearchInfo.AddressToUse = string.Empty;
+                        _SearchInfo.LastUpdatedOn = string.Empty;
+                        lstdoc.Add(_SearchInfo);
+                    }
+                }
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Corporate Information ", sFuncName);
+                Context.Response.Output.Write(js.Serialize(lstdoc));
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Corporate Information , the Serialized data is ' " + js.Serialize(lstdoc) + " '", sFuncName);
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
         public void Attachments()
         {
             string sFuncName = string.Empty;
@@ -3095,6 +3495,64 @@ namespace AE_TnN_Mobile_V001
             }
         }
 
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json, UseHttpGet = false)]
+        public void SPA_AddCase_CheckBlackListed(string sJsonInput)
+        {
+            string sFuncName = string.Empty;
+            string sCardCode = string.Empty;
+            string sCategory = string.Empty;
+            string sUserName = string.Empty;
+            try
+            {
+                sFuncName = "SPA_AddCase_CheckBlackListed()";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Starting Function ", sFuncName);
+
+                List<BlackListed> lstBlkLsted = new List<BlackListed>();
+
+                sJsonInput = "[" + sJsonInput + "]";
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Getting the Json Input from Mobile  '" + sJsonInput + "'", sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Deserialize the Json Input ", sFuncName);
+                List<JSON_BlackListed> lstDeserialize = js.Deserialize<List<JSON_BlackListed>>(sJsonInput);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Deserialize the Json Input ", sFuncName);
+                if (lstDeserialize.Count > 0)
+                {
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before calling the Method SPA_AddCase_BlackListCheck() ", sFuncName);
+                    string sResult = oCase.SPA_AddCase_BlackListCheck(lstDeserialize[0].IdNo1);
+                    if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After calling the Method SPA_AddCase_BlackListCheck() ", sFuncName);
+
+                    if (sResult == "Y")
+                    {
+                        BlackListed _BlackListed = new BlackListed();
+                        _BlackListed.BlackListResult = "The ID No " + lstDeserialize[0].IdNo1 + " is a BlackListed Customer";
+                        lstBlkLsted.Add(_BlackListed);
+                    }
+                    else
+                    {
+                        BlackListed _BlackListed = new BlackListed();
+                        _BlackListed.BlackListResult = "";
+                        lstBlkLsted.Add(_BlackListed);
+                    }
+                }
+
+
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Before Serializing the Blacklisted Information ", sFuncName);
+                Context.Response.Output.Write(js.Serialize(lstBlkLsted));
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("After Serializing the Blacklisted Information , the Serialized data is ' " + js.Serialize(lstBlkLsted) + " '", sFuncName);
+            }
+            catch (Exception ex)
+            {
+                sErrDesc = ex.Message.ToString();
+                oLog.WriteToErrorLogFile(sErrDesc, sFuncName);
+                if (p_iDebugMode == DEBUG_ON) oLog.WriteToDebugLogFile("Completed With ERROR  ", sFuncName);
+                result objResult = new result();
+                objResult.Result = "Error";
+                objResult.DisplayMessage = sErrDesc;
+                lstResult.Add(objResult);
+                Context.Response.Output.Write(js.Serialize(lstResult));
+            }
+        }
+
         #endregion
 
         #region ProcessCase
@@ -3157,6 +3615,21 @@ namespace AE_TnN_Mobile_V001
                             oDetails.VendAcqDt = dr["VendAcqDt"].ToString();
                             oDetails.CompanyBuisnessSearch = dr["CompanyBuisnessSearch"].ToString();
                             oDetails.BankWindingSearch = dr["BankWindingSearch"].ToString();
+                            oDetails.DEVREF = dr["DEVREF"].ToString();
+                            oDetails.DEVLWYRREF = dr["DEVLWYRREF"].ToString();
+                            oDetails.PURREF = dr["PURREF"].ToString();
+                            oDetails.VNDRREF = dr["VNDRREF"].ToString();
+                            oDetails.PURBANKREF = dr["PURBANKREF"].ToString();
+                            oDetails.VNDRBANKREF = dr["VNDRBANKREF"].ToString();
+                            oDetails.PURLWYRREF = dr["PURLWYRREF"].ToString();
+                            oDetails.VNDRLWYRREF = dr["VNDRLWYRREF"].ToString();
+                            oDetails.PURLOANLWYRREF = dr["PURLOANLWYRREF"].ToString();
+                            oDetails.VNDRLOANLWYRREF = dr["VNDRLOANLWYRREF"].ToString();
+                            oDetails.PURBANKLWYRREF = dr["PURBANKLWYRREF"].ToString();
+                            oDetails.VNDRBANKLWYRREF = dr["VNDRBANKLWYRREF"].ToString();
+                            oDetails.BORREF = dr["BORREF"].ToString();
+                            oDetails.BORBANKREF = dr["BORBANKREF"].ToString();
+                            oDetails.BORBANKLWYRREF = dr["BORBANKLWYRREF"].ToString();
 
                             // This is for the Purchase Tab
                             oPurchase.PurRepresentedByFirm = dr["PurRepresentedByFirm"].ToString();
@@ -3254,6 +3727,18 @@ namespace AE_TnN_Mobile_V001
                             oProperty.QryGroup14 = dr["QryGroup14"].ToString();
                             oProperty.QryGroup15 = dr["QryGroup15"].ToString();
                             oProperty.QryGroup16 = dr["QryGroup16"].ToString();
+                            oProperty.SPADate = dr["SPADate"].ToString();
+
+                            oProperty.NoofKeys = dr["NoofKeys"].ToString();
+                            oProperty.NoofAccessCard = dr["NoofAccessCard"].ToString();
+                            oProperty.ErnstDeposit = dr["ErnstDeposit"].ToString();
+                            oProperty.PropertyDesc = dr["PropertyDesc"].ToString();
+                            oProperty.LOUDate = dr["LOUDate"].ToString();
+                            oProperty.SKWNo = dr["SKWNo"].ToString();
+                            oProperty.SKWDate = dr["SKWDate"].ToString();
+                            oProperty.TitleRegDate = dr["TitleRegDate"].ToString();
+                            oProperty.TitlePresentationNo = dr["TitlePresentationNo"].ToString();
+
 
                             // This is for Loan Principle Tab
 
@@ -3709,7 +4194,9 @@ namespace AE_TnN_Mobile_V001
                                     {
                                         oGetNextSection.ResultFile = "/GDocFile/" + dr["ResultFile"].ToString().Split('\\').Last().ToString();
                                     }
-                                    else if(dr["TrnspName"].ToString().ToUpper() == "SDOC")
+                                    else if (dr["TrnspName"].ToString().ToUpper() == "SDOC" || dr["TrnspName"].ToString().ToUpper() == "ADD-PO-D"
+                                        || dr["TrnspName"].ToString().ToUpper() == "ADD-PO" || dr["TrnspName"].ToString().ToUpper() == "OPDOC"
+                                        || dr["TrnspName"].ToString().ToUpper() == "TDOC")
                                     {
                                         oGetNextSection.ResultFile = "/SDocFile/" + dr["ResultFile"].ToString().Split('\\').Last().ToString();
                                     }
@@ -3860,7 +4347,9 @@ namespace AE_TnN_Mobile_V001
                                     {
                                         oGetOptionalItems.ResultFile = "/GDocFile/" + dr["ResultFile"].ToString().Split('\\').Last().ToString();
                                     }
-                                    else if (dr["TrnspName"].ToString().ToUpper() == "SDOC")
+                                    else if (dr["TrnspName"].ToString().ToUpper() == "SDOC" || dr["TrnspName"].ToString().ToUpper() == "ADD-PO-D"
+                                        || dr["TrnspName"].ToString().ToUpper() == "ADD-PO" || dr["TrnspName"].ToString().ToUpper() == "OPDOC"
+                                        || dr["TrnspName"].ToString().ToUpper() == "TDOC")
                                     {
                                         oGetOptionalItems.ResultFile = "/SDocFile/" + dr["ResultFile"].ToString().Split('\\').Last().ToString();
                                     }
@@ -4039,7 +4528,9 @@ namespace AE_TnN_Mobile_V001
                                     {
                                         oGetOpenSection.ResultFile = "/GDocFile/" + dr["ResultFile"].ToString().Split('\\').Last().ToString();
                                     }
-                                    else if (dr["TrnspName"].ToString().ToUpper() == "SDOC")
+                                    else if (dr["TrnspName"].ToString().ToUpper() == "SDOC" || dr["TrnspName"].ToString().ToUpper() == "ADD-PO-D"
+                                        || dr["TrnspName"].ToString().ToUpper() == "ADD-PO" || dr["TrnspName"].ToString().ToUpper() == "OPDOC"
+                                        || dr["TrnspName"].ToString().ToUpper() == "TDOC")
                                     {
                                         oGetOpenSection.ResultFile = "/SDocFile/" + dr["ResultFile"].ToString().Split('\\').Last().ToString();
                                     }
@@ -4165,7 +4656,9 @@ namespace AE_TnN_Mobile_V001
                                     {
                                         oGetPastSection.ResultFile = "/GDocFile/" + dr["ResultFile"].ToString().Split('\\').Last().ToString();
                                     }
-                                    else if (dr["TrnspName"].ToString().ToUpper() == "SDOC")
+                                    else if (dr["TrnspName"].ToString().ToUpper() == "SDOC" || dr["TrnspName"].ToString().ToUpper() == "ADD-PO-D"
+                                        || dr["TrnspName"].ToString().ToUpper() == "ADD-PO" || dr["TrnspName"].ToString().ToUpper() == "OPDOC"
+                                        || dr["TrnspName"].ToString().ToUpper() == "TDOC")
                                     {
                                         oGetPastSection.ResultFile = "/SDocFile/" + dr["ResultFile"].ToString().Split('\\').Last().ToString();
                                     }
@@ -4779,10 +5272,11 @@ namespace AE_TnN_Mobile_V001
                     sUserName = lstDeserialize[0].sUserName;
                     sStatus = lstDeserialize[0].sStatus;
                     sKIV = lstDeserialize[0].sKIV;
-
+                    ProcessCase_Details Details = lstDeserialize[0].Details;
+                    DataTable dtDetails = ObjectToData(Details);
                     //The following code is for Save the header information or close the case based on the status
 
-                    string sResult = oProcessCase.CloseCase(sCaseNo, sUserName, sStatus, sKIV);
+                    string sResult = oProcessCase.CloseCase(sCaseNo, sUserName, sStatus, sKIV, dtDetails);
 
                     result objResult = new result();
 
@@ -4860,6 +5354,32 @@ namespace AE_TnN_Mobile_V001
         {
             public string Result { get; set; }
             public string DisplayMessage { get; set; }
+        }
+
+        class JSON_BindDeveloper
+        {
+            public string DeveloperCode { get; set; }
+        }
+
+        class JSON_BlackListed
+        {
+            public string IdNo1 { get; set; }
+        }
+
+        class BlackListed
+        {
+            public string BlackListResult { get; set; }
+        }
+
+        class JSON_LicenseNo
+        {
+            public string ProjectCode { get; set; }
+            public string SPADate { get; set; }
+        }
+
+        class JSON_PropertyLicenseNo
+        {
+            public string ProjectCode { get; set; }
         }
 
         class result_Case
@@ -4961,6 +5481,7 @@ namespace AE_TnN_Mobile_V001
             public string UserCode { get; set; }
             public string CaseStatus { get; set; }
             public string FileClosedDate { get; set; }
+            public string MARKETERNAME { get; set; }
         }
 
         class JSON_ListofPropertySearch
@@ -5048,6 +5569,7 @@ namespace AE_TnN_Mobile_V001
             public string UserCode { get; set; }
             public string Status { get; set; }
             public string FileClosedDate { get; set; }
+            public string MARKETERNAME { get; set; }
         }
 
         class RelatedCases_AddCaseProperty
@@ -5151,6 +5673,10 @@ namespace AE_TnN_Mobile_V001
             public string LastUpdatedOn { get; set; }
             public string FrontIC { get; set; }
             public string BackIC { get; set; }
+            public string MaritalStatus { get; set; }
+            public string Occupation { get; set; }
+            public string IdentityType { get; set; }
+            public string OccupationOthers { get; set; }
         }
 
         class JSON_AddIndividualSearch
@@ -5180,6 +5706,9 @@ namespace AE_TnN_Mobile_V001
             public string LastUpdatedOn { get; set; }
             public string ScanFrontICLocation { get; set; }
             public string ScanBackICLocation { get; set; }
+            public string MaritalStatus { get; set; }
+            public string Occupation { get; set; }
+            public string IdentityType { get; set; }
         }
 
         class Bank
@@ -5235,6 +5764,10 @@ namespace AE_TnN_Mobile_V001
             public string CorresAddr5 { get; set; }
             public string AddressToUse { get; set; }
             public string LastUpdatedOn { get; set; }
+            public string FirstSign { get; set; }
+            public string FirstSignTitle { get; set; }
+            public string SecondSign { get; set; }
+            public string SecondSignTitle { get; set; }
             public List<Director> Director { get; set; }
         }
 
@@ -5364,6 +5897,10 @@ namespace AE_TnN_Mobile_V001
             public string LSTCHG_PRSTLINK { get; set; }
             public string TITLELINK { get; set; }
             public string PurchasePrice { get; set; }
+            public string SPADate { get; set; }
+            public string ErnstDeposit { get; set; }
+            public string MarketerCode { get; set; }
+            public string MarketerName { get; set; }
         }
 
         class JSON_AddCase_AddIndividualSearch
@@ -5478,7 +6015,7 @@ namespace AE_TnN_Mobile_V001
             public string TabId { get; set; }
         }
 
-        class ProcessCase_Details
+        public class ProcessCase_Details
         {
             public string LA { get; set; }
             public string MANAGER { get; set; }
@@ -5490,6 +6027,22 @@ namespace AE_TnN_Mobile_V001
             public string VendAcqDt { get; set; }
             public string CompanyBuisnessSearch { get; set; }
             public string BankWindingSearch { get; set; }
+
+            public string DEVREF { get; set; }
+            public string DEVLWYRREF { get; set; }
+            public string PURREF { get; set; }
+            public string VNDRREF { get; set; }
+            public string PURBANKREF { get; set; }
+            public string VNDRBANKREF { get; set; }
+            public string PURLWYRREF { get; set; }
+            public string VNDRLWYRREF { get; set; }
+            public string PURLOANLWYRREF { get; set; }
+            public string VNDRLOANLWYRREF { get; set; }
+            public string PURBANKLWYRREF { get; set; }
+            public string VNDRBANKLWYRREF { get; set; }
+            public string BORREF { get; set; }
+            public string BORBANKREF { get; set; }
+            public string BORBANKLWYRREF { get; set; }
         }
 
         class ProcessCase_Purchaser
@@ -5565,6 +6118,7 @@ namespace AE_TnN_Mobile_V001
             public string DevLicenseNo { get; set; }
             public string DevSolicitor { get; set; }
             public string DevSoliLoc { get; set; }
+            public string SPADate { get; set; }
             public string TitleSearchDate { get; set; }
             public string DSCTransfer { get; set; }
             public string DRCTransfer { get; set; }
@@ -5592,7 +6146,17 @@ namespace AE_TnN_Mobile_V001
             public string DefRdmptSum { get; set; }
             public string QryGroup14 { get; set; } //Title Sub-Type is Individual 
             public string QryGroup15 { get; set; } //Title Sub-Type is Strata  
-            public string QryGroup16 { get; set; } //Title Sub-Type is Master  
+            public string QryGroup16 { get; set; } //Title Sub-Type is Master 
+
+            public string NoofKeys { get; set; }
+            public string NoofAccessCard { get; set; }
+            public string ErnstDeposit { get; set; }
+            public string PropertyDesc { get; set; }
+            public string LOUDate { get; set; }
+            public string SKWNo { get; set; }
+            public string SKWDate { get; set; }
+            public string TitleRegDate { get; set; }
+            public string TitlePresentationNo { get; set; }
         }
 
         public class ProcessCase_LoanPrinciple
@@ -5913,6 +6477,7 @@ namespace AE_TnN_Mobile_V001
             public string sUserName { get; set; }
             public string sStatus { get; set; }
             public string sKIV { get; set; }
+            public ProcessCase_Details Details { get; set; }
         }
 
         public class JSON_ProcessCase_Generate
@@ -6062,6 +6627,9 @@ namespace AE_TnN_Mobile_V001
             rowNew["LastUpdatedOn"] = objAddIndividuals.LastUpdatedOn;
             rowNew["ScanFrontICLocation"] = objAddIndividuals.ScanFrontICLocation;
             rowNew["ScanBackICLocation"] = objAddIndividuals.ScanBackICLocation;
+            rowNew["MaritalStatus"] = objAddIndividuals.MaritalStatus;
+            rowNew["Occupation"] = objAddIndividuals.Occupation;
+            rowNew["IdentityType"] = objAddIndividuals.IdentityType;
 
             tbNew.Rows.Add(rowNew);
             return tbNew.Copy();
@@ -6096,6 +6664,9 @@ namespace AE_TnN_Mobile_V001
             tbIndividual.Columns.Add("LastUpdatedOn");
             tbIndividual.Columns.Add("ScanFrontICLocation");
             tbIndividual.Columns.Add("ScanBackICLocation");
+            tbIndividual.Columns.Add("MaritalStatus");
+            tbIndividual.Columns.Add("Occupation");
+            tbIndividual.Columns.Add("IdentityType");
 
             return tbIndividual;
         }
