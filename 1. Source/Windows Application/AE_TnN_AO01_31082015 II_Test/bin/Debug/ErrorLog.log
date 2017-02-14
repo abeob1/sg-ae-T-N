@@ -1,0 +1,93 @@
+[08/21/2015 19:36:38][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 19:36:41][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 19:36:52][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 19:37:12][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 19:41:30][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 19:42:19][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 19:43:29][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 19:45:32][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 19:45:56][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 19:49:17][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 19:55:25][                      ConnectDICompSSO()] Value does not fall within the expected range.
+[08/21/2015 19:55:25][                                  Main()] Value does not fall within the expected range.
+[08/21/2015 19:58:47][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 19:59:16][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 19:59:52][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 20:04:39][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 20:12:40][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 20:12:49][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 20:26:13][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 20:26:35][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 20:32:33][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 20:32:41][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 20:34:06][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 20:38:25][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 20:39:48][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 20:59:35][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 21:00:35][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 21:04:54][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 21:16:05][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 21:23:55][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 21:23:58][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 21:24:04][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 21:29:39][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 21:31:59][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 21:38:41][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 21:40:35][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 21:51:49][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 21:54:27][                                  Main()] Connection - Could not find SBO that match the connection string
+[08/21/2015 22:11:10][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 22:19:09][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 22:21:11][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 22:21:39][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 22:22:16][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 22:28:00][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 22:28:37][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 22:30:02][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 22:31:24][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 22:36:25][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 22:39:13][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/21/2015 22:41:03][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/24/2015 13:29:59][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/24/2015 13:30:08][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/24/2015 13:30:55][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/24/2015 13:36:26][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/24/2015 13:39:13][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/24/2015 13:44:03][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/24/2015 13:44:07][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/24/2015 14:51:10][             SBO_Application_ItemEvent()] Item - Failed binding data  [66000-57]
+[08/24/2015 14:52:00][             SBO_Application_ItemEvent()] Item - Failed binding data  [66000-57]
+[08/24/2015 14:52:21][             SBO_Application_ItemEvent()] Item - Failed binding data  [66000-57]
+[08/24/2015 14:52:30][             SBO_Application_ItemEvent()] Item - Failed binding data  [66000-57]
+[08/24/2015 15:07:16][             SBO_Application_ItemEvent()] Item - Invalid item  [66000-3]. Form Unique Id: 'F_61', Item Unique Id: 'item_1'
+[08/24/2015 15:12:41][             SBO_Application_ItemEvent()] Data Source - Alias Not Found
+[08/24/2015 15:14:16][             SBO_Application_ItemEvent()] Object reference not set to an instance of an object.
+[08/24/2015 15:14:50][             SBO_Application_ItemEvent()] Data Source - Alias Not Found
+[08/24/2015 15:28:59][             SBO_Application_ItemEvent()] Data Source - Alias Not Found
+[08/24/2015 15:30:18][             SBO_Application_ItemEvent()] Data Source - Alias Not Found
+[08/24/2015 17:15:35][             SBO_Application_ItemEvent()] Data Source - Alias Not Found
+[08/24/2015 17:18:09][             SBO_Application_ItemEvent()] Data Source - Alias Not Found
+[08/24/2015 17:28:13][             SBO_Application_ItemEvent()] Item - Failed binding data  [66000-57]
+[08/24/2015 17:32:26][             SBO_Application_ItemEvent()] The string value entered is too long; it should be less than 10 characters  [66000-14]. Form Unique Id: F_114, Item Unique Id : CFPlkItm_72
+[08/25/2015 13:39:29][             SBO_Application_ItemEvent()] Item - Invalid item  [66000-3]. Form Unique Id: 'F_38', Item Unique Id: 'BPHItm_10'
+[08/25/2015 14:26:07][             SBO_Application_ItemEvent()] Item - already exists  [66000-13]. Form Unique Id: F_80, Item Unique Id : LRPItm_128
+[08/25/2015 19:12:47][             SBO_Application_ItemEvent()] Item - Invalid item  [66000-3]. Form Unique Id: 'F_46', Item Unique Id: ''
+[08/26/2015 09:47:19][             SBO_Application_ItemEvent()] Unable to cast COM object of type 'System.__ComObject' to interface type 'SAPbouiCOM.EditText'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{AE1C43FF-0F2B-4130-A0B7-40E38D5EC60E}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+[08/26/2015 09:50:54][             SBO_Application_ItemEvent()] Unable to cast COM object of type 'System.__ComObject' to interface type 'SAPbouiCOM.EditText'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{AE1C43FF-0F2B-4130-A0B7-40E38D5EC60E}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+[08/26/2015 14:51:30][             SBO_Application_ItemEvent()] The Item must be bound to an AlphaNumric field.  [66000-149]
+[08/26/2015 14:54:05][             SBO_Application_ItemEvent()] The Item must be bound to an AlphaNumric field.  [66000-149]
+[08/26/2015 15:47:17][             SBO_Application_ItemEvent()] Unable to cast COM object of type 'System.__ComObject' to interface type 'SAPbouiCOM.Matrix'. This operation failed because the QueryInterface call on the COM component for the interface with IID '{DD7804DC-811B-4829-8E87-2F5C061EE59C}' failed due to the following error: No such interface supported (Exception from HRESULT: 0x80004002 (E_NOINTERFACE)).
+[08/26/2015 17:04:40][                                  Main()] Connection - Could not find SBO that match the connection string
+[08/26/2015 17:14:19][             SBO_Application_ItemEvent()] Form - Invalid Form
+[08/26/2015 17:21:54][             SBO_Application_ItemEvent()] Invalid Memory Access
+[08/26/2015 17:27:53][             SBO_Application_ItemEvent()] Invalid Memory Access
+[08/26/2015 17:33:48][             SBO_Application_ItemEvent()] Invalid Memory Access
+[08/26/2015 17:42:29][             SBO_Application_ItemEvent()] Invalid Memory Access
+[08/27/2015 13:44:52][             SBO_Application_ItemEvent()] Item - Invalid item  [66000-3]. Form Unique Id: 'F_25', Item Unique Id: 'tcLnSub4'
+[08/28/2015 12:15:50][             SBO_Application_ItemEvent()] Data Source - Alias Not Found
+[08/28/2015 12:29:01][             SBO_Application_ItemEvent()] Item - Invalid item  [66000-3]. Form Unique Id: 'F_156', Item Unique Id: 'LPItm_18'
+[08/28/2015 14:40:26][             SBO_Application_ItemEvent()] Invalid Memory Access
+[08/28/2015 14:40:50][             SBO_Application_ItemEvent()] Invalid Memory Access
+[08/31/2015 12:17:32][             SBO_Application_ItemEvent()] Item - Invalid item  [66000-3]. Form Unique Id: 'F_32', Item Unique Id: 'item_11'
+[08/31/2015 12:17:33][             SBO_Application_ItemEvent()] Item - Invalid item  [66000-3]. Form Unique Id: 'F_32', Item Unique Id: 'item_11'
+[08/31/2015 12:17:44][             SBO_Application_ItemEvent()] Item - Invalid item  [66000-3]. Form Unique Id: 'F_34', Item Unique Id: 'item_11'
